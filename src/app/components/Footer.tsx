@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { Zap, Twitter, Linkedin, Youtube, Facebook, Globe, Mail, Phone, Instagram } from "lucide-react";
+import logo from "/src/app/assess/logos.png";
 
 export function Footer() {
   return (
@@ -10,9 +11,9 @@ export function Footer() {
           {/* Brand column */}
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center gap-3 mb-4">
-              <div className="flex items-center justify-center w-10 h-10 bg-[#00d4ff] rounded">
-                <Zap className="w-6 h-6 text-[#0d1f3c]" />
-              </div>
+            <div className="flex items-center justify-center w-10 h-10  rounded overflow-hidden">
+            <img src={logo} alt="The Pride Times Logo" className="w-full h-full object-contain" />
+            </div>
               <div>
                 <div className="text-xl font-black tracking-tight text-white">
                   The Pride <span className="text-[#00d4ff]">Times</span>
@@ -42,20 +43,6 @@ export function Footer() {
                 <Instagram className="w-4 h-4" />
               </a>
             </div>
-            <div className="space-y-2 text-sm">
-              <div className="flex items-center gap-2 text-gray-400">
-                <Mail className="w-3.5 h-3.5 text-[#00d4ff]" />
-                <span>info@thepridetime.com</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-400">
-                <Phone className="w-3.5 h-3.5 text-[#00d4ff]" />
-                <span>+91 9529782361</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-400">
-                <Globe className="w-3.5 h-3.5 text-[#00d4ff]" />
-                <span>Cyber city Gurugram Delhi -122002</span>
-              </div>
-            </div>
           </div>
 
           {/* Sections */}
@@ -64,7 +51,7 @@ export function Footer() {
               Industries
             </h4>
             <ul className="space-y-2.5">
-              {["Technology", "Finance", "Healthcare", "Energy", "Manufacturing", "Supply Chain", "Smart Cities", "Cybersecurity"].map(item => (
+              {["Technology", "Finance", "Healthcare", "Energy", "Others"].map(item => (
                 <li key={item}>
                   <Link to={`/category/${item.toLowerCase().replace(" ", "-")}`} className="text-sm text-gray-400 hover:text-[#00d4ff] transition-colors">
                     {item}
@@ -79,7 +66,7 @@ export function Footer() {
               Regions
             </h4>
             <ul className="space-y-2.5">
-              {["North America", "Europe", "Asia-Pacific", "Middle East", "Africa", "Latin America", "Global Markets", "Emerging Markets"].map(item => (
+              {["North America", "Europe", "Asia-Pacific", "Middle East", "Others"].map(item => (
                 <li key={item}>
                   <Link to={`/region/${item.toLowerCase().replace(" ", "-")}`} className="text-sm text-gray-400 hover:text-[#00d4ff] transition-colors">
                     {item}
@@ -130,7 +117,7 @@ export function Footer() {
       <div className="bg-black/30 border-t border-[#1a2f50]">
         <div className="max-w-screen-xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-gray-500">
-            © 2026 The Pride Times — Global Digital Intelligence Network. All rights reserved.
+            © 2026 The Pride Times. All rights reserved.
           </p>
           <div className="flex items-center gap-4 text-xs text-gray-500">
             <Link to="/privacy" className="hover:text-gray-300 transition-colors">Privacy Policy</Link>

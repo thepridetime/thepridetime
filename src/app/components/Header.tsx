@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { Search, Bell, Menu, X, ChevronDown, Globe, Zap, TrendingUp } from "lucide-react";
 import { categories } from "../data/newsData";
+import logo from "/src/app/assess/logos.png";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -31,7 +32,7 @@ export function Header() {
               <span>Global Digital Intelligence Network</span>
             </span>
             <span className="hidden sm:block text-gray-500">|</span>
-            <span className="hidden sm:block">Wednesday, March 7, 2026</span>
+            <span className="hidden sm:block">Friday, March 13, 2026</span>
           </div>
           <div className="flex items-center gap-4">
             <Link to="/subscribe" className="text-[#00d4ff] hover:text-white transition-colors">Subscribe</Link>
@@ -48,9 +49,9 @@ export function Header() {
         <div className="max-w-screen-xl mx-auto px-4 py-4 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 flex-shrink-0">
-            <div className="flex items-center justify-center w-10 h-10 bg-[#00d4ff] rounded">
-              <Zap className="w-6 h-6 text-[#0d1f3c]" />
-            </div>
+           <div className="flex items-center justify-center w-10 h-10  rounded overflow-hidden">
+           <img src={logo} alt="The Pride Times Logo" className="w-full h-full object-contain" />
+           </div>
             <div>
               <div className="text-xl font-black tracking-tight leading-none text-white">
                 The Pride <span className="text-[#00d4ff]">Times</span>
