@@ -156,7 +156,7 @@ export function Markets() {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <BarChart2 className="w-5 h-5 text-[#00d4ff]" />
-              <h1 className="text-white font-black text-xl uppercase tracking-wider">Alphaburg Live Markets</h1>
+              <h1 className="text-white font-black text-xl uppercase tracking-wider">Global Live Markets</h1>
               <span className="flex items-center gap-1 text-xs bg-green-500/20 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                 LIVE
@@ -234,7 +234,7 @@ export function Markets() {
               <div className="lg:col-span-2 bg-[#0d1f3c] rounded-xl p-5">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Alphaburg Technology Index</div>
+                    <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Global Technology Index</div>
                     <div className="flex items-center gap-3">
                       <LivePriceCell value={gdnTech.price} up={gdnTech.up} decimals={2} />
                       <span className={`text-sm font-bold ${gdnTech.up ? "text-green-400" : "text-red-400"}`}>

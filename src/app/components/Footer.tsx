@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Zap, Twitter, Linkedin, Youtube, Facebook, Globe, Mail, Phone } from "lucide-react";
+import { Zap, Twitter, Linkedin, Youtube, Facebook, Globe, Mail, Phone, Instagram } from "lucide-react";
 
 export function Footer() {
   return (
@@ -26,17 +26,20 @@ export function Footer() {
               The world's premier enterprise news platform delivering intelligence, analysis, and insight across every industry and region of the global economy.
             </p>
             <div className="flex items-center gap-3 mb-6">
-              <a href="#" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
+              <a href="https://x.com/thepridetime" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
                 <Twitter className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
+              <a href="https://www.linkedin.com/company/therpidetimes" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
                 <Linkedin className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
+              <a href="https://www.youtube.com/@pridetimenews" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
                 <Youtube className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
+              <a href="https://www.facebook.com/thepridetime" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
                 <Facebook className="w-4 h-4" />
+              </a>
+                <a href="https://www.instagram.com/thepridetime/" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
+                <Instagram className="w-4 h-4" />
               </a>
             </div>
             <div className="space-y-2 text-sm">
