@@ -63,7 +63,7 @@ export interface IndustryIndex {
 // --- Base data (will be mutated by live simulation) ---
 
 export const globalIndices: GlobalIndex[] = [
-  { name: "Alphaburg Global 500", country: "Global", value: 18432.56, change: 234.12, changePct: 1.29, flag: "🌐" },
+  { name: "Global 500", country: "Global", value: 18432.56, change: 234.12, changePct: 1.29, flag: "🌐" },
   { name: "S&P 500", country: "USA", value: 6284.17, change: 48.33, changePct: 0.77, flag: "🇺🇸" },
   { name: "NASDAQ", country: "USA", value: 20847.94, change: 312.88, changePct: 1.52, flag: "🇺🇸" },
   { name: "FTSE 100", country: "UK", value: 8741.22, change: -34.56, changePct: -0.39, flag: "🇬🇧" },
@@ -78,16 +78,16 @@ export const globalIndices: GlobalIndex[] = [
 ];
 
 export const industryIndices: IndustryIndex[] = [
-  { name: "Alphaburg Technology", symbol: "ARTECH", value: 12847.23, change: 172.34, changePct: 1.36, ytd: 18.4, color: "#3b82f6" },
-  { name: "Alphaburg Finance", symbol: "ARFIN", value: 8432.17, change: 45.22, changePct: 0.54, ytd: 11.2, color: "#10b981" },
-  { name: "Alphaburg Energy", symbol: "ARENG", value: 6284.55, change: -32.18, changePct: -0.51, ytd: 7.8, color: "#f59e0b" },
-  { name: "Alphaburg Healthcare", symbol: "ARHLT", value: 9102.67, change: 142.89, changePct: 1.59, ytd: 22.1, color: "#ef4444" },
-  { name: "Alphaburg Cyber", symbol: "ARCYB", value: 5847.34, change: 234.56, changePct: 4.18, ytd: 31.7, color: "#8b5cf6" },
-  { name: "Alphaburg Manufacturing", symbol: "ARMFG", value: 4523.89, change: -18.67, changePct: -0.41, ytd: 9.3, color: "#f97316" },
-  { name: "Alphaburg SmartCity", symbol: "ARSC", value: 3284.12, change: 56.34, changePct: 1.74, ytd: 24.6, color: "#14b8a6" },
-  { name: "Alphaburg Supply Chain", symbol: "ARSCP", value: 2947.66, change: 28.44, changePct: 0.97, ytd: 13.5, color: "#6366f1" },
-  { name: "Alphaburg AI Index", symbol: "ARAI", value: 4521.80, change: 96.84, changePct: 2.19, ytd: 47.3, color: "#00d4ff" },
-  { name: "Alphaburg Sustainability", symbol: "ARSUS", value: 3102.45, change: 41.22, changePct: 1.35, ytd: 19.8, color: "#84cc16" },
+  { name: "Technology", symbol: "ARTECH", value: 12847.23, change: 172.34, changePct: 1.36, ytd: 18.4, color: "#3b82f6" },
+  { name: "Finance", symbol: "ARFIN", value: 8432.17, change: 45.22, changePct: 0.54, ytd: 11.2, color: "#10b981" },
+  { name: "Energy", symbol: "ARENG", value: 6284.55, change: -32.18, changePct: -0.51, ytd: 7.8, color: "#f59e0b" },
+  { name: "Healthcare", symbol: "ARHLT", value: 9102.67, change: 142.89, changePct: 1.59, ytd: 22.1, color: "#ef4444" },
+  { name: "Cyber Security", symbol: "ARCYB", value: 5847.34, change: 234.56, changePct: 4.18, ytd: 31.7, color: "#8b5cf6" },
+  { name: "Manufacturing", symbol: "ARMFG", value: 4523.89, change: -18.67, changePct: -0.41, ytd: 9.3, color: "#f97316" },
+  { name: "SmartCity", symbol: "ARSC", value: 3284.12, change: 56.34, changePct: 1.74, ytd: 24.6, color: "#14b8a6" },
+  { name: "Supply Chain", symbol: "ARSCP", value: 2947.66, change: 28.44, changePct: 0.97, ytd: 13.5, color: "#6366f1" },
+  { name: "AI Index", symbol: "ARAI", value: 4521.80, change: 96.84, changePct: 2.19, ytd: 47.3, color: "#00d4ff" },
+  { name: "Sustainability", symbol: "ARSUS", value: 3102.45, change: 41.22, changePct: 1.35, ytd: 19.8, color: "#84cc16" },
 ];
 
 export const commodities: CommodityItem[] = [

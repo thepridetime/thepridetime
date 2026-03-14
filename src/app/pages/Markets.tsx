@@ -609,7 +609,7 @@ export function Markets() {
             </div>
 
             <div className="bg-[#0d1f3c] rounded-xl p-5">
-              <SectionHeader icon={BarChart2} title="Alphaburg Industry Indices" />
+              <SectionHeader icon={BarChart2} title="Global Industry Indices" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {industryIndices.map(idx => {
                   const [val, setVal] = useState(idx.value);

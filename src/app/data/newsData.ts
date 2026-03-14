@@ -36,9 +36,9 @@ export const articles: Article[] = [
   },
   {
     id: "2",
-    title: "Enterprise AI Spending to Exceed $2.4 Trillion Globally by 2027, Alphaburg Report Analysis Reveals",
-    excerpt: "Alphaburg Report's annual enterprise technology forecast projects unprecedented investment growth across all sectors, driven by generative AI adoption and autonomous systems deployment across Fortune 500 companies.",
-    content: "The Alphaburg Report Intelligence Research Division has released its highly anticipated annual technology investment report projecting that enterprise AI spending will surpass the $2.4 trillion mark by 2027.",
+    title: "Enterprise AI Spending to Exceed $2.4 Trillion Globally by 2027, The Pride Times Report Analysis Reveals",
+    excerpt: "The Pride Times Report's annual enterprise technology forecast projects unprecedented investment growth across all sectors, driven by generative AI adoption and autonomous systems deployment across Fortune 500 companies.",
+    content: "The The Pride Times Report Intelligence Research Division has released its highly anticipated annual technology investment report projecting that enterprise AI spending will surpass the $2.4 trillion mark by 2027.",
     author: "James Thornton",
     authorRole: "Chief Technology Analyst",
     category: "Technology",
