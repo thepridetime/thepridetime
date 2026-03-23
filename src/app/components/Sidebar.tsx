@@ -154,23 +154,18 @@ export function Sidebar() {
         <p className="text-xs text-gray-500 mt-2">Join 2.4M+ enterprise readers. No spam.</p>
       </div>
 
-      {/* Alphaburg Intelligence Report */}
+      {/* The Pride Times Intelligence Report */}
       <div className="border-2 border-[#0d1f3c] rounded-lg overflow-hidden">
         <div className="bg-[#0d1f3c] px-4 py-3">
-          <div className="text-[#00d4ff] text-xs font-black uppercase tracking-widest">Premium Report</div>
+          <div className="text-[#00d4ff] text-xs font-black uppercase tracking-widest">Top High Rated Brands</div>
           <h3 className="text-white font-bold mt-1 leading-tight">Global Digital Intelligence Outlook 2026</h3>
         </div>
         <div className="p-4 bg-white">
           <p className="text-sm text-gray-600 leading-relaxed mb-3">
             Our comprehensive annual analysis covering AI, digital infrastructure, cybersecurity, and enterprise transformation across 195 nations.
           </p>
-          <Link
-            to="/reports"
-            className="flex items-center justify-center gap-2 w-full bg-[#0d1f3c] text-white py-2.5 rounded text-sm font-bold hover:bg-[#1a2f50] transition-colors"
-          >
-            Download Report <ChevronRight className="w-4 h-4" />
-          </Link>
-          <p className="text-xs text-gray-400 text-center mt-2">Available to subscribers</p>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2331501617441941"
+     crossorigin="anonymous"></script>
         </div>
       </div>
     </aside>
