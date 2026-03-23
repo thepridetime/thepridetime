@@ -164,8 +164,6 @@ export function Sidebar() {
           <p className="text-sm text-gray-600 leading-relaxed mb-3">
             Our comprehensive annual analysis covering AI, digital infrastructure, cybersecurity, and enterprise transformation across 195 nations.
           </p>
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2331501617441941"
-     crossorigin="anonymous"></script>
         </div>
       </div>
     </aside>
