@@ -32,8 +32,8 @@ export function Header() {
               <span>Global Digital Intelligence Network</span>
             </span>
             <span className="hidden sm:block text-gray-500">|</span>
-            <span className="hidden sm:block">Monday, March 23, 2026</span>
-          </div>
+            <span className="hidden sm:block">Tuesday, March 24, 2026</span>
+          </div> 
           <div className="flex items-center gap-4">
             <Link to="/subscribe" className="text-[#00d4ff] hover:text-white transition-colors">Subscribe</Link>
             <span className="text-gray-500">|</span>
