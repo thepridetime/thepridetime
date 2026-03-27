@@ -32,10 +32,9 @@ export function Header() {
               <span>Global Digital Intelligence Network</span>
             </span>
             <span className="hidden sm:block text-gray-500">|</span>
-            <span className="hidden sm:block">Thursday, March 26, 2026</span>
+            <span className="hidden sm:block">Friday, March 27, 2026</span>
           </div> 
           <div className="flex items-center gap-4">
-            <Link to="/subscribe" className="text-[#00d4ff] hover:text-white transition-colors">Subscribe</Link>
             <span className="text-gray-500">|</span>
             <Link to="/signin" className="hover:text-white transition-colors">Sign In</Link>
             <span className="text-gray-500">|</span>
@@ -93,10 +92,6 @@ export function Header() {
               <>
                 <button onClick={() => setSearchOpen(true)} className="text-gray-400 hover:text-white transition-colors p-1">
                   <Search className="w-5 h-5" />
-                </button>
-                <button className="text-gray-400 hover:text-white transition-colors p-1 relative">
-                  <Bell className="w-5 h-5" />
-                  <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
                 </button>
                 <Link
                   to="/subscribe"
@@ -164,7 +159,7 @@ export function Header() {
                 to="/reports"
                 className="flex items-center h-10 px-4 text-sm text-[#00d4ff] hover:text-white transition-colors font-semibold"
               >
-                TPT Reports
+                Magazine
               </Link>
             </li>
           </ul>
