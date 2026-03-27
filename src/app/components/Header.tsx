@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router";
 import { Search, Bell, Menu, X, ChevronDown, Globe, Zap, TrendingUp } from "lucide-react";
 import { categories } from "../data/newsData";
 import logo from "/src/app/assess/logos.png";
+import icon from "/src/app/assess/icon.png";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -78,7 +79,7 @@ export function Header() {
                   type="text"
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  placeholder="Search Alphaburg Report..."
+                  placeholder="Search News..."
                   className="bg-[#1a2f50] text-white placeholder-gray-400 rounded px-3 py-1.5 text-sm w-64 border border-[#00d4ff]/30 outline-none focus:border-[#00d4ff]"
                 />
                 <button type="submit" className="text-[#00d4ff] hover:text-white transition-colors">
@@ -175,7 +176,7 @@ export function Header() {
                 type="text"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Search Alphaburg Report..."
+                placeholder="Search News..."
                 className="flex-1 bg-[#1a2f50] text-white placeholder-gray-400 rounded px-3 py-2 text-sm border border-[#00d4ff]/30 outline-none"
               />
               <button type="submit" className="bg-[#00d4ff] text-[#0d1f3c] px-3 py-2 rounded">
