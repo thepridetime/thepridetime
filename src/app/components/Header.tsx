@@ -38,8 +38,6 @@ export function Header() {
           <div className="flex items-center gap-4">
             <span className="text-gray-500">|</span>
             <Link to="/signin" className="hover:text-white transition-colors">Sign In</Link>
-            <span className="text-gray-500">|</span>
-            <Link to="/newsletter" className="hover:text-white transition-colors">Newsletter</Link>
           </div>
         </div>
       </div>
@@ -118,14 +116,6 @@ export function Header() {
           <ul className="flex items-center gap-0">
             <li>
               <Link
-                to="/"
-                className="flex items-center h-10 px-4 text-sm text-white bg-[#00d4ff]/10 border-b-2 border-[#00d4ff] hover:text-[#00d4ff] transition-colors"
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
                 to="/markets"
                 className="flex items-center gap-1 h-10 px-4 text-sm text-[#00d4ff] hover:bg-[#1a2f50] transition-colors font-bold border-b-2 border-[#00d4ff]/40"
               >
@@ -184,11 +174,6 @@ export function Header() {
               </button>
             </form>
             <ul className="space-y-1">
-              <li>
-                <Link to="/" className="block px-3 py-2 text-sm text-white hover:text-[#00d4ff] transition-colors" onClick={() => setMobileMenuOpen(false)}>
-                  Home
-                </Link>
-              </li>
               {navCategories.map((cat) => (
                 <li key={cat}>
                   <Link
