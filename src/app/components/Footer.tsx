@@ -30,7 +30,7 @@ export function Footer() {
               <a href="https://x.com/thepridetime" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
                 <Twitter className="w-4 h-4" />
               </a>
-              <a href="https://www.linkedin.com/company/therpidetimes" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
+              <a href="https://www.linkedin.com/company/thepridetimes" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
                 <Linkedin className="w-4 h-4" />
               </a>
               <a href="https://www.youtube.com/@pridetimenews" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
