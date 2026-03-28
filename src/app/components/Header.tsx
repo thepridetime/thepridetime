@@ -33,7 +33,7 @@ export function Header() {
               <span>Global Digital Intelligence Network</span>
             </span>
             <span className="hidden sm:block text-gray-500">|</span>
-            <span className="hidden sm:block">Saturday, March 28, 2026</span>
+            <span className="hidden sm:block">Exclusive news, data and analytics for Gobal Business</span>
           </div> 
           <div className="flex items-center gap-4">
             <span className="text-gray-500">|</span>
