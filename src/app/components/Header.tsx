@@ -77,8 +77,8 @@ export function Header() {
                   type="text"
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  placeholder="Search News..."
-                  className="bg-[#1a2f50] text-white placeholder-gray-400 rounded px-3 py-1.5 text-sm w-64 border border-[#00d4ff]/30 outline-none focus:border-[#00d4ff]"
+                  placeholder="Search"
+                  className="bg-[#1a2f50] text-white placeholder-gray-400 rounded px-1 py-1.5 text-sm w-64 border border-[#00d4ff]/30 outline-none focus:border-[#00d4ff]"
                 />
                 <button type="submit" className="text-[#00d4ff] hover:text-white transition-colors">
                   <Search className="w-5 h-5" />
@@ -166,7 +166,7 @@ export function Header() {
                 type="text"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Search News..."
+                placeholder="Search"
                 className="flex-1 bg-[#1a2f50] text-white placeholder-gray-400 rounded px-3 py-2 text-sm border border-[#00d4ff]/30 outline-none"
               />
               <button type="submit" className="bg-[#00d4ff] text-[#0d1f3c] px-3 py-2 rounded">
