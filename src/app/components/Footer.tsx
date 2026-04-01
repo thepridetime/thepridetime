@@ -51,7 +51,7 @@ export function Footer() {
               Industries
             </h4>
             <ul className="space-y-2.5">
-              {["Technology", "Finance", "Healthcare", "Energy", "Others"].map(item => (
+              {["Technology", "Finance", "Healthcare", "Energy", "More Industries"].map(item => (
                 <li key={item}>
                   <Link to={`/category/${item.toLowerCase().replace(" ", "-")}`} className="text-sm text-gray-400 hover:text-[#00d4ff] transition-colors">
                     {item}
@@ -66,7 +66,7 @@ export function Footer() {
               Regions
             </h4>
             <ul className="space-y-2.5">
-              {["North America", "Europe", "Asia-Pacific", "Middle East", "Others"].map(item => (
+              {["North America", "Europe", "Asia-Pacific", "Middle East", "More Countries"].map(item => (
                 <li key={item}>
                   <Link to={`/region/${item.toLowerCase().replace(" ", "-")}`} className="text-sm text-gray-400 hover:text-[#00d4ff] transition-colors">
                     {item}
