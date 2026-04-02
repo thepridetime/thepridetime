@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { TrendingUp, TrendingDown, BarChart2, Flame, Globe, ChevronRight, Activity } from "lucide-react";
 import { articles, categories } from "../data/newsData";
+import { AdBlock } from "./AdBlock";
 
 interface LiveMarketItem {
   name: string;
@@ -11,12 +12,14 @@ interface LiveMarketItem {
 }
 
 const initialMarkets: LiveMarketItem[] = [
-  { name: "AR Tech Index", value: 12847.23, changePct: "+1.34%", up: true },
-  { name: "Global AI ETF", value: 4521.80, changePct: "+2.18%", up: true },
+  { name: "S&P 500", value: 6284.17, changePct: "+0.77%", up: true },
+  { name: "NASDAQ", value: 20847.94, changePct: "+1.52%", up: true },
+  { name: "TPT Tech", value: 12847.23, changePct: "+1.34%", up: true },
   { name: "BTC/USD", value: 98234.50, changePct: "-0.72%", up: false },
   { name: "Gold $/oz", value: 3124.80, changePct: "+0.59%", up: true },
   { name: "WTI Oil", value: 87.42, changePct: "+0.95%", up: true },
   { name: "EUR/USD", value: 1.0842, changePct: "-0.23%", up: false },
+  { name: "Nikkei 225", value: 41236.78, changePct: "+1.28%", up: true },
 ];
 
 export function Sidebar() {
@@ -40,20 +43,20 @@ export function Sidebar() {
           };
         })
       );
-    }, 2000);
+    }, 1800);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <aside className="space-y-6">
-      {/* Markets Widget */}
-      <div className="bg-[#0d1f3c] rounded-lg overflow-hidden">
+    <aside className="space-y-5">
+      {/* Live Markets Widget */}
+      <div className="bg-[#0d1f3c] rounded-lg overflow-hidden border border-[#1a2f50]">
         <div className="flex items-center gap-2 px-4 py-3 border-b border-[#1a2f50]">
           <BarChart2 className="w-4 h-4 text-[#00d4ff]" />
-          <h3 className="text-sm font-bold text-white uppercase tracking-wider">Live Markets</h3>
-          <span className="ml-auto flex items-center gap-1 text-xs text-green-400">
+          <h3 className="text-sm font-black text-white uppercase tracking-wider">Live Markets</h3>
+          <span className="ml-auto flex items-center gap-1 text-xs text-green-400 font-semibold">
             <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-            Live
+            LIVE
           </span>
         </div>
         <div className="p-2">
@@ -61,11 +64,11 @@ export function Sidebar() {
             <Link
               key={idx}
               to="/markets"
-              className="flex items-center justify-between px-3 py-2.5 hover:bg-[#1a2f50] rounded transition-colors"
+              className="flex items-center justify-between px-3 py-2 hover:bg-[#1a2f50] rounded transition-colors"
             >
               <div>
-                <div className="text-xs font-semibold text-gray-200">{item.name}</div>
-                <div className="text-sm font-bold text-white tabular-nums">
+                <div className="text-xs font-semibold text-gray-300">{item.name}</div>
+                <div className="text-sm font-black text-white tabular-nums">
                   {item.value.toLocaleString("en-US", {
                     minimumFractionDigits: item.value < 10 ? 4 : 2,
                     maximumFractionDigits: item.value < 10 ? 4 : 2,
@@ -79,19 +82,22 @@ export function Sidebar() {
             </Link>
           ))}
         </div>
-        <div className="px-4 py-2 border-t border-[#1a2f50]">
-          <Link to="/markets" className="text-xs text-[#00d4ff] hover:text-white transition-colors flex items-center gap-1">
+        <div className="px-4 py-2.5 border-t border-[#1a2f50]">
+          <Link to="/markets" className="text-xs text-[#00d4ff] hover:text-white transition-colors flex items-center gap-1 font-semibold">
             <Activity className="w-3 h-3" />
-            Full Live Market Data <ChevronRight className="w-3 h-3" />
+            Full Live Market Dashboard <ChevronRight className="w-3 h-3" />
           </Link>
         </div>
       </div>
+
+      {/* Ad Block 1 */}
+      <AdBlock variant="sidebar" />
 
       {/* Trending */}
       <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
         <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-200 bg-gray-50">
           <Flame className="w-4 h-4 text-red-500" />
-          <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Trending Now</h3>
+          <h3 className="text-sm font-black text-gray-900 uppercase tracking-wider">Trending Now</h3>
         </div>
         <div className="divide-y divide-gray-100">
           {trendingArticles.map((article, idx) => (
@@ -104,22 +110,25 @@ export function Sidebar() {
                 {idx + 1}
               </span>
               <div>
-                <p className="text-xs font-bold text-blue-700 uppercase tracking-wide mb-1">{article.category}</p>
+                <p className="text-xs font-bold text-[#00d4ff] uppercase tracking-wide mb-1">{article.category}</p>
                 <h4 className="text-sm font-bold text-gray-900 leading-tight line-clamp-2 group-hover:text-[#0d1f3c] transition-colors">
                   {article.title}
                 </h4>
-                <p className="text-xs text-gray-500 mt-1">{article.readTime}</p>
+                <p className="text-xs text-gray-500 mt-1">{article.readTime} · {article.date}</p>
               </div>
             </Link>
           ))}
         </div>
       </div>
 
+      {/* Ad Block 2 */}
+      <AdBlock variant="rectangle" />
+
       {/* Categories */}
       <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
         <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-200 bg-gray-50">
           <Globe className="w-4 h-4 text-[#0d1f3c]" />
-          <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Browse Topics</h3>
+          <h3 className="text-sm font-black text-gray-900 uppercase tracking-wider">Browse Topics</h3>
         </div>
         <div className="p-3 flex flex-wrap gap-2">
           {categories.map((cat) => (
@@ -135,36 +144,67 @@ export function Sidebar() {
       </div>
 
       {/* Newsletter CTA */}
-      <div className="bg-gradient-to-br from-[#0d1f3c] to-[#1a3a5c] rounded-lg p-5 text-white">
-        <div className="text-[#00d4ff] text-xs font-black uppercase tracking-widest mb-2">The Pride Times Intelligence</div>
-        <h3 className="font-bold text-lg leading-tight mb-2">Daily Briefing Newsletter</h3>
+      <div className="bg-gradient-to-br from-[#0d1f3c] to-[#1a3a5c] rounded-lg p-5 text-white border border-[#1a2f50]">
+        <div className="text-[#00d4ff] text-xs font-black uppercase tracking-widest mb-2">TPT Intelligence</div>
+        <h3 className="font-black text-base leading-tight mb-2">Daily Briefing Newsletter</h3>
         <p className="text-sm text-gray-300 leading-relaxed mb-4">
-          Get the most important enterprise news curated by our global intelligence network delivered every morning.
+          Get the most important global news curated by our international team of correspondents, delivered every morning.
         </p>
-        <form onSubmit={e => e.preventDefault()} className="space-y-2">
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            const inp = (e.target as HTMLFormElement).querySelector("input") as HTMLInputElement;
+            if (inp?.value) {
+              alert(`Welcome to The Pride Times! You've subscribed with ${inp.value}`);
+              inp.value = "";
+            }
+          }}
+          className="space-y-2"
+        >
           <input
             type="email"
-            placeholder="your@company.com"
+            placeholder="your@email.com"
+            required
             className="w-full bg-[#1a2f50] text-white placeholder-gray-400 rounded px-3 py-2 text-sm border border-[#2a4f80] outline-none focus:border-[#00d4ff]"
           />
-          <button className="w-full bg-[#00d4ff] text-[#0d1f3c] py-2 rounded text-sm font-bold hover:bg-white transition-colors">
+          <button type="submit" className="w-full bg-[#00d4ff] text-[#0a1628] py-2 rounded text-sm font-black hover:bg-white transition-colors">
             Subscribe Free
           </button>
         </form>
-        <p className="text-xs text-gray-500 mt-2">Join 2.4M+ enterprise readers. No spam.</p>
+        <p className="text-xs text-gray-500 mt-2">Join 2.4M+ global readers. No spam, ever.</p>
       </div>
 
-      {/* The Pride Times Intelligence Report */}
+      {/* TPT Premium Report */}
       <div className="border-2 border-[#0d1f3c] rounded-lg overflow-hidden">
         <div className="bg-[#0d1f3c] px-4 py-3">
-          <div className="text-[#00d4ff] text-xs font-black uppercase tracking-widest">Top High Rated Brands</div>
-          <h3 className="text-white font-bold mt-1 leading-tight">Global Digital Intelligence Outlook 2026</h3>
+          <div className="text-[#00d4ff] text-xs font-black uppercase tracking-widest">Premium Report</div>
+          <h3 className="text-white font-black mt-1 leading-tight text-sm">Global Intelligence Outlook 2026</h3>
         </div>
         <div className="p-4 bg-white">
           <p className="text-sm text-gray-600 leading-relaxed mb-3">
-            Our comprehensive annual analysis covering AI, digital infrastructure, cybersecurity, and enterprise transformation across 195 nations.
+            The Pride Times' comprehensive annual analysis covering AI, digital infrastructure, cybersecurity, and enterprise transformation across 195 nations.
           </p>
+          <Link
+            to="/reports"
+            className="flex items-center justify-center gap-2 w-full bg-[#0d1f3c] text-white py-2.5 rounded text-sm font-black hover:bg-[#1a2f50] transition-colors"
+          >
+            Access Report <ChevronRight className="w-4 h-4" />
+          </Link>
+          <p className="text-xs text-gray-400 text-center mt-2">Available to subscribers</p>
         </div>
+      </div>
+
+      {/* Magazine promo */}
+      <div className="bg-gradient-to-br from-yellow-900 to-amber-800 rounded-lg p-4 text-white border border-yellow-700">
+        <div className="text-yellow-300 text-xs font-black uppercase tracking-widest mb-2">📖 Magazine</div>
+        <h3 className="font-black text-base mb-1">The Pride Times Magazine</h3>
+        <p className="text-xs text-yellow-100 mb-3">Full-length features, cover stories, and deep-dive analysis from around the globe.</p>
+        <Link
+          to="/magazine"
+          className="block text-center bg-yellow-400 text-yellow-900 py-2 rounded text-sm font-black hover:bg-white hover:text-yellow-900 transition-colors"
+        >
+          Browse This Month's Issue
+        </Link>
       </div>
     </aside>
   );

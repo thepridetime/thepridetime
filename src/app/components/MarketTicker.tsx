@@ -43,26 +43,26 @@ export function MarketTicker() {
           };
         })
       );
-    }, 1800);
+    }, 1600);
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="bg-[#0a1628] border-b border-[#1a2f50] overflow-hidden">
-      <div className="max-w-screen-xl mx-auto px-4 flex items-center h-9 gap-0 overflow-x-auto scrollbar-hide">
+    <div className="bg-[#07131f] border-b border-[#1a2f50] overflow-hidden">
+      <div className="max-w-screen-xl mx-auto px-3 sm:px-4 flex items-center h-9 gap-0 overflow-x-auto scrollbar-hide">
         <Link
           to="/markets"
-          className="flex items-center gap-1.5 text-xs font-black text-[#0a1628] bg-[#00d4ff] px-3 h-full uppercase tracking-wider mr-0 flex-shrink-0 hover:bg-white transition-colors"
+          className="flex items-center gap-1.5 text-xs font-black text-[#07131f] bg-[#00d4ff] px-2 sm:px-3 h-full uppercase tracking-wider mr-0 flex-shrink-0 hover:bg-white transition-colors"
         >
           <Activity className="w-3.5 h-3.5" />
-          Live Markets
+          <span className="hidden sm:inline">Live</span> Markets
         </Link>
         <div className="flex items-center gap-0 flex-nowrap overflow-x-auto scrollbar-hide">
           {liveData.map((item, idx) => (
             <Link
               key={idx}
               to="/markets"
-              className="flex items-center gap-2 flex-shrink-0 px-4 border-r border-[#1a2f50] last:border-none hover:bg-[#1a2f50] transition-colors h-9"
+              className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0 px-2 sm:px-4 border-r border-[#1a2f50] last:border-none hover:bg-[#1a2f50] transition-colors h-9"
             >
               <span className="text-xs text-gray-400 font-medium whitespace-nowrap">{item.name}</span>
               <span className="text-xs font-bold text-white tabular-nums">
@@ -78,9 +78,9 @@ export function MarketTicker() {
             </Link>
           ))}
         </div>
-        <div className="flex items-center gap-1.5 ml-auto pl-4 flex-shrink-0 text-[10px] text-gray-500">
+        <div className="flex items-center gap-1.5 ml-auto pl-3 sm:pl-4 flex-shrink-0 text-[10px] text-gray-500">
           <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse flex-shrink-0"></span>
-          LIVE
+          <span className="hidden sm:inline">LIVE</span>
         </div>
       </div>
     </div>

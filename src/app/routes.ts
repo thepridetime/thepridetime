@@ -6,6 +6,15 @@ import { Category } from "./pages/Category";
 import { Markets } from "./pages/Markets";
 import { Search } from "./pages/Search";
 import { NotFound } from "./pages/NotFound";
+import { Subscribe } from "./pages/Subscribe";
+import { SignIn } from "./pages/SignIn";
+import { Newsletter } from "./pages/Newsletter";
+import { Magazine } from "./pages/Magazine";
+import { Privacy } from "./pages/Privacy";
+import { Terms } from "./pages/Terms";
+import { CookiePolicy } from "./pages/CookiePolicy";
+import { Accessibility } from "./pages/Accessibility";
+import { Reports } from "./pages/Reports";
 
 export const router = createBrowserRouter([
   {
@@ -19,11 +28,16 @@ export const router = createBrowserRouter([
       { path: "region/:slug", Component: Category },
       { path: "markets", Component: Markets },
       { path: "search", Component: Search },
-      { path: "reports", Component: Home },
+      { path: "magazine", Component: Magazine },
+      { path: "reports", Component: Reports },
+      { path: "subscribe", Component: Subscribe },
+      { path: "signin", Component: SignIn },
+      { path: "newsletter", Component: Newsletter },
+      { path: "privacy", Component: Privacy },
+      { path: "terms", Component: Terms },
+      { path: "cookie-policy", Component: CookiePolicy },
+      { path: "accessibility", Component: Accessibility },
       { path: "latest", Component: Home },
-      { path: "subscribe", Component: Home },
-      { path: "newsletter", Component: Home },
-      { path: "signin", Component: Home },
       { path: "*", Component: NotFound },
     ],
   },

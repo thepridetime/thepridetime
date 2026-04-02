@@ -110,7 +110,7 @@ const categoryMeta: Record<string, {
     subtopics: ["Net Zero Strategy", "Carbon Markets", "Green Finance", "Circular Economy", "Climate Tech", "ESG Reporting", "Biodiversity", "Water Security"],
   },
   Markets: {
-    description: "Comprehensive global markets intelligence covering equities, fixed income, commodities, forex, digital assets, and The Pride Times Report's proprietary industry indices.",
+    description: "Comprehensive global markets intelligence covering equities, fixed income, commodities, forex, digital assets, and The Pride Times' proprietary industry indices.",
     color: "#00d4ff",
     stats: [
       { label: "Global Equities", value: "$109T" },
@@ -143,7 +143,7 @@ export function Category() {
   ) || (slug ? slug.replace(/-/g, " ").replace(/\b\w/g, l => l.toUpperCase()) : "Category");
 
   const meta = categoryMeta[categoryName] || {
-    description: `Latest intelligence and analysis from The Pride Times Report on ${categoryName}.`,
+    description: `Latest intelligence and analysis from The Pride Times on ${categoryName}.`,
     color: "#00d4ff",
     stats: [],
     subtopics: [],
@@ -307,7 +307,7 @@ export function Category() {
             <div className="rounded-xl overflow-hidden" style={{ background: `linear-gradient(135deg, ${meta.color}22, #0d1f3c)` }}>
               <div className="border border-white/10 rounded-xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                  <div className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: meta.color }}>The Pride Times Intelligence Report</div>
+                  <div className="text-xs font-black uppercase tracking-widest mb-1" style={{ color: meta.color }}>TPT Intelligence Report</div>
                   <h3 className="text-[#0d1f3c] font-bold text-xl leading-tight">
                     {categoryName} Outlook Q1 2026
                   </h3>

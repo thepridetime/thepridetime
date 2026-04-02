@@ -156,7 +156,7 @@ export function Markets() {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <BarChart2 className="w-5 h-5 text-[#00d4ff]" />
-              <h1 className="text-white font-black text-xl uppercase tracking-wider">Global Live Markets</h1>
+              <h1 className="text-white font-black text-xl uppercase tracking-wider">The Pride Times — Live Markets</h1>
               <span className="flex items-center gap-1 text-xs bg-green-500/20 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                 LIVE
@@ -180,14 +180,14 @@ export function Markets() {
         <div className="max-w-screen-xl mx-auto px-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 divide-x divide-[#1a2f50]">
             {[
-              { label: "AR Tech", ...gdnTech, suffix: "", decimals: 2 },
-              { label: "AR AI Index", price: gdnAI.price, up: gdnAI.up, suffix: "", decimals: 2 },
+              { label: "TPT Tech", ...gdnTech, suffix: "", decimals: 2 },
+              { label: "TPT AI Index", price: gdnAI.price, up: gdnAI.up, suffix: "", decimals: 2 },
               { label: "BTC/USD", price: btcPrice.price, up: btcPrice.up, suffix: "$", decimals: 0 },
               { label: "ETH/USD", price: ethPrice.price, up: ethPrice.up, suffix: "$", decimals: 2 },
               { label: "Gold $/oz", price: goldPrice.price, up: goldPrice.up, suffix: "$", decimals: 2 },
               { label: "WTI Oil", price: oilPrice.price, up: oilPrice.up, suffix: "$", decimals: 2 },
               { label: "EUR/USD", price: eurusd.price, up: eurusd.up, suffix: "", decimals: 4 },
-              { label: "AR Cyber", price: gdnCyber.price, up: gdnCyber.up, suffix: "", decimals: 2 },
+              { label: "TPT Cyber", price: gdnCyber.price, up: gdnCyber.up, suffix: "", decimals: 2 },
             ].map((item, i) => (
               <div key={i} className="px-4 py-3 flex flex-col gap-0.5">
                 <span className="text-[10px] text-gray-500 uppercase tracking-wider">{item.label}</span>
@@ -234,7 +234,7 @@ export function Markets() {
               <div className="lg:col-span-2 bg-[#0d1f3c] rounded-xl p-5">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">Global Technology Index</div>
+                    <div className="text-xs text-gray-400 uppercase tracking-wider mb-1">TPT Technology Index</div>
                     <div className="flex items-center gap-3">
                       <LivePriceCell value={gdnTech.price} up={gdnTech.up} decimals={2} />
                       <span className={`text-sm font-bold ${gdnTech.up ? "text-green-400" : "text-red-400"}`}>
@@ -609,7 +609,7 @@ export function Markets() {
             </div>
 
             <div className="bg-[#0d1f3c] rounded-xl p-5">
-              <SectionHeader icon={BarChart2} title="Global Industry Indices" />
+              <SectionHeader icon={BarChart2} title="TPT Industry Indices" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {industryIndices.map(idx => {
                   const [val, setVal] = useState(idx.value);
