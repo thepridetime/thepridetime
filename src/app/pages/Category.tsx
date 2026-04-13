@@ -151,12 +151,10 @@ export function Category() {
   };
 
   const catColor = categoryColors[categoryName] || "bg-[#0d1f3c]";
-
-  let categoryArticles = articles.filter(
-    a => a.category.toLowerCase().replace(/ /g, "-") === slug ||
-      a.category === categoryName
-  );
-  const displayArticles = categoryArticles.length > 0 ? categoryArticles : articles;
+let categoryArticles = articles.filter(
+  a => a.category.trim() === categoryName
+);
+  const displayArticles = categoryArticles;
 
   const heroArticle = displayArticles[0];
   const gridArticles = displayArticles.slice(1);
@@ -201,48 +199,7 @@ export function Category() {
               </div>
               <p className="text-gray-300 text-base leading-relaxed mb-6 max-w-2xl">{meta.description}</p>
              
-              {/* ========== BREAKING NEWS - RIGHT UNDER TITLE ========== */}
-              {breakingNews.length > 0 && (
-                <div className="mb-6">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="bg-red-600 text-white text-[10px] font-black px-2 py-0.5 uppercase tracking-widest">Breaking</span>
-                    <span className="text-[10px] text-red-400 font-semibold">Latest Developments</span>
-                  </div>
-                  <div className="space-y-1">
-                    {breakingNews.map(news => (
-                      <Link key={news.id} to={`/article/${news.id}`} className="flex items-start gap-2 group">
-                        <div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 flex-shrink-0"></div>
-                        <p className="text-sm font-medium text-gray-200 group-hover:text-[#00d4ff] transition-colors">
-                          {news.title}
-                        </p>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* ========== LIVE MARKETS TICKER - RIGHT UNDER BREAKING NEWS ========== */}
-              <div className="bg-[#0a1628]/50 border border-[#1a2f50] rounded-lg p-3 mb-8">
-                <div className="flex items-center gap-4 overflow-x-auto">
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
-                    <span className="text-[10px] font-black text-green-400 uppercase">LIVE</span>
-                    <span className="text-[10px] text-gray-500">Markets</span>
-                  </div>
-                  {marketItems.slice(0, 6).map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-2 flex-shrink-0">
-                      <div>
-                        <div className="text-[9px] text-gray-500">{item.name}</div>
-                        <div className="text-xs font-bold text-white">{item.value}</div>
-                      </div>
-                      <div className={`text-[10px] font-bold ${item.up ? 'text-green-400' : 'text-red-400'}`}>
-                        {item.change}
-                      </div>
-                      {idx < 5 && <div className="w-px h-5 bg-[#1a2f50] ml-1"></div>}
-                    </div>
-                  ))}
-                </div>
-              </div>
+              
              
               {/* Subtopics - DROPDOWN BOX */}
 {meta.subtopics.length > 0 && (
