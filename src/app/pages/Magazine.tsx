@@ -12,7 +12,7 @@ const coverStories = [
     subtitle: "March 2026 Cover Story",
     desc: "From Silicon Valley to Singapore, we investigate how artificial intelligence is reshaping every industry, every government, and every life on the planet.",
     image: "https://images.unsplash.com/photo-1768224656445-33d078c250b7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    author: "Alexandra Chen",
+    author: "Sagar Kuamr",
     readTime: "18 min read",
     tag: "Cover Story",
     tagColor: "bg-red-600",
@@ -23,7 +23,7 @@ const coverStories = [
     subtitle: "Special Report: March 2026",
     desc: "DeFi has surpassed traditional banking. We trace the seismic shift from Wall Street to a world without borders — and what it means for the $800 trillion global economy.",
     image: "https://images.unsplash.com/photo-1642775196125-38a9eb496568?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    author: "Marcus Webb",
+    author: "Sagar Kuamr",
     readTime: "22 min read",
     tag: "Special Report",
     tagColor: "bg-emerald-600",
@@ -34,7 +34,7 @@ const coverStories = [
     subtitle: "Feature: March 2026",
     desc: "With fusion power now commercially viable and renewables connecting 200 nations, we mark the moment fossil fuels became history.",
     image: "https://images.unsplash.com/photo-1769501378353-2e4e3e3e325c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    author: "Dr. Wei Zhang",
+    author: "Sagar Kuamr",
     readTime: "16 min read",
     tag: "Feature",
     tagColor: "bg-yellow-600",
@@ -42,12 +42,8 @@ const coverStories = [
 ];
 
 const issues = [
-  { month: "March 2026", articles: 48, cover: "AI Revolution", current: true },
-  { month: "February 2026", articles: 52, cover: "Digital Finance" },
-  { month: "January 2026", articles: 45, cover: "Quantum Leap" },
-  { month: "December 2025", articles: 55, cover: "Year in Review" },
-  { month: "November 2025", articles: 44, cover: "Smart Cities" },
-  { month: "October 2025", articles: 48, cover: "Cybersecurity" },
+  { month: "April 2026", articles: 48, cover: "AI Revolution", current: true },
+  //**{ month: "March 2026", articles: 52, cover: "Digital Finance" },
 ];
 
 const sections = [
@@ -75,7 +71,7 @@ export function Magazine() {
                 <BookOpen className="w-4 h-4" /> The Pride Times Magazine
               </div>
               <h1 className="text-3xl sm:text-4xl font-black leading-tight mb-3">
-                March 2026 Issue
+                April 2026 Issue
               </h1>
               <p className="text-yellow-100 text-lg mb-4">
                 "Truth in every page. Pride in every story."
@@ -91,7 +87,7 @@ export function Magazine() {
             <div className="flex-shrink-0">
               <div className="bg-gradient-to-br from-yellow-600 to-amber-700 rounded-2xl p-6 shadow-2xl w-48 text-center border-4 border-yellow-500">
                 <div className="text-yellow-200 text-[10px] font-black uppercase tracking-widest mb-2">The Pride Times</div>
-                <div className="text-white text-4xl font-black mb-1">MARCH</div>
+                <div className="text-white text-4xl font-black mb-1">April</div>
                 <div className="text-yellow-300 text-lg font-bold">2026</div>
                 <div className="mt-3 pt-3 border-t border-yellow-500/40">
                   <div className="text-[10px] text-yellow-200">AI REVOLUTION</div>
