@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router";
+//import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Eye, EyeOff, Lock, Mail, AlertCircle, CheckCircle } from "lucide-react";
-import logo from "/src/app/assess/logos.png";
-import icon from "/src/app/assess/icon.png";
-
+//import { useNavigate } from "react-router";
+//import { supabase } from "../lib/supabase";        
+//import { useAuth } from "../hooks/useAuth";       
 export function SignIn() {
+  //const { signIn } = useAuth();
+
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -12,19 +15,57 @@ export function SignIn() {
   const [resetMode, setResetMode] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [resetSent, setResetSent] = useState(false);
+  const navigate = useNavigate();
+const [error, setError] = useState("");
+const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleSignIn = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      if (form.email && form.password.length >= 6) {
-        setStatus("success");
-      } else {
-        setStatus("error");
-      }
-    }, 1200);
-  };
+const checkUserSubscription = async (email: string) => {
+  try {
+    const response = await fetch(`http://localhost:5000/api/auth/check-status/${email}`);
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    return { canLogin: false, message: "Unable to verify subscription status" };
+  }
+};
+
+const handleSignIn = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
+  
+  try {
+    // Directly proceed with login (skip status check for now)
+    const response = await fetch('http://localhost:5000/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        email: form.email, 
+        password: form.password 
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.error || 'Login failed');
+    }
+    
+    if (data.success) {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+          window.dispatchEvent(new Event('auth-change'));
+      setIsSuccess(true);
+      
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+    }
+  } catch (err: any) {
+    setError(err.message);
+    setLoading(false);
+  }
+};
 
   const handleReset = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +76,8 @@ export function SignIn() {
     }, 1000);
   };
 
-  if (status === "success") {
+  // NEW: Success screen using isSuccess instead of status
+  if (isSuccess) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="bg-white rounded-2xl shadow-lg p-8 max-w-sm w-full text-center">
@@ -61,7 +103,9 @@ export function SignIn() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex flex-col items-center gap-2">
-            <img src={logo} alt="The Pride Times" className="w-14 h-14 rounded-xl object-cover border-2 border-[#00d4ff]/40" />
+            <div className="w-14 h-14 bg-gradient-to-br from-[#0d1f3c] to-[#00d4ff] rounded-xl flex items-center justify-center border-2 border-[#00d4ff]/40">
+  <span className="text-white font-black text-2xl">PT</span>
+</div>
             <div>
               <div className="text-xl font-black text-[#0d1f3c]">The Pride <span className="text-[#00d4ff]">Times</span></div>
               <div className="text-[9px] tracking-widest text-gray-400 uppercase">Truth · Integrity · Pride</div>
@@ -148,7 +192,7 @@ export function SignIn() {
               <div className="mt-6 pt-5 border-t border-gray-100 text-center">
                 <p className="text-sm text-gray-600">
                   Don't have an account?{" "}
-                  <Link to="/subscribe" className="text-[#00d4ff] font-bold hover:text-[#0d1f3c] transition-colors">
+                  <Link to="/signup" className="text-[#00d4ff] font-bold hover:text-[#0d1f3c] transition-colors">
                     Subscribe Now
                   </Link>
                 </p>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { Search, Bell, Menu, X, ChevronDown, Globe, TrendingUp } from "lucide-react";
+import { Search, Bell, Menu, X, ChevronDown, Globe, TrendingUp, ChevronRight } from "lucide-react";
 import { categories } from "../data/newsData";
 import { useLiveDateTime } from "./LiveClock";
 import logo from "/src/app/assess/logos.png";
@@ -23,8 +23,7 @@ export function Header() {
     }
   };
 
-  const navCategories = categories.slice(0, 8);
-
+const navCategories = [...categories.slice(0, 8)];
   return (
     <header className="sticky top-0 z-50 shadow-lg">
       {/* Top utility bar — live date/time + world clocks */}
@@ -166,8 +165,8 @@ export function Header() {
 
       {/* Navigation bar */}
       <nav className="bg-[#0d1f3c] border-t border-[#1a2f50] hidden lg:block">
-        <div className="max-w-screen-x mx-auto px-4">
-          <ul className="flex items-center gap-0 overflow-x-auto">
+        <div className="max-w-screen-xl mx-auto px-4">
+          <ul className="flex items-center justify-between flex-nowrap w-full">
             <li>
               <Link to="/markets" className="flex items-center gap-1 h-10 px-3 text-sm text-[#00d4ff] hover:bg-[#1a2f50] transition-colors font-black border-b-2 border-[#00d4ff]/50 whitespace-nowrap">
                 📈 Live Markets
@@ -185,26 +184,102 @@ export function Header() {
                   className="flex items-center gap-1 h-10 px-3 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors whitespace-nowrap"
                 >
                   {cat}
-                  <ChevronDown className="w-3 h-3 opacity-60" />
+                  <ChevronDown className="w-3 h-3 opacity-60 group-hover:rotate-180 transition-transform duration-200" />
                 </Link>
-                <div className="absolute top-full left-0 w-48 bg-[#0d1f3c] border border-[#1a2f50] shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 rounded-b-lg">
-                  <Link to={`/category/${cat.toLowerCase().replace(/ /g, "-")}`} className="block px-4 py-2.5 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors border-b border-[#1a2f50]">
-                    All {cat}
-                  </Link>
-                  <Link to={`/category/${cat.toLowerCase().replace(/ /g, "-")}/analysis`} className="block px-4 py-2.5 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors border-b border-[#1a2f50]">
+
+                {/* Modern Organized Dropdown */}
+                <div className="absolute top-full left-0 w-64 bg-[#0d1f3c] border border-[#1a2f50] rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
+
+                  {/* Header */}
+                  <div className="px-4 py-3 border-b border-[#1a2f50] bg-gradient-to-r from-[#0a1628] to-[#0d1f3c]">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">📰</span>
+                      <div>
+                        <div className="text-sm font-bold text-white">{cat}</div>
+                        <div className="text-[10px] text-gray-500">Latest news & analysis</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Main Section */}
+                  <div className="py-2">
+                    <Link
+                      to={`/category/${cat.toLowerCase().replace(/ /g, "-")}`}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-[#00d4ff]"></span>
+                      All {cat}
+                    </Link>
+                  </div>
+
+                  {/* Content Section */}
+                  <div className="px-4 py-1">
+                    <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Content</div>
+                  </div>
+
+                  <Link
+                    to={`/category/${cat.toLowerCase().replace(/ /g, "-")}/analysis`}
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors"
+                  >
+                    <span className="w-5 text-center">📊</span>
                     Analysis
                   </Link>
-                  <Link to={`/category/${cat.toLowerCase().replace(/ /g, "-")}/reports`} className="block px-4 py-2.5 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors">
+
+                  <Link
+                    to={`/category/${cat.toLowerCase().replace(/ /g, "-")}/reports`}
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors"
+                  >
+                    <span className="w-5 text-center">📄</span>
                     Reports
                   </Link>
+
+                  <Link
+                    to={`/category/${cat.toLowerCase().replace(/ /g, "-")}/interviews`}
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors"
+                  >
+                    <span className="w-5 text-center">🎤</span>
+                    Interviews
+                  </Link>
+
+                  {/* Resources Section */}
+                  <div className="px-4 py-1 mt-1">
+                    <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Resources</div>
+                  </div>
+
+                  <Link
+                    to={`/category/${cat.toLowerCase().replace(/ /g, "-")}/data`}
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors"
+                  >
+                    <span className="w-5 text-center">📈</span>
+                    Data & Charts
+                  </Link>
+
+                  <Link
+                    to={`/category/${cat.toLowerCase().replace(/ /g, "-")}/events`}
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors"
+                  >
+                    <span className="w-5 text-center">📅</span>
+                    Events
+                  </Link>
+
+                  {/* Footer */}
+                  <div className="px-4 py-2 border-t border-[#1a2f50] bg-[#0a1628]">
+                    <Link
+                      to={`/category/${cat.toLowerCase().replace(/ /g, "-")}/trending`}
+                      className="flex items-center justify-between text-xs text-[#00d4ff] hover:text-white transition-colors"
+                    >
+                      <span>🔥 Trending in {cat}</span>
+                      <ChevronRight className="w-3 h-3" />
+                    </Link>
+                  </div>
                 </div>
               </li>
             ))}
-            <li className="ml-auto">
-              <Link to="/reports" className="flex items-center h-10 px-4 text-sm text-[#00d4ff] hover:text-white transition-colors font-bold whitespace-nowrap">
-                TPT Reports
-              </Link>
-            </li>
+          <li className="ml-auto">
+  <Link to="/reports" className="flex items-center h-10 px-3 text-sm text-[#00d4ff] hover:text-white hover:bg-[#1a2f50] transition-colors font-bold whitespace-nowrap">
+    TPT Reports
+  </Link>
+</li>
           </ul>
         </div>
       </nav>

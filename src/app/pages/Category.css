@@ -1,0 +1,103 @@
+/* Category Page - UltraTech Style Spacing */
+
+/* Hero section with proper padding */
+.category-hero {
+  padding: 2rem 0 3rem 0;
+  position: relative;
+}
+
+/* Breadcrumb spacing */
+.category-breadcrumb {
+  margin-bottom: 2rem;
+}
+
+/* Title spacing */
+.category-title {
+  margin-bottom: 1rem;
+}
+
+.category-description {
+  margin-bottom: 2rem;
+  max-width: 42rem;
+}
+
+/* Subtopics section */
+.category-subtopics {
+  margin-bottom: 2.5rem;
+}
+
+.subtopics-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.subtopics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+/* Stats section */
+.category-stats {
+  margin-top: 1.5rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+/* Quick navigation card */
+.quick-nav-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.25rem;
+}
+
+.quick-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  color: #d1d5db;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.quick-nav-item:hover {
+  color: #00d4ff;
+}
+
+/* Live ticker spacing */
+.live-ticker {
+  margin: 1.5rem 0;
+  padding: 0.75rem 0;
+  background: #0a1628;
+  border-top: 1px solid #1a2f50;
+  border-bottom: 1px solid #1a2f50;
+}
+
+/* Main content spacing */
+.main-content {
+  padding: 2rem 0 3rem 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .subtopics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .category-hero {
+    padding: 1rem 0 2rem 0;
+  }
+  .main-content {
+    padding: 1.5rem 0;
+  }
+}

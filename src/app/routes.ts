@@ -8,6 +8,7 @@ import { Search } from "./pages/Search";
 import { NotFound } from "./pages/NotFound";
 import { Subscribe } from "./pages/Subscribe";
 import { SignIn } from "./pages/SignIn";
+import { Signup } from "./pages/Signup";
 import { Newsletter } from "./pages/Newsletter";
 import { Magazine } from "./pages/Magazine";
 import { Privacy } from "./pages/Privacy";
@@ -32,6 +33,7 @@ export const router = createBrowserRouter([
       { path: "reports", Component: Reports },
       { path: "subscribe", Component: Subscribe },
       { path: "signin", Component: SignIn },
+      { path: "signup", Component: Signup },
       { path: "newsletter", Component: Newsletter },
       { path: "privacy", Component: Privacy },
       { path: "terms", Component: Terms },

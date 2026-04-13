@@ -1,8 +1,9 @@
 import { useParams, Link } from "react-router";
-import { ChevronRight, Clock, MapPin, Tag, ArrowRight, BarChart2 } from "lucide-react";
+import { ChevronRight, ChevronDown, Clock, MapPin, Tag, ArrowRight, BarChart2 } from "lucide-react";
 import { articles, categories } from "../data/newsData";
 import { NewsCard } from "../components/NewsCard";
 import { Sidebar } from "../components/Sidebar";
+import "./Category.css";
 
 const categoryMeta: Record<string, {
   description: string;
@@ -151,10 +152,9 @@ export function Category() {
 
   const catColor = categoryColors[categoryName] || "bg-[#0d1f3c]";
 
-  // Get articles for this category (fall back to all if none match)
   let categoryArticles = articles.filter(
     a => a.category.toLowerCase().replace(/ /g, "-") === slug ||
-         a.category === categoryName
+      a.category === categoryName
   );
   const displayArticles = categoryArticles.length > 0 ? categoryArticles : articles;
 
@@ -162,90 +162,182 @@ export function Category() {
   const gridArticles = displayArticles.slice(1);
   const latestAll = articles.slice(0, 5);
 
+  // Get breaking news
+  const breakingNews = displayArticles.filter(a => a.breaking).slice(0, 3);
+
+  // Live market data
+  const marketItems = [
+    { name: "TPT Tech Index", value: "12,849.84", change: "+0.01%", up: true },
+    { name: "Global AI ETF", value: "4,522.31", change: "+0.02%", up: true },
+    { name: "Digital Assets", value: "98,234.22", change: "-0.01%", up: false },
+    { name: "Energy Futures", value: "87.40", change: "+0.01%", up: true },
+    { name: "HealthTech Index", value: "3,104.46", change: "+0.03%", up: true },
+    { name: "EUR/USD", value: "1.0842", change: "+0.00%", up: true },
+    { name: "Gold", value: "3,122.14", change: "+0.00%", up: true },
+    { name: "BTC/USD", value: "98,275.14", change: "+0.01%", up: true },
+  ];
+
   return (
     <div className="bg-gray-50 min-h-screen">
-      {/* Category hero banner */}
-      <div className="bg-[#0d1f3c]">
-        <div className="max-w-screen-xl mx-auto px-4 pt-6 pb-0">
+      {/* Category hero banner - ULTRATECH STYLE */}
+      <div className="bg-gradient-to-br from-[#0a1628] to-[#0d1f3c]">
+        <div className="max-w-screen-xl mx-auto px-4 pt-12 pb-16">
+          
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
+          <div className="flex items-center gap-2 text-sm text-gray-400 mb-8">
             <Link to="/" className="hover:text-[#00d4ff] transition-colors">Home</Link>
             <ChevronRight className="w-4 h-4" />
-            <span className="text-white">{categoryName}</span>
+            <span className="text-white font-medium">{categoryName}</span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            {/* Left Column - Main Content */}
             <div className="lg:col-span-2">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-1 h-8 rounded" style={{ background: meta.color }} />
-                <h1 className="text-3xl font-black text-white uppercase tracking-wide">{categoryName}</h1>
+              
+              {/* Title */}
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-1 h-10 rounded-full" style={{ background: meta.color }} />
+                <h1 className="text-4xl font-black text-white tracking-tight">{categoryName}</h1>
               </div>
-              <p className="text-gray-300 text-sm leading-relaxed mb-5 max-w-2xl">{meta.description}</p>
-
-              {/* Subtopics */}
-              {meta.subtopics.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-5">
-                  {meta.subtopics.map(sub => (
-                    <Link
-                      key={sub}
-                      to={`/category/${slug}/${sub.toLowerCase().replace(/ /g, "-")}`}
-                      className="text-xs px-3 py-1.5 border border-white/20 text-gray-300 rounded hover:bg-white/10 hover:border-white/40 transition-colors"
-                    >
-                      {sub}
-                    </Link>
-                  ))}
+              <p className="text-gray-300 text-base leading-relaxed mb-6 max-w-2xl">{meta.description}</p>
+             
+              {/* ========== BREAKING NEWS - RIGHT UNDER TITLE ========== */}
+              {breakingNews.length > 0 && (
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="bg-red-600 text-white text-[10px] font-black px-2 py-0.5 uppercase tracking-widest">Breaking</span>
+                    <span className="text-[10px] text-red-400 font-semibold">Latest Developments</span>
+                  </div>
+                  <div className="space-y-1">
+                    {breakingNews.map(news => (
+                      <Link key={news.id} to={`/article/${news.id}`} className="flex items-start gap-2 group">
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 flex-shrink-0"></div>
+                        <p className="text-sm font-medium text-gray-200 group-hover:text-[#00d4ff] transition-colors">
+                          {news.title}
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               )}
 
-              {/* Stats */}
+              {/* ========== LIVE MARKETS TICKER - RIGHT UNDER BREAKING NEWS ========== */}
+              <div className="bg-[#0a1628]/50 border border-[#1a2f50] rounded-lg p-3 mb-8">
+                <div className="flex items-center gap-4 overflow-x-auto">
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+                    <span className="text-[10px] font-black text-green-400 uppercase">LIVE</span>
+                    <span className="text-[10px] text-gray-500">Markets</span>
+                  </div>
+                  {marketItems.slice(0, 6).map((item, idx) => (
+                    <div key={idx} className="flex items-center gap-2 flex-shrink-0">
+                      <div>
+                        <div className="text-[9px] text-gray-500">{item.name}</div>
+                        <div className="text-xs font-bold text-white">{item.value}</div>
+                      </div>
+                      <div className={`text-[10px] font-bold ${item.up ? 'text-green-400' : 'text-red-400'}`}>
+                        {item.change}
+                      </div>
+                      {idx < 5 && <div className="w-px h-5 bg-[#1a2f50] ml-1"></div>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+             
+              {/* Subtopics - DROPDOWN BOX */}
+{meta.subtopics.length > 0 && (
+  <div className="mb-8">
+    <div className="flex items-center gap-2 mb-3">
+      <span className="text-xs font-bold text-[#00d4ff] uppercase tracking-wider">Browse by Topic</span>
+      <div className="h-px flex-1 bg-white/10"></div>
+    </div>
+    
+    <div className="relative inline-block w-full sm:w-80">
+      <select 
+        className="w-full appearance-none px-4 py-2.5 bg-white/5 border border-white/10 rounded-lg text-sm text-gray-300 focus:outline-none focus:border-[#00d4ff] focus:ring-1 focus:ring-[#00d4ff] cursor-pointer"
+        onChange={(e) => {
+          if (e.target.value) {
+            window.location.href = e.target.value;
+          }
+        }}
+        defaultValue=""
+      >
+        <option value="" disabled>Select a topic...</option>
+        {meta.subtopics.map(sub => (
+          <option 
+            key={sub} 
+            value={`/category/${slug}/${sub.toLowerCase().replace(/ /g, "-")}`}
+          >
+            {sub}
+          </option>
+        ))}
+      </select>
+      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+    </div>
+  </div>
+)}
+              
+              {/* Stats Cards */}
               {meta.stats.length > 0 && (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {meta.stats.map(stat => (
-                    <div key={stat.label} className="bg-white/5 border border-white/10 rounded-lg px-3 py-3">
-                      <div className="text-lg font-black text-white" style={{ color: meta.color }}>{stat.value}</div>
-                      <div className="text-xs text-gray-400 mt-0.5 leading-tight">{stat.label}</div>
+                    <div 
+                      key={stat.label} 
+                      className="bg-white/5 border border-white/10 rounded-xl p-3 text-center hover:bg-white/10 transition-all"
+                    >
+                      <div className="text-xl font-black text-white" style={{ color: meta.color }}>{stat.value}</div>
+                      <div className="text-[10px] text-gray-400 mt-0.5">{stat.label}</div>
                     </div>
                   ))}
                 </div>
               )}
             </div>
 
-            {/* Quick links */}
+            {/* Right Column - Quick Navigation Card */}
             <div className="hidden lg:block">
-              <div className="bg-white/5 border border-white/10 rounded-lg p-4">
-                <div className="text-xs font-black text-gray-400 uppercase tracking-widest mb-3">Quick Navigation</div>
-                <ul className="space-y-2">
-                  {["Latest News", "Analysis", "Reports", "Data & Research", "Events"].map(item => (
-                    <li key={item}>
-                      <Link
-                        to="#"
-                        className="flex items-center justify-between text-sm text-gray-300 hover:text-[#00d4ff] transition-colors group"
-                      >
-                        {item}
-                        <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-4 pt-4 border-t border-white/10">
-                  <Link
-                    to="/markets"
-                    className="flex items-center gap-2 text-sm text-[#00d4ff] hover:text-white transition-colors"
-                  >
-                    <BarChart2 className="w-4 h-4" />
-                    Live Market Data
-                  </Link>
+              <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-1 h-5 bg-[#00d4ff] rounded-full"></div>
+                    <div className="text-xs font-black text-gray-400 uppercase tracking-wider">Quick Navigation</div>
+                  </div>
+                  <ul className="space-y-3">
+                    {["Latest News", "Analysis", "Reports", "Data & Research", "Events"].map(item => (
+                      <li key={item}>
+                        <Link
+                          to="#"
+                          className="flex items-center justify-between text-sm text-gray-300 hover:text-[#00d4ff] transition-colors group"
+                        >
+                          <span className="flex items-center gap-2">
+                            <span className="w-1 h-1 rounded-full bg-gray-500 group-hover:bg-[#00d4ff]"></span>
+                            {item}
+                          </span>
+                          <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all" />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-6 pt-4 border-t border-white/10">
+                    <Link
+                      to="/markets"
+                      className="flex items-center gap-2 text-sm text-[#00d4ff] hover:text-white transition-colors"
+                    >
+                      <BarChart2 className="w-4 h-4" />
+                      Live Market Data
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div className="max-w-screen-xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      {/* Main Content - ULTRATECH STYLE SPACING */}
+      <div className="max-w-screen-xl mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-8">
 
             {/* Hero article */}
             {heroArticle && (

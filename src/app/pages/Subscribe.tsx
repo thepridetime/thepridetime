@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { Check, Star, Zap, Globe, BarChart2, BookOpen, ChevronRight } from "lucide-react";
 import logo from "/src/app/assess/logos.png";
-import icon from "/src/app/assess/icon.png";
 
 const plans = [
   {
@@ -64,10 +63,59 @@ export function Subscribe() {
   const [selected, setSelected] = useState("Premium");
   const [step, setStep] = useState<"plans" | "form" | "success">("plans");
   const [form, setForm] = useState({ name: "", email: "", company: "", payment: "" });
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStep("success");
+    setLoading(true);
+
+    try {
+      const tempUser = JSON.parse(localStorage.getItem('tempUser') || '{}');
+      const tempToken = localStorage.getItem('tempToken');
+
+      if (!tempUser.id) {
+        throw new Error('Please sign up first');
+      }
+
+      const cardNumber = form.payment.replace(/\s/g, '');
+      
+      const response = await fetch('http://localhost:5000/api/subscriptions/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${tempToken}`
+        },
+        body: JSON.stringify({
+          userId: tempUser.id,
+          plan: selected.toLowerCase(),
+          name: form.name,
+          email: form.email,
+          company: form.company,
+          paymentDetails: {
+            cardNumber: cardNumber,
+            cardBrand: cardNumber.startsWith('4') ? 'Visa' : 'Mastercard',
+            expiry: '12/25'
+          }
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Subscription failed');
+      }
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.removeItem('tempUser');
+      localStorage.removeItem('tempToken');
+
+      setStep("success");
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (step === "success") {
@@ -172,9 +220,10 @@ export function Subscribe() {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-[#00d4ff] text-[#0d1f3c] py-3 rounded-lg font-black text-sm hover:bg-[#0d1f3c] hover:text-white transition-colors"
+                  disabled={loading}
+                  className="flex-1 bg-[#00d4ff] text-[#0d1f3c] py-3 rounded-lg font-black text-sm hover:bg-[#0d1f3c] hover:text-white transition-colors disabled:opacity-60"
                 >
-                  Start Free Trial →
+                  {loading ? "Processing..." : "Start Free Trial →"}
                 </button>
               </div>
             </form>
