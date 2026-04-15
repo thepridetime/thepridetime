@@ -1,6 +1,8 @@
 // src/hooks/useAuth.ts
 import { useState, useEffect } from 'react';
 
+const API_BASE = "https://thepridetime.onrender.com";
+
 interface User {
   id: string;
   email: string;
@@ -18,31 +20,55 @@ export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Function to load user from localStorage
+  // ----------------------------
+  // Load user from localStorage
+  // ----------------------------
   const loadUser = () => {
-    const storedUser = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-    
-    if (storedUser && token) {
-      setUser(JSON.parse(storedUser));
-    } else {
+    try {
+      const storedUser = localStorage.getItem('user');
+      const token = localStorage.getItem('token');
+
+      if (!storedUser || !token) {
+        setUser(null);
+        return;
+      }
+
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+
+    } catch (error) {
+      console.error("Auth load failed:", error);
+
+      // clear corrupted data
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+
       setUser(null);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
-  // Check for existing session on mount
+  // ----------------------------
+  // Sync helper (IMPORTANT)
+  // ----------------------------
+  const syncAuth = (newUser: User | null) => {
+    setUser(newUser);
+    window.dispatchEvent(new Event('auth-change'));
+  };
+
+  // ----------------------------
+  // Initialize auth state
+  // ----------------------------
   useEffect(() => {
     loadUser();
 
-    // Listen for storage changes (when logout happens in another tab)
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'user' || e.key === 'token') {
         loadUser();
       }
     };
 
-    // Custom event for same-tab updates
     const handleAuthChange = () => {
       loadUser();
     };
@@ -56,10 +82,16 @@ export function useAuth() {
     };
   }, []);
 
-  // Sign Up - Register new user
-  const signUp = async (email: string, password: string, name: string): Promise<AuthResponse> => {
+  // ----------------------------
+  // SIGN UP
+  // ----------------------------
+  const signUp = async (
+    email: string,
+    password: string,
+    name: string
+  ): Promise<AuthResponse> => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
+      const response = await fetch(`${API_BASE}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, name })
@@ -68,35 +100,44 @@ export function useAuth() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Signup failed');
+        return {
+          success: false,
+          message: data.error || 'Signup failed'
+        };
       }
 
       if (data.success) {
-        const newUser = {
+        const newUser: User = {
           id: data.user.id,
           email: data.user.email,
           name: data.user.name,
         };
+
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(newUser));
-        setUser(newUser);
-        
-        // Notify other components
-        window.dispatchEvent(new Event('auth-change'));
-        
+
+        syncAuth(newUser);
+
         return { success: true, user: newUser };
       }
+
       return { success: false, message: 'Signup failed' };
+
     } catch (error: any) {
       console.error('Signup error:', error);
       return { success: false, message: error.message };
     }
   };
 
-  // Sign In - Login existing user
-  const signIn = async (email: string, password: string): Promise<AuthResponse> => {
+  // ----------------------------
+  // SIGN IN
+  // ----------------------------
+  const signIn = async (
+    email: string,
+    password: string
+  ): Promise<AuthResponse> => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch(`${API_BASE}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -105,68 +146,72 @@ export function useAuth() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+        return {
+          success: false,
+          message: data.error || 'Login failed'
+        };
       }
 
       if (data.success) {
-        const userData = {
+        const userData: User = {
           id: data.user.id,
           email: data.user.email,
           name: data.user.name,
         };
+
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(userData));
-        setUser(userData);
-        
-        // Notify other components
-        window.dispatchEvent(new Event('auth-change'));
-        
+
+        syncAuth(userData);
+
         return { success: true, user: userData };
       }
+
       return { success: false, message: 'Login failed' };
+
     } catch (error: any) {
       console.error('Login error:', error);
       return { success: false, message: error.message };
     }
   };
 
-  // Sign Out - Clear all user data
+  // ----------------------------
+  // SIGN OUT
+  // ----------------------------
   const signOut = async (): Promise<void> => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('tempUser');
     localStorage.removeItem('tempToken');
-    setUser(null);
-    
-    // Notify other components
-    window.dispatchEvent(new Event('auth-change'));
+
+    syncAuth(null);
   };
 
-  // Check if user is authenticated
+  // ----------------------------
+  // CHECK AUTH
+  // ----------------------------
   const isAuthenticated = (): boolean => {
-    return !!user && !!localStorage.getItem('token');
+    return !!user;
   };
 
-  // Get current user
-  const getCurrentUser = (): User | null => {
-    return user;
-  };
-
-  // Update user data
+  // ----------------------------
+  // UPDATE USER
+  // ----------------------------
   const updateUser = (updatedUser: User): void => {
     localStorage.setItem('user', JSON.stringify(updatedUser));
-    setUser(updatedUser);
-    window.dispatchEvent(new Event('auth-change'));
+    syncAuth(updatedUser);
   };
 
-  return { 
-    user, 
-    loading, 
-    signIn, 
-    signUp, 
+  // ----------------------------
+  // RETURN HOOK API
+  // ----------------------------
+  return {
+    user,
+    loading,
+    signIn,
+    signUp,
     signOut,
     isAuthenticated,
-    getCurrentUser,
     updateUser
   };
 }
