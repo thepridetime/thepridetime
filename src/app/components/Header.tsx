@@ -23,7 +23,7 @@ export function Header() {
     }
   };
 
-const navCategories = [...categories.slice(0, 8)];
+  const navCategories = [...categories.slice(0, 8)];
   return (
     <header className="sticky top-0 z-50 shadow-lg">
       {/* Top utility bar — live date/time + world clocks */}
@@ -201,85 +201,19 @@ const navCategories = [...categories.slice(0, 8)];
                     </div>
                   </div>
 
-                  {/* Main Section */}
-                  <div className="py-2">
-                    <Link
-                      to={`/category/${cat.toLowerCase().replace(/ /g, "-")}`}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors"
-                    >
-                      <span className="w-2 h-2 rounded-full bg-[#00d4ff]"></span>
-                      All {cat}
-                    </Link>
-                  </div>
 
-                  {/* Content Section */}
-                  <div className="px-4 py-1">
-                    <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Content</div>
-                  </div>
 
-                  <Link
-                    to={`/category/${cat.toLowerCase().replace(/ /g, "-")}/analysis`}
-                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors"
-                  >
-                    <span className="w-5 text-center">📊</span>
-                    Analysis
-                  </Link>
 
-                  <Link
-                    to={`/category/${cat.toLowerCase().replace(/ /g, "-")}/reports`}
-                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors"
-                  >
-                    <span className="w-5 text-center">📄</span>
-                    Reports
-                  </Link>
 
-                  <Link
-                    to={`/category/${cat.toLowerCase().replace(/ /g, "-")}/interviews`}
-                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors"
-                  >
-                    <span className="w-5 text-center">🎤</span>
-                    Interviews
-                  </Link>
 
-                  {/* Resources Section */}
-                  <div className="px-4 py-1 mt-1">
-                    <div className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Resources</div>
-                  </div>
-
-                  <Link
-                    to={`/category/${cat.toLowerCase().replace(/ /g, "-")}/data`}
-                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors"
-                  >
-                    <span className="w-5 text-center">📈</span>
-                    Data & Charts
-                  </Link>
-
-                  <Link
-                    to={`/category/${cat.toLowerCase().replace(/ /g, "-")}/events`}
-                    className="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:text-[#00d4ff] hover:bg-[#1a2f50] transition-colors"
-                  >
-                    <span className="w-5 text-center">📅</span>
-                    Events
-                  </Link>
-
-                  {/* Footer */}
-                  <div className="px-4 py-2 border-t border-[#1a2f50] bg-[#0a1628]">
-                    <Link
-                      to={`/category/${cat.toLowerCase().replace(/ /g, "-")}/trending`}
-                      className="flex items-center justify-between text-xs text-[#00d4ff] hover:text-white transition-colors"
-                    >
-                      <span>🔥 Trending in {cat}</span>
-                      <ChevronRight className="w-3 h-3" />
-                    </Link>
-                  </div>
                 </div>
               </li>
             ))}
-          <li className="ml-auto">
-  <Link to="/reports" className="flex items-center h-10 px-3 text-sm text-[#00d4ff] hover:text-white hover:bg-[#1a2f50] transition-colors font-bold whitespace-nowrap">
-    TPT Reports
-  </Link>
-</li>
+            <li className="ml-auto">
+              <Link to="/reports" className="flex items-center h-10 px-3 text-sm text-[#00d4ff] hover:text-white hover:bg-[#1a2f50] transition-colors font-bold whitespace-nowrap">
+                TPT Reports
+              </Link>
+            </li>
           </ul>
         </div>
       </nav>
