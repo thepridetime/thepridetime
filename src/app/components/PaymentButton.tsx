@@ -11,19 +11,30 @@ export default function PaymentButton() {
   const payNow = async () => {
     try {
 
-      // 1. CREATE ORDER (LIVE BACKEND)
+      // 1. CREATE ORDER
       const res = await axios.post(
         "https://thepridetime.onrender.com/api/payment/create-order",
-        {
-          amount: 500 // ₹500
-        }
+        { amount: 500 }
       );
 
       const order = res.data.order;
 
-      // 2. RAZORPAY OPTIONS
+      if (!order) {
+        alert("Order creation failed");
+        return;
+      }
+
+      // 2. GET USER ID SAFELY
+      const userId = localStorage.getItem("userId");
+
+      if (!userId) {
+        alert("User not logged in. Please login again.");
+        return;
+      }
+
+      // 3. RAZORPAY OPTIONS
       const options = {
-        key: "rzp_live_Se2cGxhX6qZJdY", // YOUR LIVE KEY ID
+        key: "rzp_live_Se2cGxhX6qZJdY",
         amount: order.amount,
         currency: "INR",
         name: "The Pride Times",
@@ -33,23 +44,30 @@ export default function PaymentButton() {
         handler: async function (response: any) {
           try {
 
-            // 3. VERIFY PAYMENT
+            console.log("Payment Success Response:", response);
+
+            // 4. VERIFY PAYMENT
             const verifyRes = await axios.post(
               "https://thepridetime.onrender.com/api/payment/verify",
               {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
-                userId: localStorage.getItem("userId"), // make sure you store this
+                userId: userId,
                 plan: "basic"
               }
             );
 
-            alert("Payment Successful!");
-            console.log("Verified:", verifyRes.data);
+            console.log("Verify response:", verifyRes.data);
+
+            if (verifyRes.data.success) {
+              alert("Payment Successful!");
+            } else {
+              alert("Payment verification failed");
+            }
 
           } catch (err) {
-            console.error("Verification failed", err);
+            console.error("Verification error:", err);
             alert("Payment verification failed");
           }
         },
@@ -59,7 +77,7 @@ export default function PaymentButton() {
         }
       };
 
-      // 4. OPEN RAZORPAY POPUP
+      // 5. OPEN POPUP
       const rzp = new window.Razorpay(options);
       rzp.open();
 
