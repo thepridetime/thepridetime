@@ -11,7 +11,6 @@ export default function PaymentButton() {
   const payNow = async () => {
     try {
 
-      // 1. CREATE ORDER
       const res = await axios.post(
         "https://thepridetime.onrender.com/api/payment/create-order",
         { amount: 500 }
@@ -24,7 +23,7 @@ export default function PaymentButton() {
         return;
       }
 
-      // 2. GET USER ID SAFELY
+
       const userId = localStorage.getItem("userId");
 
       if (!userId) {
@@ -32,7 +31,7 @@ export default function PaymentButton() {
         return;
       }
 
-      // 3. RAZORPAY OPTIONS
+
       const options = {
         key: "rzp_live_Se2cGxhX6qZJdY",
         amount: order.amount,
@@ -46,7 +45,6 @@ export default function PaymentButton() {
 
             console.log("Payment Success Response:", response);
 
-            // 4. VERIFY PAYMENT
             const verifyRes = await axios.post(
               "https://thepridetime.onrender.com/api/payment/verify",
               {
@@ -76,8 +74,6 @@ export default function PaymentButton() {
           color: "#000000"
         }
       };
-
-      // 5. OPEN POPUP
       const rzp = new window.Razorpay(options);
       rzp.open();
 
