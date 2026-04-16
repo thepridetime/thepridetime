@@ -71,7 +71,7 @@ export function Markets() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/market/live");
+        const res = await fetch("https://thepridetime.com/api/markets");
         if (!res.ok) throw new Error("HTTP " + res.status);
         const data = await res.json();
         setMarketData(data);
