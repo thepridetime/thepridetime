@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { Check, Star, Zap, Globe, BarChart2, BookOpen, ChevronRight } from "lucide-react";
 import logo from "/src/app/assess/logos.png";
 
+// Plan definitions (unchanged)
 const plans = [
   {
     name: "Digital",
@@ -59,6 +60,17 @@ const plans = [
   },
 ];
 
+// Helper to load Razorpay script dynamically
+const loadRazorpayScript = (): Promise<boolean> => {
+  return new Promise((resolve) => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
+
 export function Subscribe() {
   const [selected, setSelected] = useState("Premium");
   const [step, setStep] = useState<"plans" | "form" | "success">("plans");
@@ -69,55 +81,95 @@ export function Subscribe() {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      const tempUser = JSON.parse(localStorage.getItem('tempUser') || '{}');
-      const tempToken = localStorage.getItem('tempToken');
+    // Check if user is logged in
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const token = localStorage.getItem('token');
 
-      if (!tempUser.id) {
-        throw new Error('Please sign up first');
+    if (!user.id || !token) {
+      alert('Please sign up first');
+      window.location.href = '/signup';
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // Load Razorpay script if not already loaded
+      const isScriptLoaded = await loadRazorpayScript();
+      if (!isScriptLoaded) {
+        alert('Failed to load Razorpay SDK. Please check your internet connection.');
+        setLoading(false);
+        return;
       }
 
-      const cardNumber = form.payment.replace(/\s/g, '');
-      
-      const response = await fetch('http://localhost:5000/api/subscriptions/create', {
+      // Convert plan to INR amount (in rupees)
+      const amountMap: Record<string, number> = { digital: 900, premium: 1900, enterprise: 4900 };
+      const amount = amountMap[selected.toLowerCase()] || 1900;
+
+      // 1. Create order on your backend
+      const orderResponse = await fetch('http://localhost:5000/api/payment/create-order', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${tempToken}`
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount })
+      });
+      const orderData = await orderResponse.json();
+
+      if (!orderData.success) {
+        throw new Error(orderData.error || 'Failed to create order');
+      }
+
+      // 2. Configure Razorpay options
+      const options = {
+        key: 'rzp_test_Se2hBaZL', // Replace with your Razorpay key_id from .env if needed
+        amount: amount * 100,       // amount in paise
+        currency: 'INR',
+        name: 'The Pride Times',
+        description: `${selected} Subscription`,
+        image: logo,
+        order_id: orderData.order.id,
+        handler: async (response: any) => {
+          // 3. Verify payment on backend
+          try {
+            const verifyRes = await fetch('http://localhost:5000/api/payment/verify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                userId: user.id,
+                plan: selected.toLowerCase()
+              })
+            });
+            const verifyData = await verifyRes.json();
+            if (verifyData.success) {
+              // Update user subscription in local storage (optional)
+              const updatedUser = { ...user, subscription: { plan: selected.toLowerCase(), status: 'active' } };
+              localStorage.setItem('user', JSON.stringify(updatedUser));
+              setStep('success');
+            } else {
+              alert('Payment verification failed. Please contact support.');
+            }
+          } catch (err: any) {
+            alert('Verification error: ' + err.message);
+          }
         },
-        body: JSON.stringify({
-          userId: tempUser.id,
-          plan: selected.toLowerCase(),
+        prefill: {
           name: form.name,
           email: form.email,
-          company: form.company,
-          paymentDetails: {
-            cardNumber: cardNumber,
-            cardBrand: cardNumber.startsWith('4') ? 'Visa' : 'Mastercard',
-            expiry: '12/25'
-          }
-        })
-      });
+        },
+        theme: { color: '#00d4ff' }
+      };
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Subscription failed');
-      }
-
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      localStorage.removeItem('tempUser');
-      localStorage.removeItem('tempToken');
-
-      setStep("success");
+      const razorpay = new (window as any).Razorpay(options);
+      razorpay.open();
     } catch (err: any) {
-      alert(err.message);
+      alert(err.message || 'Subscription failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
+  // Success screen (unchanged)
   if (step === "success") {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -139,6 +191,7 @@ export function Subscribe() {
     );
   }
 
+  // Form step (unchanged except the button text)
   if (step === "form") {
     return (
       <div className="min-h-screen bg-gray-50 py-12 px-4">
@@ -184,6 +237,7 @@ export function Subscribe() {
                   className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:border-[#00d4ff] outline-none"
                 />
               </div>
+              {/* Card details – in production, use Razorpay's card element; here we keep as placeholder */}
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">Card Number *</label>
                 <input
@@ -208,7 +262,7 @@ export function Subscribe() {
               </div>
               <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-600 flex items-start gap-2">
                 <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <span>Your subscription starts with a free trial. Cancel anytime before it ends with no charge. Secure payment powered by Stripe.</span>
+                <span>Your subscription starts with a free trial. Cancel anytime before it ends with no charge. Secure payment powered by Razorpay.</span>
               </div>
               <div className="flex gap-3">
                 <button
@@ -233,9 +287,9 @@ export function Subscribe() {
     );
   }
 
+  // Plans selection screen (unchanged)
   return (
     <div className="bg-gray-50 min-h-screen">
-      {/* Hero */}
       <div className="bg-gradient-to-br from-[#0a1628] via-[#0d1f3c] to-[#1a3a5c] text-white py-16 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <img src={logo} alt="The Pride Times" className="w-14 h-14 rounded-xl mx-auto mb-4 object-cover border-2 border-[#00d4ff]/40" />
@@ -262,7 +316,6 @@ export function Subscribe() {
         </div>
       </div>
 
-      {/* Plans */}
       <div className="max-w-5xl mx-auto px-4 py-12">
         <h2 className="text-2xl font-black text-[#0d1f3c] text-center mb-2">Choose Your Plan</h2>
         <p className="text-gray-500 text-center mb-8">All plans include a free trial. Cancel anytime.</p>
@@ -313,7 +366,6 @@ export function Subscribe() {
           <p className="text-xs text-gray-400 mt-3">No commitment. Cancel anytime. Secure checkout.</p>
         </div>
 
-        {/* Trust signals */}
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6">
           {[
             { icon: Star, title: "4.9/5 Rating", desc: "Rated by 48,000+ enterprise subscribers worldwide" },
