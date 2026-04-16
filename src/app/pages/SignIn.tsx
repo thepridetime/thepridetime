@@ -21,7 +21,7 @@ const [isSuccess, setIsSuccess] = useState(false);
 
 const checkUserSubscription = async (email: string) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/auth/check-status/${email}`);
+    const response = await fetch(`https://thepridetime.com/api/auth/check-status/${email}`);
     const data = await response.json();
     return data;
   } catch (err) {
@@ -36,7 +36,7 @@ const handleSignIn = async (e: React.FormEvent) => {
   
   try {
     // Directly proceed with login (skip status check for now)
-    const response = await fetch('http://localhost:5000/api/auth/login', {
+    const response = await fetch('https://thepridetime.com/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 

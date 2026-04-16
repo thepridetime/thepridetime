@@ -106,7 +106,7 @@ export function Subscribe() {
       const amount = amountMap[selected.toLowerCase()] || 1900;
 
       // 1. Create order on your backend
-      const orderResponse = await fetch('http://localhost:5000/api/payment/create-order', {
+      const orderResponse = await fetch('https://thepridetime.com/api/payment/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount })
@@ -129,7 +129,7 @@ export function Subscribe() {
         handler: async (response: any) => {
           // 3. Verify payment on backend
           try {
-            const verifyRes = await fetch('http://localhost:5000/api/payment/verify', {
+            const verifyRes = await fetch('https://thepridetime.com/api/payment/verify', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
