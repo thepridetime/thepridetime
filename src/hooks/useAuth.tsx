@@ -1,9 +1,14 @@
-// src/hooks/useAuth.tsx (alternative with React context)
 import { createContext, useContext, ReactNode } from 'react';
 import { useAuth as useAuthHook } from './useAuth';
 
+interface User {
+  id: string;
+  email: string;
+  name: string;
+}
+
 interface AuthContextType {
-  user: any;
+  user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<any>;
   signUp: (email: string, password: string, name: string) => Promise<any>;
@@ -11,13 +16,29 @@ interface AuthContextType {
   isAuthenticated: () => boolean;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const auth = useAuthHook();
-  
+  const {
+    user,
+    loading,
+    signIn,
+    signUp,
+    signOut,
+    isAuthenticated
+  } = useAuthHook();
+
   return (
-    <AuthContext.Provider value={auth}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        signIn,
+        signUp,
+        signOut,
+        isAuthenticated
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -25,8 +46,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuthContext() {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuthContext must be used within an AuthProvider');
+
+  if (!context) {
+    throw new Error('useAuthContext must be used within AuthProvider');
   }
+
   return context;
 }
