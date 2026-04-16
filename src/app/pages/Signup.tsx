@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router";
 import { Eye, EyeOff, Lock, Mail, User, AlertCircle } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
-const API_BASE = "https://thepridetime.onrender.com";
+const API_BASE = "https://www.thepridetime.com.onrender.com";
 
 export function Signup() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
