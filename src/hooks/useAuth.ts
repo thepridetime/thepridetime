@@ -42,6 +42,7 @@ export function useAuth() {
       // clear corrupted data
       localStorage.removeItem('user');
       localStorage.removeItem('token');
+      localStorage.removeItem('userId'); // 🔥 FIX ADDED
 
       setUser(null);
     } finally {
@@ -50,7 +51,7 @@ export function useAuth() {
   };
 
   // ----------------------------
-  // Sync helper (IMPORTANT)
+  // Sync helper
   // ----------------------------
   const syncAuth = (newUser: User | null) => {
     setUser(newUser);
@@ -58,7 +59,7 @@ export function useAuth() {
   };
 
   // ----------------------------
-  // Initialize auth state
+  // INIT
   // ----------------------------
   useEffect(() => {
     loadUser();
@@ -116,6 +117,9 @@ export function useAuth() {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(newUser));
 
+        // 🔥 IMPORTANT FIX FOR RAZORPAY
+        localStorage.setItem('userId', data.user.id);
+
         syncAuth(newUser);
 
         return { success: true, user: newUser };
@@ -162,6 +166,9 @@ export function useAuth() {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(userData));
 
+        // 🔥 IMPORTANT FIX FOR RAZORPAY
+        localStorage.setItem('userId', data.user.id);
+
         syncAuth(userData);
 
         return { success: true, user: userData };
@@ -181,6 +188,7 @@ export function useAuth() {
   const signOut = async (): Promise<void> => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('userId'); // 🔥 FIX ADDED
     localStorage.removeItem('tempUser');
     localStorage.removeItem('tempToken');
 
@@ -199,11 +207,13 @@ export function useAuth() {
   // ----------------------------
   const updateUser = (updatedUser: User): void => {
     localStorage.setItem('user', JSON.stringify(updatedUser));
+    localStorage.setItem('userId', updatedUser.id); // 🔥 FIX ADDED
+
     syncAuth(updatedUser);
   };
 
   // ----------------------------
-  // RETURN HOOK API
+  // RETURN
   // ----------------------------
   return {
     user,
