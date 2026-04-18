@@ -306,229 +306,200 @@ export function Category() {
     setSelectedSubtopic(null);
   };
 
-  return (
-    <div className="bg-gray-50 min-h-screen">
-      {/* Category hero banner */}
-      <div className="bg-gradient-to-br from-[#0a1628] to-[#0d1f3c]">
-        <div className="max-w-screen-xl mx-auto px-4 pt-12 pb-16">
-          
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-sm text-gray-400 mb-8">
-            <Link to="/" className="hover:text-[#00d4ff] transition-colors">Home</Link>
-            <ChevronRight className="w-4 h-4" />
-            <span className="text-white font-medium">{categoryName}</span>
-            {selectedSubtopic && (
-              <>
-                <ChevronRight className="w-4 h-4" />
-                <span className="text-[#00d4ff] font-medium">{selectedSubtopic}</span>
-              </>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            <div className="lg:col-span-2">
-              
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-1 h-10 rounded-full" style={{ background: meta.color }} />
-                <h1 className="text-4xl font-black text-white tracking-tight">
-                  {selectedSubtopic ? selectedSubtopic : categoryName}
-                </h1>
-              </div>
-              
-              {!selectedSubtopic && (
-                <p className="text-gray-300 text-base leading-relaxed mb-6 max-w-2xl">{meta.description}</p>
-              )}
-              
-              {selectedSubtopic && (
-                <div className="mb-6">
-                  <button 
-                    onClick={clearSubtopic}
-                    className="text-[#00d4ff] text-sm hover:underline flex items-center gap-1"
-                  >
-                    ← Back to all {categoryName} topics
-                  </button>
-                  <p className="text-gray-300 text-base leading-relaxed mt-4 max-w-2xl">
-                    Latest articles and insights on {selectedSubtopic} from The Pride Times.
-                  </p>
-                </div>
-              )}
-              
-              {/* Subtopics Dropdown */}
-              {meta.subtopics.length > 0 && !selectedSubtopic && (
-                <div className="mb-8">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs font-bold text-[#00d4ff] uppercase tracking-wider">Browse by Topic</span>
-                    <div className="h-px flex-1 bg-white/10"></div>
-                  </div>
-                  
-                  <div className="w-full sm:w-80">
-                    <SearchableSubtopicsDropdown 
-                      subtopics={meta.subtopics}
-                      onSelect={handleSubtopicSelect}
-                    />
-                  </div>
-                </div>
-              )}
-              
-              {/* Stats Cards */}
-              {meta.stats.length > 0 && !selectedSubtopic && (
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {meta.stats.map(stat => (
-                    <div 
-                      key={stat.label} 
-                      className="bg-white/5 border border-white/10 rounded-xl p-3 text-center hover:bg-white/10 transition-all"
-                    >
-                      <div className="text-xl font-black text-white" style={{ color: meta.color }}>{stat.value}</div>
-                      <div className="text-[10px] text-gray-400 mt-0.5">{stat.label}</div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Right Column */}
-            <div className="hidden lg:block">
-              <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
-                <div className="p-5">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-1 h-5 bg-[#00d4ff] rounded-full"></div>
-                    <div className="text-xs font-black text-gray-400 uppercase tracking-wider">Quick Navigation</div>
-                  </div>
-              <ul className="space-y-3">
-  {/* Latest News - Go to Home page */}
-  <li>
-    <Link
-      to="/"
-      className="flex items-center justify-between text-sm text-gray-300 hover:text-[#00d4ff] transition-colors group"
-    >
-      <span className="flex items-center gap-2">
-        <span className="w-1 h-1 rounded-full bg-gray-500 group-hover:bg-[#00d4ff]"></span>
-        Latest News
-      </span>
-      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all" />
-    </Link>
-  </li>
-  
-  {/* Analysis - Go to Analysis page */}
-  <li>
-    <Link
-      to="/analysis"
-      className="flex items-center justify-between text-sm text-gray-300 hover:text-[#00d4ff] transition-colors group"
-    >
-      <span className="flex items-center gap-2">
-        <span className="w-1 h-1 rounded-full bg-gray-500 group-hover:bg-[#00d4ff]"></span>
-        Analysis
-      </span>
-      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all" />
-    </Link>
-  </li>
-  
-  {/* Reports - Go to Reports page */}
-  <li>
-    <Link
-      to="/reports"
-      className="flex items-center justify-between text-sm text-gray-300 hover:text-[#00d4ff] transition-colors group"
-    >
-      <span className="flex items-center gap-2">
-        <span className="w-1 h-1 rounded-full bg-gray-500 group-hover:bg-[#00d4ff]"></span>
-        Reports
-      </span>
-      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all" />
-    </Link>
-  </li>
-  
-  {/* Data & Research - Go to Data Research page */}
-  <li>
-    <Link
-      to="/data-research"
-      className="flex items-center justify-between text-sm text-gray-300 hover:text-[#00d4ff] transition-colors group"
-    >
-      <span className="flex items-center gap-2">
-        <span className="w-1 h-1 rounded-full bg-gray-500 group-hover:bg-[#00d4ff]"></span>
-        Data & Research
-      </span>
-      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all" />
-    </Link>
-  </li>
-  
-  {/* Events - Go to Events page */}
-  <li>
-    <Link
-      to="/events"
-      className="flex items-center justify-between text-sm text-gray-300 hover:text-[#00d4ff] transition-colors group"
-    >
-      <span className="flex items-center gap-2">
-        <span className="w-1 h-1 rounded-full bg-gray-500 group-hover:bg-[#00d4ff]"></span>
-        Events
-      </span>
-      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all" />
-    </Link>
-  </li>
-</ul>
-
-<div className="mt-6 pt-4 border-t border-white/10">
-  <Link
-    to="/markets"
-    className="flex items-center gap-2 text-sm text-[#00d4ff] hover:text-white transition-colors"
-  >
-    <BarChart2 className="w-4 h-4" />
-    Live Market Data
-  </Link>
-</div>
-                </div>
-              </div>
-            </div>
-          </div>
+return (
+  <div className="bg-[#0a1628] min-h-screen">
+    {/* Category hero banner */}
+    <div className="bg-gradient-to-br from-[#0a1628] to-[#0d1f3c]">
+      <div className="max-w-screen-xl mx-auto px-4 pt-12 pb-16">
+        
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 text-sm text-gray-400 mb-8">
+          <Link to="/" className="hover:text-[#00d4ff] transition-colors">Home</Link>
+          <ChevronRight className="w-4 h-4" />
+          <span className="text-white font-medium">{categoryName}</span>
+          {selectedSubtopic && (
+            <>
+              <ChevronRight className="w-4 h-4" />
+              <span className="text-[#00d4ff] font-medium">{selectedSubtopic}</span>
+            </>
+          )}
         </div>
-      </div>
-      
-      {/* Main Content */}
-      <div id="subtopic-content" className="max-w-screen-xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
 
-            {!selectedSubtopic ? (
-              <>
-                {/* Hero article */}
-                {heroArticle && (
-                  <div className="h-80">
-                    <NewsCard article={heroArticle} variant="hero" />
-                  </div>
-                )}
-
-                {/* Article grid */}
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-1 h-6" style={{ background: meta.color }} />
-                    <h2 className="text-lg font-black text-[#0d1f3c] uppercase tracking-wide">Latest in {categoryName}</h2>
-                    <span className="text-xs text-gray-400 ml-auto">{displayArticles.length} articles</span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {gridArticles.map(article => (
-                      <NewsCard key={article.id} article={article} variant="standard" />
-                    ))}
-                  </div>
-                </div>
-              </>
-            ) : (
-              /* Show subtopic content */
-              <SubtopicContent topic={selectedSubtopic} categoryName={categoryName} />
-            )}
-
-            {/* Load more */}
-            <div className="text-center">
-              <button className="px-10 py-3 bg-[#0d1f3c] text-white rounded-lg font-bold text-sm hover:bg-[#1a3a5c] transition-colors">
-                Load More Stories
-              </button>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          <div className="lg:col-span-2">
+            
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-1 h-10 rounded-full" style={{ background: meta.color }} />
+              <h1 className="text-4xl font-black text-white tracking-tight">
+                {selectedSubtopic ? selectedSubtopic : categoryName}
+              </h1>
             </div>
+            
+            {!selectedSubtopic && (
+              <p className="text-gray-300 text-base leading-relaxed mb-6 max-w-2xl">{meta.description}</p>
+            )}
+            
+            {selectedSubtopic && (
+              <div className="mb-6">
+                <button 
+                  onClick={clearSubtopic}
+                  className="text-[#00d4ff] text-sm hover:underline flex items-center gap-1"
+                >
+                  ← Back to all {categoryName} topics
+                </button>
+                <p className="text-gray-300 text-base leading-relaxed mt-4 max-w-2xl">
+                  Latest articles and insights on {selectedSubtopic} from The Pride Times.
+                </p>
+              </div>
+            )}
+            
+            {/* Subtopics Dropdown */}
+            {meta.subtopics.length > 0 && !selectedSubtopic && (
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-[#00d4ff] uppercase tracking-wider">Browse by Topic</span>
+                  <div className="h-px flex-1 bg-white/10"></div>
+                </div>
+                
+                <div className="w-full sm:w-80">
+                  <SearchableSubtopicsDropdown 
+                    subtopics={meta.subtopics}
+                    onSelect={handleSubtopicSelect}
+                  />
+                </div>
+              </div>
+            )}
+            
+            {/* Stats Cards */}
+            {meta.stats.length > 0 && !selectedSubtopic && (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {meta.stats.map(stat => (
+                  <div 
+                    key={stat.label} 
+                    className="bg-white/5 border border-white/10 rounded-xl p-3 text-center hover:bg-white/10 transition-all"
+                  >
+                    <div className="text-xl font-black text-white" style={{ color: meta.color }}>{stat.value}</div>
+                    <div className="text-[10px] text-gray-400 mt-0.5">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <Sidebar />
+          {/* Right Column */}
+          <div className="hidden lg:block">
+            <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
+              <div className="p-5">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-1 h-5 bg-[#00d4ff] rounded-full"></div>
+                  <div className="text-xs font-black text-gray-400 uppercase tracking-wider">Quick Navigation</div>
+                </div>
+                <ul className="space-y-3">
+                  <li>
+                    <Link to="/" className="flex items-center justify-between text-sm text-gray-300 hover:text-[#00d4ff] transition-colors group">
+                      <span className="flex items-center gap-2">
+                        <span className="w-1 h-1 rounded-full bg-gray-500 group-hover:bg-[#00d4ff]"></span>
+                        Latest News
+                      </span>
+                      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all" />
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/analysis" className="flex items-center justify-between text-sm text-gray-300 hover:text-[#00d4ff] transition-colors group">
+                      <span className="flex items-center gap-2">
+                        <span className="w-1 h-1 rounded-full bg-gray-500 group-hover:bg-[#00d4ff]"></span>
+                        Analysis
+                      </span>
+                      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all" />
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/reports" className="flex items-center justify-between text-sm text-gray-300 hover:text-[#00d4ff] transition-colors group">
+                      <span className="flex items-center gap-2">
+                        <span className="w-1 h-1 rounded-full bg-gray-500 group-hover:bg-[#00d4ff]"></span>
+                        Reports
+                      </span>
+                      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all" />
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/data-research" className="flex items-center justify-between text-sm text-gray-300 hover:text-[#00d4ff] transition-colors group">
+                      <span className="flex items-center gap-2">
+                        <span className="w-1 h-1 rounded-full bg-gray-500 group-hover:bg-[#00d4ff]"></span>
+                        Data & Research
+                      </span>
+                      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all" />
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/events" className="flex items-center justify-between text-sm text-gray-300 hover:text-[#00d4ff] transition-colors group">
+                      <span className="flex items-center gap-2">
+                        <span className="w-1 h-1 rounded-full bg-gray-500 group-hover:bg-[#00d4ff]"></span>
+                        Events
+                      </span>
+                      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all" />
+                    </Link>
+                  </li>
+                </ul>
+                <div className="mt-6 pt-4 border-t border-white/10">
+                  <Link to="/markets" className="flex items-center gap-2 text-sm text-[#00d4ff] hover:text-white transition-colors">
+                    <BarChart2 className="w-4 h-4" />
+                    Live Market Data
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  );
+    
+    {/* Main Content */}
+    <div id="subtopic-content" className="max-w-screen-xl mx-auto px-4 py-12">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-8">
+
+          {!selectedSubtopic ? (
+            <>
+              {/* Hero article */}
+              {heroArticle && (
+                <div className="h-80">
+                  <NewsCard article={heroArticle} variant="hero" />
+                </div>
+              )}
+
+              {/* Article grid */}
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-1 h-6" style={{ background: meta.color }} />
+                  <h2 className="text-lg font-black text-white uppercase tracking-wide">Latest in {categoryName}</h2>
+                  <span className="text-xs text-gray-400 ml-auto">{displayArticles.length} articles</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {gridArticles.map(article => (
+                    <NewsCard key={article.id} article={article} variant="standard" />
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <SubtopicContent topic={selectedSubtopic} categoryName={categoryName} />
+          )}
+
+          {/* Load more */}
+          <div className="text-center">
+            <button className="px-10 py-3 bg-[#0d1f3c] text-white rounded-lg font-bold text-sm hover:bg-[#1a3a5c] transition-colors">
+              Load More Stories
+            </button>
+          </div>
+        </div>
+
+        {/* Sidebar */}
+        <div className="lg:col-span-1">
+          <Sidebar />
+        </div>
+      </div>
+    </div>
+  </div>
+);
 }

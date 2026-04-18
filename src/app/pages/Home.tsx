@@ -71,11 +71,11 @@ export function Home() {
           <div className="lg:col-span-2 space-y-6">
             {/* Hero + secondary featured */}
             <section>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:h-[480px]">
-                <div className="md:col-span-1 h-72 sm:h-96 md:h-full">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
+                <div className="md:col-span-1 min-h-[320px]">
                   <NewsCard article={featuredArticle} variant="hero" />
                 </div>
-                <div className="md:col-span-1 grid grid-rows-2 gap-4 md:h-full h-72 sm:h-96">
+                <div className="md:col-span-1 grid grid-rows-2 gap-4 min-h-[320px]">
                   {secondaryFeatured.map(article => (
                     <NewsCard key={article.id} article={article} variant="featured" />
                   ))}

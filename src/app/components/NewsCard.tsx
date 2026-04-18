@@ -25,13 +25,13 @@ export function NewsCard({ article, variant = "standard" }: NewsCardProps) {
 
   if (variant === "hero") {
     return (
-      <Link to={`/article/${article.id}`} className="group block relative overflow-hidden rounded-lg h-full min-h-[480px]">
+      <Link to={`/article/${article.id}`} className="group block relative overflow-hidden rounded-lg h-full min-h-[320px]">
         <img
           src={article.image}
           alt={article.title}
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         {article.breaking && (
           <div className="absolute top-4 left-4 bg-red-600 text-white text-xs font-black px-2 py-1 tracking-widest uppercase">
             Breaking
