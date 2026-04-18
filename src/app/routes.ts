@@ -6,7 +6,7 @@ import { Category } from "./pages/Category";
 import { Markets } from "./pages/Markets";
 import { Search } from "./pages/Search";
 import { NotFound } from "./pages/NotFound";
-import { Subscribe } from "./pages/Subscribe";
+import {Subscribe} from "./pages/Subscribe";
 import { SignIn } from "./pages/SignIn";
 import { Signup } from "./pages/Signup";
 import { Newsletter } from "./pages/Newsletter";
@@ -16,6 +16,9 @@ import { Terms } from "./pages/Terms";
 import { CookiePolicy } from "./pages/CookiePolicy";
 import { Accessibility } from "./pages/Accessibility";
 import { Reports } from "./pages/Reports";
+import { Analysis } from "./pages/Analysis";
+import { DataResearch } from "./pages/DataResearch";
+import { Events } from "./pages/Events";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +44,9 @@ export const router = createBrowserRouter([
       { path: "accessibility", Component: Accessibility },
       { path: "latest", Component: Home },
       { path: "*", Component: NotFound },
+      { path: "analysis", Component: Analysis },
+      { path: "data-research", Component: DataResearch },
+      { path: "events", Component: Events },
     ],
   },
 ]);
