@@ -8,22 +8,22 @@ import { AdBlock } from "../components/AdBlock";
 const coverStories = [
   {
     id: "cover-1",
-    title: "The AI Revolution That's Changing Everything",
-    subtitle: "March 2026 Cover Story",
-    desc: "From Silicon Valley to Singapore, we investigate how artificial intelligence is reshaping every industry, every government, and every life on the planet.",
-    image: "https://images.unsplash.com/photo-1768224656445-33d078c250b7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    author: "Sagar Kuamr",
-    readTime: "18 min read",
+    title: "Why Most Businesses Fail at Digital Marketing",
+    subtitle: "April 2026 Cover Story",
+    desc: "And how AI-driven systems are turning unpredictable campaigns into scalable, revenue-generating engines.",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    author: "Prakash Ray",
+    readTime: "6 min read",
     tag: "Cover Story",
     tagColor: "bg-red-600",
   },
   {
     id: "cover-2",
     title: "The New World Order of Finance",
-    subtitle: "Special Report: March 2026",
-    desc: "DeFi has surpassed traditional banking. We trace the seismic shift from Wall Street to a world without borders — and what it means for the $800 trillion global economy.",
-    image: "https://images.unsplash.com/photo-1642775196125-38a9eb496568?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    author: "Sagar Kuamr",
+    subtitle: "Special Report: April 2026",
+    desc: "DeFi has surpassed traditional banking. We trace the seismic shift from Wall Street to a world without borders.",
+    image: "",
+    author: "Sagar Kumar",
     readTime: "22 min read",
     tag: "Special Report",
     tagColor: "bg-emerald-600",
@@ -31,10 +31,10 @@ const coverStories = [
   {
     id: "cover-3",
     title: "The Clean Energy Century Begins",
-    subtitle: "Feature: March 2026",
+    subtitle: "Feature: April 2026",
     desc: "With fusion power now commercially viable and renewables connecting 200 nations, we mark the moment fossil fuels became history.",
     image: "https://images.unsplash.com/photo-1769501378353-2e4e3e3e325c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    author: "Sagar Kuamr",
+    author: "Sagar Kumar",
     readTime: "16 min read",
     tag: "Feature",
     tagColor: "bg-yellow-600",
@@ -56,7 +56,7 @@ const sections = [
 ];
 
 export function Magazine() {
-  const [activeIssue, setActiveIssue] = useState("March 2026");
+  const [activeIssue, setActiveIssue] = useState("april 2026");
   const { fullDate } = useLiveDateTime();
   const magazineArticles = articles.slice(0, 9);
 

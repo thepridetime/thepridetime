@@ -20,8 +20,8 @@ export const articles: Article[] = [
   // TECHNOLOGY
   {
     id: "1",
-    title: "Global AI Alliance Forms as Tech Giants Unite to Shape Digital Intelligence Standards",
-    excerpt: "A landmark coalition of 47 technology companies across 18 nations announced the formation of the Global Digital Intelligence Standards Board, setting the stage for unified AI governance frameworks in 2026.",
+    title: "Why Most Businesses Fail at Digital Marketing",
+    excerpt: "And how AI-driven systems are turning unpredictable campaigns into scalable, revenue-generating engines..",
     content: "In an unprecedented move, technology leaders from Silicon Valley to Singapore have joined forces to establish a comprehensive framework for artificial intelligence governance. The alliance aims to create interoperable standards that will accelerate responsible AI adoption across enterprise environments worldwide.",
     author: "Sagar Kumar",
     authorRole: "Chief Editor",
