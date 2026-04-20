@@ -102,9 +102,9 @@ export function Footer() {
               {[
                 { label: "About The Pride Times", to: "/about" },
                 { label: "Editorial Standards", to: "/editorial-standards" },
-                { label: "Careers", to: "/careers" },
+                //{ label: "Careers", to: "/careers" },
                 { label: "Advertise With Us", to: "/advertise" },
-                { label: "Contact Us", to: "/contact" },
+                //{ label: "Contact Us", to: "/contact" },
               ].map(item => (
                 <li key={item.label}>
                   <Link to={item.to} className="text-sm text-gray-400 hover:text-[#00d4ff] transition-colors">

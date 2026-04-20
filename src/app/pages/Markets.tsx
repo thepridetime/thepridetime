@@ -11,13 +11,11 @@ import {
 } from "lucide-react";
 import { articles } from "../data/newsData";
 
-// Helper: format numbers
 const formatNumber = (num: number) => {
   if (!num && num !== 0) return "0";
   return num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 };
 
-// Live price cell with flash animation
 function LivePriceCell({ value, up, decimals = 2 }: { value: number; up: boolean; decimals?: number }) {
   const [flash, setFlash] = useState(false);
   const prevRef = useRef(value);
@@ -36,7 +34,6 @@ function LivePriceCell({ value, up, decimals = 2 }: { value: number; up: boolean
   );
 }
 
-// Section Header
 function SectionHeader({ icon: Icon, title, color = "#00d4ff" }: { icon: any; title: string; color?: string }) {
   return (
     <div className="flex items-center gap-2 mb-4">
@@ -51,14 +48,22 @@ function SectionHeader({ icon: Icon, title, color = "#00d4ff" }: { icon: any; ti
   );
 }
 
+function EmptyTab({ label }: { label: string }) {
+  return (
+    <div className="bg-[#0d1f3c] rounded-xl p-12 text-center">
+      <Activity className="w-10 h-10 text-[#00d4ff] mx-auto mb-4 opacity-50" />
+      <p className="text-white font-bold mb-1">{label}</p>
+      <p className="text-gray-500 text-sm">Live data feed connecting...</p>
+    </div>
+  );
+}
+
 export function Markets() {
   const [activeTab, setActiveTab] = useState<"overview" | "indices" | "commodities" | "forex" | "crypto" | "movers">("overview");
   const [marketData, setMarketData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState(new Date());
 
-  // Simulated chart (only for visual, you can replace with real history later)
   const [chartData, setChartData] = useState(() => {
     let price = 12847;
     return Array(48).fill(0).map((_, i) => {
@@ -67,19 +72,17 @@ export function Markets() {
     });
   });
 
-  // Fetch real market data
   useEffect(() => {
     const fetchData = async () => {
       try {
-   const res = await fetch("https://thepridetime.onrender.com/api/market/live");
+        const res = await fetch("https://thepridetime.onrender.com/api/market/live");
         if (!res.ok) throw new Error("HTTP " + res.status);
         const data = await res.json();
         setMarketData(data);
         setLastUpdate(new Date());
-        setError(null);
       } catch (err) {
         console.error("Fetch error:", err);
-        setError("Unable to load live market data");
+        // Don't block UI — just leave marketData as null or stale
       } finally {
         setLoading(false);
       }
@@ -89,7 +92,6 @@ export function Markets() {
     return () => clearInterval(interval);
   }, []);
 
-  // Animate chart (still simulated, but smooth)
   useEffect(() => {
     const t = setInterval(() => {
       setChartData(prev => {
@@ -120,21 +122,29 @@ export function Markets() {
 
   const marketNewsArticles = articles.filter(a => ["Finance", "Technology", "Energy"].includes(a.category)).slice(0, 4);
 
-  if (loading) return <div className="bg-[#06101f] min-h-screen flex items-center justify-center text-white text-xl">Loading live market data...</div>;
-  if (error || !marketData) return <div className="bg-[#06101f] min-h-screen flex items-center justify-center text-red-400 text-xl">{error || "No data"}</div>;
+  const indices = marketData?.indices || [];
+  const topGainers = marketData?.topGainers || [];
+  const topLosers = marketData?.topLosers || [];
+  const commodities = marketData?.commodities || [];
+  const forex = marketData?.forex || [];
+  const crypto = marketData?.crypto || [];
 
-  const indices = marketData.indices || [];
-  const topGainers = marketData.topGainers || [];
-  const topLosers = marketData.topLosers || [];
-
-  // KPI strip – use first 6 indices + fallback BTC/ETH
-  const kpiItems = indices.slice(0,6).map((idx: any) => ({
+  const kpiItems = indices.slice(0, 6).map((idx: any) => ({
     label: idx.name,
     price: idx.value,
     up: parseFloat(idx.changePercent) >= 0,
     decimals: idx.name === "SENSEX" ? 0 : 2
   }));
-  const allKpi = [...kpiItems, { label: "BTC/USD", price: 98234, up: true, decimals: 0 }, { label: "ETH/USD", price: 4127, up: true, decimals: 2 }].slice(0,8);
+  const allKpi = [...kpiItems, { label: "BTC/USD", price: 98234, up: true, decimals: 0 }, { label: "ETH/USD", price: 4127, up: true, decimals: 2 }].slice(0, 8);
+
+  if (loading) return (
+    <div className="bg-[#06101f] min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <RefreshCw className="w-8 h-8 text-[#00d4ff] animate-spin mx-auto mb-3" />
+        <p className="text-white font-bold">Loading live market data...</p>
+      </div>
+    </div>
+  );
 
   return (
     <div className="bg-[#06101f] min-h-screen">
@@ -156,9 +166,9 @@ export function Markets() {
             <RefreshCw className="w-3.5 h-3.5 text-[#00d4ff] animate-spin" style={{ animationDuration: "3s" }} />
             <span>Updated: {lastUpdate.toLocaleTimeString()}</span>
             <span className="text-gray-600">|</span>
-            <span className="text-gray-400">NYC {new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York", hour:"2-digit", minute:"2-digit" })}</span>
-            <span className="text-gray-400">LDN {new Date().toLocaleTimeString("en-US", { timeZone:"Europe/London", hour:"2-digit", minute:"2-digit" })}</span>
-            <span className="text-gray-400">TKY {new Date().toLocaleTimeString("en-US", { timeZone:"Asia/Tokyo", hour:"2-digit", minute:"2-digit" })}</span>
+            <span>NYC {new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "2-digit", minute: "2-digit" })}</span>
+            <span>LDN {new Date().toLocaleTimeString("en-US", { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit" })}</span>
+            <span>TKY {new Date().toLocaleTimeString("en-US", { timeZone: "Asia/Tokyo", hour: "2-digit", minute: "2-digit" })}</span>
           </div>
         </div>
       </div>
@@ -196,9 +206,10 @@ export function Markets() {
       </div>
 
       <div className="max-w-screen-xl mx-auto px-4 py-6 space-y-6">
+
+        {/* OVERVIEW TAB */}
         {activeTab === "overview" && (
           <>
-            {/* Chart + indices panel */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
               <div className="lg:col-span-2 bg-[#0d1f3c] rounded-xl p-5">
                 <div className="flex items-center justify-between mb-4">
@@ -224,10 +235,10 @@ export function Markets() {
                 </div>
                 <ResponsiveContainer width="100%" height={220}>
                   <AreaChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                    <defs><linearGradient id="techGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#00d4ff" stopOpacity={0.3}/><stop offset="95%" stopColor="#00d4ff" stopOpacity={0}/></linearGradient></defs>
+                    <defs><linearGradient id="techGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#00d4ff" stopOpacity={0.3} /><stop offset="95%" stopColor="#00d4ff" stopOpacity={0} /></linearGradient></defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#1a2f50" />
                     <XAxis dataKey="time" tick={{ fill: "#6b7280", fontSize: 10 }} interval={3} />
-                    <YAxis tick={{ fill: "#6b7280", fontSize: 10 }} domain={["auto","auto"]} />
+                    <YAxis tick={{ fill: "#6b7280", fontSize: 10 }} domain={["auto", "auto"]} />
                     <Tooltip contentStyle={{ background: "#0d1f3c", border: "1px solid #1a2f50", borderRadius: "8px" }} labelStyle={{ color: "#9ca3af", fontSize: 11 }} itemStyle={{ color: "#00d4ff", fontSize: 12 }} />
                     <Area type="monotone" dataKey="price" stroke="#00d4ff" fill="url(#techGrad)" strokeWidth={2} dot={false} />
                   </AreaChart>
@@ -236,7 +247,7 @@ export function Markets() {
                   <div className="text-xs text-gray-500 mb-1">Volume</div>
                   <ResponsiveContainer width="100%" height={40}>
                     <BarChart data={chartData.slice(-20)} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                      <Bar dataKey="volume" fill="#1a2f50" radius={[2,2,0,0]} />
+                      <Bar dataKey="volume" fill="#1a2f50" radius={[2, 2, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -245,7 +256,7 @@ export function Markets() {
               <div className="bg-[#0d1f3c] rounded-xl p-5">
                 <SectionHeader icon={BarChart2} title="Market Indices" />
                 <div className="space-y-3">
-                  {indices.slice(0,5).map((idx: any, i: number) => {
+                  {indices.slice(0, 5).map((idx: any, i: number) => {
                     const isUp = parseFloat(idx.changePercent) >= 0;
                     return (
                       <div key={i} className="flex items-center justify-between">
@@ -261,11 +272,10 @@ export function Markets() {
               </div>
             </div>
 
-            {/* Global indices quick row */}
             <div className="bg-[#0d1f3c] rounded-xl p-5">
               <SectionHeader icon={Globe} title="Global Indices" />
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                {indices.slice(0,6).map((idx: any, i: number) => {
+                {indices.slice(0, 6).map((idx: any, i: number) => {
                   const isUp = parseFloat(idx.changePercent) >= 0;
                   return (
                     <div key={i} className="bg-[#0a1628] rounded-lg p-3 hover:bg-[#1a2f50] transition-colors cursor-pointer">
@@ -281,7 +291,6 @@ export function Markets() {
               </div>
             </div>
 
-            {/* Top Movers Table */}
             <div className="bg-[#0d1f3c] rounded-xl p-5">
               <SectionHeader icon={Activity} title="Top Movers — Equities" />
               <div className="overflow-x-auto">
@@ -317,7 +326,6 @@ export function Markets() {
               </div>
             </div>
 
-            {/* Market News */}
             <div className="bg-[#0d1f3c] rounded-xl p-5">
               <SectionHeader icon={Zap} title="Market Intelligence" />
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -334,13 +342,185 @@ export function Markets() {
           </>
         )}
 
-        {/* Placeholders for other tabs (you can extend similarly) */}
-        {activeTab !== "overview" && (
-          <div className="text-center text-gray-500 py-10">
-            <p>Live data for this tab coming soon.</p>
-            <p className="text-sm mt-2">The Overview tab shows real indices and top movers.</p>
+        {/* GLOBAL INDICES TAB */}
+        {activeTab === "indices" && (
+          <div className="bg-[#0d1f3c] rounded-xl p-5">
+            <SectionHeader icon={Globe} title="Global Indices" />
+            {indices.length === 0 ? <EmptyTab label="Global Indices" /> : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                {indices.map((idx: any, i: number) => {
+                  const isUp = parseFloat(idx.changePercent) >= 0;
+                  return (
+                    <div key={i} className="bg-[#0a1628] rounded-lg p-4 hover:bg-[#1a2f50] transition-colors">
+                      <div className="text-[11px] text-gray-400 mb-1 truncate">{idx.name}</div>
+                      <div className="text-base font-black text-white tabular-nums">{formatNumber(idx.value)}</div>
+                      <div className={`text-xs font-bold flex items-center gap-0.5 mt-1 ${isUp ? "text-green-400" : "text-red-400"}`}>
+                        {isUp ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                        {idx.changePercent}%
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
+
+        {/* COMMODITIES TAB */}
+        {activeTab === "commodities" && (
+          <div className="bg-[#0d1f3c] rounded-xl p-5">
+            <SectionHeader icon={Fuel} title="Commodities" />
+            {commodities.length === 0 ? <EmptyTab label="Commodities" /> : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                {commodities.map((item: any, i: number) => {
+                  const isUp = parseFloat(item.changePercent) >= 0;
+                  return (
+                    <div key={i} className="bg-[#0a1628] rounded-lg p-4 hover:bg-[#1a2f50] transition-colors">
+                      <div className="text-[11px] text-gray-400 mb-1">{item.name}</div>
+                      <div className="text-base font-black text-white tabular-nums">{formatNumber(item.value)}</div>
+                      <div className={`text-xs font-bold flex items-center gap-0.5 mt-1 ${isUp ? "text-green-400" : "text-red-400"}`}>
+                        {isUp ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                        {item.changePercent}%
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* FOREX TAB */}
+        {activeTab === "forex" && (
+          <div className="bg-[#0d1f3c] rounded-xl p-5">
+            <SectionHeader icon={DollarSign} title="Forex" />
+            {forex.length === 0 ? <EmptyTab label="Forex" /> : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[#1a2f50]">
+                      {["Pair", "Rate", "Change", "% Change"].map(h => (
+                        <th key={h} className="text-left py-2 px-3 text-xs text-gray-500 uppercase tracking-wider font-semibold">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {forex.map((item: any, i: number) => {
+                      const isUp = parseFloat(item.changePercent) >= 0;
+                      return (
+                        <tr key={i} className="border-b border-[#0a1628] hover:bg-[#1a2f50] transition-colors">
+                          <td className="py-2.5 px-3 font-black text-[#00d4ff]">{item.name}</td>
+                          <td className="py-2.5 px-3 font-bold text-white tabular-nums">{formatNumber(item.value)}</td>
+                          <td className={`py-2.5 px-3 font-bold tabular-nums ${isUp ? "text-green-400" : "text-red-400"}`}>{item.change}</td>
+                          <td className={`py-2.5 px-3 font-bold tabular-nums ${isUp ? "text-green-400" : "text-red-400"}`}>
+                            <span className={`inline-flex items-center gap-0.5 px-2 py-0.5 rounded text-xs ${isUp ? "bg-green-400/10" : "bg-red-400/10"}`}>
+                              {isUp ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                              {item.changePercent}%
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* CRYPTO TAB */}
+        {activeTab === "crypto" && (
+          <div className="bg-[#0d1f3c] rounded-xl p-5">
+            <SectionHeader icon={Bitcoin} title="Cryptocurrency" />
+            {crypto.length === 0 ? <EmptyTab label="Cryptocurrency" /> : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                {crypto.map((item: any, i: number) => {
+                  const isUp = parseFloat(item.changePercent) >= 0;
+                  return (
+                    <div key={i} className="bg-[#0a1628] rounded-lg p-4 hover:bg-[#1a2f50] transition-colors">
+                      <div className="text-[11px] text-gray-400 mb-1">{item.name}</div>
+                      <div className="text-base font-black text-white tabular-nums">${formatNumber(item.value)}</div>
+                      <div className={`text-xs font-bold flex items-center gap-0.5 mt-1 ${isUp ? "text-green-400" : "text-red-400"}`}>
+                        {isUp ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                        {item.changePercent}%
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TOP MOVERS TAB */}
+        {activeTab === "movers" && (
+          <div className="space-y-6">
+            <div className="bg-[#0d1f3c] rounded-xl p-5">
+              <SectionHeader icon={TrendingUp} title="Top Gainers" color="#4ade80" />
+              {topGainers.length === 0 ? <EmptyTab label="Top Gainers" /> : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-[#1a2f50]">
+                        {["Symbol", "Price", "Change", "% Change", "Volume"].map(h => (
+                          <th key={h} className="text-left py-2 px-3 text-xs text-gray-500 uppercase tracking-wider font-semibold">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {topGainers.map((stock: any, i: number) => (
+                        <tr key={i} className="border-b border-[#0a1628] hover:bg-[#1a2f50] transition-colors">
+                          <td className="py-2.5 px-3 font-black text-[#00d4ff]">{stock.symbol}</td>
+                          <td className="py-2.5 px-3 font-bold text-white tabular-nums">${formatNumber(stock.price)}</td>
+                          <td className="py-2.5 px-3 font-bold text-green-400 tabular-nums">{stock.change}</td>
+                          <td className="py-2.5 px-3">
+                            <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded text-xs bg-green-400/10 text-green-400">
+                              <ArrowUpRight className="w-3 h-3" />{stock.percent}
+                            </span>
+                          </td>
+                          <td className="py-2.5 px-3 text-gray-400 tabular-nums">{stock.volume}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+
+            <div className="bg-[#0d1f3c] rounded-xl p-5">
+              <SectionHeader icon={TrendingDown} title="Top Losers" color="#f87171" />
+              {topLosers.length === 0 ? <EmptyTab label="Top Losers" /> : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-[#1a2f50]">
+                        {["Symbol", "Price", "Change", "% Change", "Volume"].map(h => (
+                          <th key={h} className="text-left py-2 px-3 text-xs text-gray-500 uppercase tracking-wider font-semibold">{h}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {topLosers.map((stock: any, i: number) => (
+                        <tr key={i} className="border-b border-[#0a1628] hover:bg-[#1a2f50] transition-colors">
+                          <td className="py-2.5 px-3 font-black text-[#00d4ff]">{stock.symbol}</td>
+                          <td className="py-2.5 px-3 font-bold text-white tabular-nums">${formatNumber(stock.price)}</td>
+                          <td className="py-2.5 px-3 font-bold text-red-400 tabular-nums">{stock.change}</td>
+                          <td className="py-2.5 px-3">
+                            <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded text-xs bg-red-400/10 text-red-400">
+                              <ArrowDownRight className="w-3 h-3" />{stock.percent}
+                            </span>
+                          </td>
+                          <td className="py-2.5 px-3 text-gray-400 tabular-nums">{stock.volume}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

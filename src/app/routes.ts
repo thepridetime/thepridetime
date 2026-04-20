@@ -21,9 +21,9 @@ import { DataResearch } from "./pages/DataResearch";
 import { Events } from "./pages/Events";
 import { About } from "./pages/About";                           // ← add
 import { EditorialStandards } from "./pages/EditorialStandards"; // ← add
-import { Careers } from "./pages/Careers";                       // ← add
+//import { Careers } from "./pages/Careers";                       // ← add
 import { Advertise } from "./pages/Advertise";                   // ← add
-import { Contact } from "./pages/Contact";  
+//import { Contact } from "./pages/Contact";  
 
 export const router = createBrowserRouter([
   {
@@ -54,9 +54,9 @@ export const router = createBrowserRouter([
       { path: "events", Component: Events },
        { path: "about", Component: About },                           // ← add
       { path: "editorial-standards", Component: EditorialStandards },// ← add
-      { path: "careers", Component: Careers },                       // ← add
+      //{ path: "careers", Component: Careers },                       // ← add
       { path: "advertise", Component: Advertise },                   // ← add
-      { path: "contact", Component: Contact },                       // ← add
+      //{ path: "contact", Component: Contact },                       // ← add
       { path: "*", Component: NotFound },
     ],
   },
