@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 dotenv.config();
+console.log('FINNHUB KEY:', process.env.FINNHUB_API_KEY);
 
 const app = express();
 
@@ -224,26 +225,22 @@ app.get('/api/market/live', async (req, res) => {
 
   const symbols = {
     indices: [
-      { symbol: 'OANDA:SPX500_USD', name: 'S&P 500' },
-      { symbol: 'OANDA:NAS100_USD', name: 'NASDAQ' },
-      { symbol: 'OANDA:UK100_GBP', name: 'FTSE 100' },
-      { symbol: 'OANDA:JP225_USD', name: 'Nikkei 225' },
-      { symbol: 'OANDA:DE30_EUR', name: 'DAX' },
-      { symbol: 'OANDA:HK33_HKD', name: 'Hang Seng' },
+      { symbol: 'BINANCE:BTCUSDT', name: 'Bitcoin' },
+      { symbol: 'BINANCE:ETHUSDT', name: 'Ethereum' },
+      { symbol: 'BINANCE:BNBUSDT', name: 'BNB' },
+      { symbol: 'BINANCE:SOLUSDT', name: 'Solana' },
+      { symbol: 'BINANCE:XRPUSDT', name: 'XRP' },
+      { symbol: 'BINANCE:ADAUSDT', name: 'Cardano' },
     ],
     commodities: [
-      { symbol: 'OANDA:XAU_USD', name: 'Gold' },
-      { symbol: 'OANDA:XAG_USD', name: 'Silver' },
-      { symbol: 'OANDA:BRENT_USD', name: 'Brent Oil' },
-      { symbol: 'OANDA:NATGAS_USD', name: 'Natural Gas' },
+      { symbol: 'BINANCE:BTCUSDT', name: 'Bitcoin' },
+      { symbol: 'BINANCE:ETHUSDT', name: 'Ethereum' },
     ],
     forex: [
-      { symbol: 'OANDA:EUR_USD', name: 'EUR/USD' },
-      { symbol: 'OANDA:GBP_USD', name: 'GBP/USD' },
-      { symbol: 'OANDA:USD_JPY', name: 'USD/JPY' },
-      { symbol: 'OANDA:USD_INR', name: 'USD/INR' },
-      { symbol: 'OANDA:USD_SGD', name: 'USD/SGD' },
-      { symbol: 'OANDA:AUD_USD', name: 'AUD/USD' },
+      { symbol: 'BINANCE:BTCUSDT', name: 'BTC/USDT' },
+      { symbol: 'BINANCE:ETHUSDT', name: 'ETH/USDT' },
+      { symbol: 'BINANCE:BNBUSDT', name: 'BNB/USDT' },
+      { symbol: 'BINANCE:SOLUSDT', name: 'SOL/USDT' },
     ],
     crypto: [
       { symbol: 'BINANCE:BTCUSDT', name: 'Bitcoin' },
@@ -257,9 +254,8 @@ app.get('/api/market/live', async (req, res) => {
 
   const fetchQuote = async ({ symbol, name }) => {
     try {
-      const response = await fetch(
-        `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(symbol)}&token=${KEY}`
-      );
+      const url = `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(symbol)}&token=${KEY}`;
+      const response = await fetch(url);
       const data = await response.json();
       if (!data.c || data.c === 0) return null;
       const change = (data.c - data.pc).toFixed(2);
@@ -267,7 +263,7 @@ app.get('/api/market/live', async (req, res) => {
         ? (((data.c - data.pc) / data.pc) * 100).toFixed(2)
         : '0.00';
       return { symbol, name, value: data.c, change, changePercent, volume: '—' };
-    } catch {
+    } catch (e) {
       return null;
     }
   };
@@ -282,9 +278,6 @@ app.get('/api/market/live', async (req, res) => {
 
     const clean = (arr) => arr.filter(Boolean);
     const all = [
-      ...clean(indices),
-      ...clean(commodities),
-      ...clean(forex),
       ...clean(crypto),
     ];
 
