@@ -219,61 +219,92 @@ app.post('/api/subscriptions/create', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-// Market data route
 app.get('/api/market/live', async (req, res) => {
+  const KEY = process.env.FINNHUB_API_KEY;
+
+  const symbols = {
+    indices: [
+      { symbol: 'OANDA:SPX500_USD', name: 'S&P 500' },
+      { symbol: 'OANDA:NAS100_USD', name: 'NASDAQ' },
+      { symbol: 'OANDA:UK100_GBP', name: 'FTSE 100' },
+      { symbol: 'OANDA:JP225_USD', name: 'Nikkei 225' },
+      { symbol: 'OANDA:DE30_EUR', name: 'DAX' },
+      { symbol: 'OANDA:HK33_HKD', name: 'Hang Seng' },
+    ],
+    commodities: [
+      { symbol: 'OANDA:XAU_USD', name: 'Gold' },
+      { symbol: 'OANDA:XAG_USD', name: 'Silver' },
+      { symbol: 'OANDA:BRENT_USD', name: 'Brent Oil' },
+      { symbol: 'OANDA:NATGAS_USD', name: 'Natural Gas' },
+    ],
+    forex: [
+      { symbol: 'OANDA:EUR_USD', name: 'EUR/USD' },
+      { symbol: 'OANDA:GBP_USD', name: 'GBP/USD' },
+      { symbol: 'OANDA:USD_JPY', name: 'USD/JPY' },
+      { symbol: 'OANDA:USD_INR', name: 'USD/INR' },
+      { symbol: 'OANDA:USD_SGD', name: 'USD/SGD' },
+      { symbol: 'OANDA:AUD_USD', name: 'AUD/USD' },
+    ],
+    crypto: [
+      { symbol: 'BINANCE:BTCUSDT', name: 'Bitcoin' },
+      { symbol: 'BINANCE:ETHUSDT', name: 'Ethereum' },
+      { symbol: 'BINANCE:BNBUSDT', name: 'BNB' },
+      { symbol: 'BINANCE:SOLUSDT', name: 'Solana' },
+      { symbol: 'BINANCE:XRPUSDT', name: 'XRP' },
+      { symbol: 'BINANCE:ADAUSDT', name: 'Cardano' },
+    ],
+  };
+
+  const fetchQuote = async ({ symbol, name }) => {
+    try {
+      const response = await fetch(
+        `https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(symbol)}&token=${KEY}`
+      );
+      const data = await response.json();
+      if (!data.c || data.c === 0) return null;
+      const change = (data.c - data.pc).toFixed(2);
+      const changePercent = data.pc
+        ? (((data.c - data.pc) / data.pc) * 100).toFixed(2)
+        : '0.00';
+      return { symbol, name, value: data.c, change, changePercent, volume: '—' };
+    } catch {
+      return null;
+    }
+  };
+
   try {
-    const headers = { 'User-Agent': 'Mozilla/5.0' };
+    const [indices, commodities, forex, crypto] = await Promise.all([
+      Promise.all(symbols.indices.map(fetchQuote)),
+      Promise.all(symbols.commodities.map(fetchQuote)),
+      Promise.all(symbols.forex.map(fetchQuote)),
+      Promise.all(symbols.crypto.map(fetchQuote)),
+    ]);
 
-    const symbols = {
-      indices: ['^GSPC', '^DJI', '^IXIC', '^FTSE', '^N225', '^HSI'],
-      commodities: ['GC=F', 'SI=F', 'CL=F', 'NG=F'],
-      forex: ['EURUSD=X', 'GBPUSD=X', 'USDJPY=X', 'USDINR=X'],
-      crypto: ['BTC-USD', 'ETH-USD', 'BNB-USD', 'SOL-USD'],
-    };
+    const clean = (arr) => arr.filter(Boolean);
+    const all = [
+      ...clean(indices),
+      ...clean(commodities),
+      ...clean(forex),
+      ...clean(crypto),
+    ];
 
-    const allSymbols = Object.values(symbols).flat().join(',');
-    const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${allSymbols}`;
-
-    const response = await fetch(url, { headers });
-    const data = await response.json();
-    const quotes = data.quoteResponse?.result || [];
-
-    const nameMap = {
-      '^GSPC': 'S&P 500', '^DJI': 'Dow Jones', '^IXIC': 'NASDAQ',
-      '^FTSE': 'FTSE 100', '^N225': 'Nikkei 225', '^HSI': 'Hang Seng',
-      'GC=F': 'Gold', 'SI=F': 'Silver', 'CL=F': 'Crude Oil', 'NG=F': 'Natural Gas',
-      'EURUSD=X': 'EUR/USD', 'GBPUSD=X': 'GBP/USD', 'USDJPY=X': 'USD/JPY', 'USDINR=X': 'USD/INR',
-      'BTC-USD': 'Bitcoin', 'ETH-USD': 'Ethereum', 'BNB-USD': 'BNB', 'SOL-USD': 'Solana',
-    };
-
-    const format = (syms) => syms.map(sym => {
-      const q = quotes.find(q => q.symbol === sym);
-      if (!q) return null;
-      return {
-        symbol: sym,
-        name: nameMap[sym] || sym,
-        value: q.regularMarketPrice || 0,
-        change: q.regularMarketChange?.toFixed(2) || '0',
-        changePercent: q.regularMarketChangePercent?.toFixed(2) || '0',
-        volume: q.regularMarketVolume?.toLocaleString() || '0',
-      };
-    }).filter(Boolean);
-
-    const allFormatted = format(Object.values(symbols).flat());
-    const gainers = [...allFormatted].sort((a, b) => parseFloat(b.changePercent) - parseFloat(a.changePercent)).slice(0, 5);
-    const losers = [...allFormatted].sort((a, b) => parseFloat(a.changePercent) - parseFloat(b.changePercent)).slice(0, 5);
+    const gainers = [...all]
+      .sort((a, b) => parseFloat(b.changePercent) - parseFloat(a.changePercent))
+      .slice(0, 5);
+    const losers = [...all]
+      .sort((a, b) => parseFloat(a.changePercent) - parseFloat(b.changePercent))
+      .slice(0, 5);
 
     res.json({
-      indices: format(symbols.indices),
-      commodities: format(symbols.commodities),
-      forex: format(symbols.forex),
-      crypto: format(symbols.crypto),
+      indices: clean(indices),
+      commodities: clean(commodities),
+      forex: clean(forex),
+      crypto: clean(crypto),
       topGainers: gainers,
       topLosers: losers,
     });
-
   } catch (error) {
-    console.error('Market data error:', error);
+    console.error('Market error:', error);
     res.status(500).json({ error: 'Failed to fetch market data' });
   }
 });
