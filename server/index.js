@@ -219,7 +219,64 @@ app.post('/api/subscriptions/create', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+// Market data route
+app.get('/api/market/live', async (req, res) => {
+  try {
+    const headers = { 'User-Agent': 'Mozilla/5.0' };
 
+    const symbols = {
+      indices: ['^GSPC', '^DJI', '^IXIC', '^FTSE', '^N225', '^HSI'],
+      commodities: ['GC=F', 'SI=F', 'CL=F', 'NG=F'],
+      forex: ['EURUSD=X', 'GBPUSD=X', 'USDJPY=X', 'USDINR=X'],
+      crypto: ['BTC-USD', 'ETH-USD', 'BNB-USD', 'SOL-USD'],
+    };
+
+    const allSymbols = Object.values(symbols).flat().join(',');
+    const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${allSymbols}`;
+
+    const response = await fetch(url, { headers });
+    const data = await response.json();
+    const quotes = data.quoteResponse?.result || [];
+
+    const nameMap = {
+      '^GSPC': 'S&P 500', '^DJI': 'Dow Jones', '^IXIC': 'NASDAQ',
+      '^FTSE': 'FTSE 100', '^N225': 'Nikkei 225', '^HSI': 'Hang Seng',
+      'GC=F': 'Gold', 'SI=F': 'Silver', 'CL=F': 'Crude Oil', 'NG=F': 'Natural Gas',
+      'EURUSD=X': 'EUR/USD', 'GBPUSD=X': 'GBP/USD', 'USDJPY=X': 'USD/JPY', 'USDINR=X': 'USD/INR',
+      'BTC-USD': 'Bitcoin', 'ETH-USD': 'Ethereum', 'BNB-USD': 'BNB', 'SOL-USD': 'Solana',
+    };
+
+    const format = (syms) => syms.map(sym => {
+      const q = quotes.find(q => q.symbol === sym);
+      if (!q) return null;
+      return {
+        symbol: sym,
+        name: nameMap[sym] || sym,
+        value: q.regularMarketPrice || 0,
+        change: q.regularMarketChange?.toFixed(2) || '0',
+        changePercent: q.regularMarketChangePercent?.toFixed(2) || '0',
+        volume: q.regularMarketVolume?.toLocaleString() || '0',
+      };
+    }).filter(Boolean);
+
+    const allFormatted = format(Object.values(symbols).flat());
+    const gainers = [...allFormatted].sort((a, b) => parseFloat(b.changePercent) - parseFloat(a.changePercent)).slice(0, 5);
+    const losers = [...allFormatted].sort((a, b) => parseFloat(a.changePercent) - parseFloat(b.changePercent)).slice(0, 5);
+
+    res.json({
+      indices: format(symbols.indices),
+      commodities: format(symbols.commodities),
+      forex: format(symbols.forex),
+      crypto: format(symbols.crypto),
+      topGainers: gainers,
+      topLosers: losers,
+    });
+
+  } catch (error) {
+    console.error('Market data error:', error);
+    res.status(500).json({ error: 'Failed to fetch market data' });
+  }
+});
 app.listen(PORT, '0.0.0.0', () => {
     console.log(` Server running on http://localhost:${PORT}`);
 });
