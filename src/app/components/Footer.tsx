@@ -1,12 +1,14 @@
 import { Link } from "react-router";
 import { Twitter, Linkedin, Youtube, Facebook, Instagram, Globe, Mail, Phone, MapPin } from "lucide-react";
 import { useLiveDateTime } from "./LiveClock";
+import { useState } from "react";
 import logo from "/src/app/assess/logos.png";
 import icon from "/src/app/assess/icon.png";
 
 export function Footer() {
   const { fullDate } = useLiveDateTime();
-
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
   return (
     <footer className="bg-[#050e1a] text-gray-300">
       {/* Main footer content */}
@@ -125,26 +127,51 @@ export function Footer() {
             <div className="text-gray-400 text-xs mt-0.5">Daily intelligence briefing for global leaders — trusted by 2.4M+ readers</div>
           </div>
           <form
-            onSubmit={e => {
-              e.preventDefault();
-              const emailInput = (e.target as HTMLFormElement).querySelector("input[type=email]") as HTMLInputElement;
-              if (emailInput?.value) {
-                alert(`Thank you! You've subscribed with ${emailInput.value}. Welcome to The Pride Times!`);
-                emailInput.value = "";
-              }
-            }}
-            className="flex gap-2 w-full sm:w-auto"
-          >
-            <input
-              type="email"
-              placeholder="Enter your work email"
-              required
-              className="bg-[#1a2f50] text-white placeholder-gray-400 rounded px-4 py-2 text-sm border border-[#2a4f80] outline-none focus:border-[#00d4ff] w-full sm:w-64"
-            />
-            <button type="submit" className="bg-[#00d4ff] text-[#0a1628] px-5 py-2 rounded text-sm font-black hover:bg-white transition-colors whitespace-nowrap flex-shrink-0">
-              Get Briefing
-            </button>
-          </form>
+  onSubmit={(e) => {
+    e.preventDefault();
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/;
+
+    if (!email) {
+      setError("Email is required");
+      return;
+    }
+
+    if (!emailRegex.test(email)) {
+      setError("Enter a valid email address");
+      return;
+    }
+
+    setError("");
+    alert(`Thank you! You've subscribed with ${email}. Welcome to The Pride Times!`);
+    setEmail("");
+  }}
+  className="flex flex-col gap-1 w-full sm:w-auto"
+>
+  <div className="flex gap-2 w-full sm:w-auto">
+    <input
+      type="text"  // no browser interference
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      placeholder="Enter your work email"
+      className={`bg-[#1a2f50] text-white placeholder-gray-400 rounded px-4 py-2 text-sm border ${
+        error ? "border-red-500" : "border-[#2a4f80]"
+      } outline-none focus:border-[#00d4ff] w-full sm:w-64`}
+    />
+
+    <button
+      type="submit"
+      className="bg-[#00d4ff] text-[#0a1628] px-5 py-2 rounded text-sm font-black hover:bg-white transition-colors whitespace-nowrap"
+    >
+      Get Briefing
+    </button>
+  </div>
+
+  {/* Inline error */}
+  {error && (
+    <span className="text-red-400 text-xs">{error}</span>
+  )}
+</form>
         </div>
       </div>
 
