@@ -32,7 +32,7 @@ export function Footer() {
             <p className="text-sm leading-relaxed text-gray-400 mb-5 max-w-sm">
               The Pride Times is the world's premier enterprise news platform delivering truth, integrity, and pride-driven journalism across every industry and region of the global economy. Trusted by 2.4M+ readers in 195 nations.
             </p>
- <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-6">
               <a href="https://x.com/thepridetime" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
                 <Twitter className="w-4 h-4" />
               </a>
@@ -45,7 +45,7 @@ export function Footer() {
               <a href="https://www.facebook.com/thepridetime" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
                 <Facebook className="w-4 h-4" />
               </a>
-                <a href="https://www.instagram.com/thepridetime/" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
+              <a href="https://www.instagram.com/thepridetime/" className="w-8 h-8 flex items-center justify-center rounded bg-[#1a2f50] hover:bg-[#00d4ff] hover:text-[#0d1f3c] text-gray-400 transition-colors">
                 <Instagram className="w-4 h-4" />
               </a>
             </div>
@@ -100,11 +100,11 @@ export function Footer() {
             </h4>
             <ul className="space-y-2.5">
               {[
-                { label: "About The Pride Times", to: "#" },
-                { label: "Editorial Standards", to: "#" },
-                { label: "Careers", to: "#" },
-                { label: "Advertise With Us", to: "#" },
-                { label: "Contact Us", to: "#" },
+                { label: "About The Pride Times", to: "/about" },
+                { label: "Editorial Standards", to: "/editorial-standards" },
+                { label: "Careers", to: "/careers" },
+                { label: "Advertise With Us", to: "/advertise" },
+                { label: "Contact Us", to: "/contact" },
               ].map(item => (
                 <li key={item.label}>
                   <Link to={item.to} className="text-sm text-gray-400 hover:text-[#00d4ff] transition-colors">
