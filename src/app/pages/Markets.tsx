@@ -63,14 +63,28 @@ export function Markets() {
   const [marketData, setMarketData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date());
+  const [activeTimePeriod, setActiveTimePeriod] = useState("1D");
 
-  const [chartData, setChartData] = useState(() => {
-    let price = 12847;
-    return Array(48).fill(0).map((_, i) => {
-      price = price + (Math.random() - 0.5) * 60;
-      return { time: `${i}:00`, price: Math.max(12000, price), volume: Math.floor(Math.random() * 5e6 + 1e6) };
-    });
+  const [allChartData] = useState(() => {
+  let price = 12847;
+  return Array(720).fill(0).map((_, i) => {
+    price = price + (Math.random() - 0.5) * 60;
+    return { time: `${i}:00`, price: Math.max(12000, price), volume: Math.floor(Math.random() * 5e6 + 1e6) };
   });
+});
+
+const [chartData, setChartData] = useState(allChartData.slice(-48));
+
+// Filter chart data by time period
+const filteredChartData = (() => {
+  switch (activeTimePeriod) {
+    case "1H": return allChartData.slice(-12);
+    case "1D": return allChartData.slice(-48);
+    case "1W": return allChartData.slice(-168);
+    case "1M": return allChartData.slice(-720);
+    default: return allChartData.slice(-48);
+  }
+})();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -229,12 +243,18 @@ export function Markets() {
                   </div>
                   <div className="flex gap-2">
                     {["1H", "1D", "1W", "1M"].map(t => (
-                      <button key={t} className={`text-xs px-2 py-1 rounded ${t === "1D" ? "bg-[#00d4ff] text-[#0d1f3c]" : "text-gray-400 hover:text-white"}`}>{t}</button>
-                    ))}
+  <button
+    key={t}
+    onClick={() => setActiveTimePeriod(t)}
+    className={`text-xs px-2 py-1 rounded ${activeTimePeriod === t ? "bg-[#00d4ff] text-[#0d1f3c]" : "text-gray-400 hover:text-white"}`}
+  >
+    {t}
+  </button>
+))}
                   </div>
                 </div>
                 <ResponsiveContainer width="100%" height={220}>
-                  <AreaChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                  <AreaChart data={filteredChartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                     <defs><linearGradient id="techGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#00d4ff" stopOpacity={0.3} /><stop offset="95%" stopColor="#00d4ff" stopOpacity={0} /></linearGradient></defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#1a2f50" />
                     <XAxis dataKey="time" tick={{ fill: "#6b7280", fontSize: 10 }} interval={3} />
@@ -246,7 +266,7 @@ export function Markets() {
                 <div className="mt-2">
                   <div className="text-xs text-gray-500 mb-1">Volume</div>
                   <ResponsiveContainer width="100%" height={40}>
-                    <BarChart data={chartData.slice(-20)} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                    <BarChart data={filteredChartData.slice(-20)} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                       <Bar dataKey="volume" fill="#1a2f50" radius={[2, 2, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
