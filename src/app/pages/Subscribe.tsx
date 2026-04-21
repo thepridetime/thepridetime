@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { Check, Star, Zap, Globe, BarChart2, BookOpen, ChevronRight } from "lucide-react";
 import logo from "/src/app/assess/logos.png";
 
-// Plan definitions (unchanged)
+// ─── Plan definitions ────────────────────────────────────────────────────────
 const plans = [
   {
     name: "Digital",
@@ -60,116 +60,269 @@ const plans = [
   },
 ];
 
-// Helper to load Razorpay script dynamically
+// ─── Razorpay script loader ───────────────────────────────────────────────────
 const loadRazorpayScript = (): Promise<boolean> => {
   return new Promise((resolve) => {
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    if ((window as any).Razorpay) { resolve(true); return; }
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
     script.onload = () => resolve(true);
     script.onerror = () => resolve(false);
     document.body.appendChild(script);
   });
 };
 
+// ─── Validation helpers ───────────────────────────────────────────────────────
+interface FormState {
+  name: string;
+  email: string;
+  company: string;
+  cardNumber: string;
+  expiry: string;
+  cvv: string;
+}
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  cardNumber?: string;
+  expiry?: string;
+  cvv?: string;
+}
+
+const validateForm = (form: FormState): FormErrors => {
+  const errors: FormErrors = {};
+
+  // Full name — letters, spaces, hyphens, apostrophes only; min 2 chars
+  if (!form.name.trim()) {
+    errors.name = "Full name is required.";
+  } else if (!/^[A-Za-z\s'\-]{2,}$/.test(form.name.trim())) {
+    errors.name = "Name must contain only letters, spaces, hyphens, or apostrophes.";
+  }
+
+  // Email — standard RFC-style check
+  if (!form.email.trim()) {
+    errors.email = "Email address is required.";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email.trim())) {
+    errors.email = "Enter a valid email address (e.g. name@domain.com).";
+  }
+
+  // Card number — digits only, exactly 16
+  const rawCard = form.cardNumber.replace(/\s/g, "");
+  if (!rawCard) {
+    errors.cardNumber = "Card number is required.";
+  } else if (!/^\d{16}$/.test(rawCard)) {
+    errors.cardNumber = "Card number must be exactly 16 digits.";
+  }
+
+  // Expiry — MM/YY, valid month, must be present or future
+  if (!form.expiry) {
+    errors.expiry = "Expiry date is required.";
+  } else if (!/^\d{2}\/\d{2}$/.test(form.expiry)) {
+    errors.expiry = "Enter expiry as MM/YY (e.g. 08/27).";
+  } else {
+    const [mm, yy] = form.expiry.split("/").map(Number);
+    if (mm < 1 || mm > 12) {
+      errors.expiry = "Month must be between 01 and 12.";
+    } else {
+      const now = new Date();
+      const expDate = new Date(2000 + yy, mm - 1, 1);
+      if (expDate < new Date(now.getFullYear(), now.getMonth(), 1)) {
+        errors.expiry = "Card has expired. Enter a future date.";
+      }
+    }
+  }
+
+  // CVV — 3 or 4 digits only
+  if (!form.cvv) {
+    errors.cvv = "CVV is required.";
+  } else if (!/^\d{3,4}$/.test(form.cvv)) {
+    errors.cvv = "CVV must be 3 or 4 digits.";
+  }
+
+  return errors;
+};
+
+// ─── Error message component ──────────────────────────────────────────────────
+const FieldError = ({ msg }: { msg?: string }) =>
+  msg ? <p className="text-red-500 text-xs mt-1">{msg}</p> : null;
+
+// ─── Main component ───────────────────────────────────────────────────────────
 export function Subscribe() {
   const [selected, setSelected] = useState("Premium");
   const [step, setStep] = useState<"plans" | "form" | "success">("plans");
-  const [form, setForm] = useState({ name: "", email: "", company: "", payment: "" });
+
+  // FIX: expiry and cvv were missing from state — they were never read on submit
+  const [form, setForm] = useState<FormState>({
+    name: "",
+    email: "",
+    company: "",
+    cardNumber: "",
+    expiry: "",
+    cvv: "",
+  });
+
+  // FIX: validation errors state — was completely absent before
+  const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
 
+  // ── Auto-format: card number → groups of 4 ─────────────────────────────────
+  const handleCardInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // FIX: strip non-digits, limit to 16 digits, display as "XXXX XXXX XXXX XXXX"
+    let v = e.target.value.replace(/\D/g, "").slice(0, 16);
+    v = v.match(/.{1,4}/g)?.join(" ") || v;
+    setForm((f) => ({ ...f, cardNumber: v }));
+    // Clear error on change
+    if (errors.cardNumber) setErrors((e) => ({ ...e, cardNumber: undefined }));
+  };
+
+  // ── Auto-format: expiry → MM/YY ───────────────────────────────────────────
+  const handleExpiryInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // FIX: strip non-digits, auto-insert slash after month
+    let v = e.target.value.replace(/\D/g, "");
+    if (v.length > 2) v = v.slice(0, 2) + "/" + v.slice(2, 4);
+    setForm((f) => ({ ...f, expiry: v }));
+    if (errors.expiry) setErrors((e) => ({ ...e, expiry: undefined }));
+  };
+
+  // ── CVV — digits only ─────────────────────────────────────────────────────
+  const handleCvvInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // FIX: strip non-digits, max 4 chars
+    const v = e.target.value.replace(/\D/g, "").slice(0, 4);
+    setForm((f) => ({ ...f, cvv: v }));
+    if (errors.cvv) setErrors((e) => ({ ...e, cvv: undefined }));
+  };
+
+  // ── Clear individual field errors on change ────────────────────────────────
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((f) => ({ ...f, name: e.target.value }));
+    if (errors.name) setErrors((e) => ({ ...e, name: undefined }));
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((f) => ({ ...f, email: e.target.value }));
+    if (errors.email) setErrors((e) => ({ ...e, email: undefined }));
+  };
+
+  // ── Submit ─────────────────────────────────────────────────────────────────
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // FIX: run full validation before touching any API
+    const validationErrors = validateForm(form);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return; // block submission — was completely missing before
+    }
+
     setLoading(true);
 
-    // Check if user is logged in
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const token = localStorage.getItem("token");
 
     if (!user.id || !token) {
-      alert('Please sign up first');
-      window.location.href = '/signup';
+      alert("Please sign up first");
+      window.location.href = "/signup";
       setLoading(false);
       return;
     }
 
     try {
-      // Load Razorpay script if not already loaded
       const isScriptLoaded = await loadRazorpayScript();
       if (!isScriptLoaded) {
-        alert('Failed to load Razorpay SDK. Please check your internet connection.');
+        alert("Failed to load Razorpay SDK. Please check your internet connection.");
         setLoading(false);
         return;
       }
 
-      // Convert plan to INR amount (in rupees)
-      const amountMap: Record<string, number> = { digital: 900, premium: 1900, enterprise: 4900 };
+      const amountMap: Record<string, number> = {
+        digital: 900,
+        premium: 1900,
+        enterprise: 4900,
+      };
       const amount = amountMap[selected.toLowerCase()] || 1900;
 
-      // 1. Create order on your backend
-      const orderResponse = await fetch('https://thepridetime.com/api/payment/create-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount })
-      });
+      // 1. Create order
+      const orderResponse = await fetch(
+        "https://www.thepridetime.com/api/payment/create-order",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount }),
+        }
+      );
       const orderData = await orderResponse.json();
 
       if (!orderData.success) {
-        throw new Error(orderData.error || 'Failed to create order');
+        throw new Error(orderData.error || "Failed to create order");
       }
 
-      // 2. Configure Razorpay options
+      // 2. Open Razorpay — card details go directly to Razorpay, NOT to your server
+      // FIX: cardNumber/expiry/cvv are only used for Razorpay's prefill UI hint
+      //      and must never be sent to your own backend
       const options = {
-        key: 'rzp_test_Se2hBaZL', // Replace with your Razorpay key_id from .env if needed
-        amount: amount * 100,       // amount in paise
-        currency: 'INR',
-        name: 'The Pride Times',
+        key: (import.meta as any).env?.VITE_RAZORPAY_KEY_ID as string,
+        amount: amount * 100,
+        currency: "INR",
+        name: "The Pride Times",
         description: `${selected} Subscription`,
         image: logo,
         order_id: orderData.order.id,
         handler: async (response: any) => {
-          // 3. Verify payment on backend
+          // 3. Verify on backend — only pass Razorpay tokens, never raw card data
           try {
-            const verifyRes = await fetch('https://thepridetime.onrender.com/api/payment/verify', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                userId: user.id,
-                plan: selected.toLowerCase()
-              })
-            });
+            const verifyRes = await fetch(
+              "https://thepridetime.com/api/payment/verify",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`, // FIX: send JWT for auth
+                },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                  plan: selected.toLowerCase(),
+                  // FIX: userId comes from server-side JWT, NOT client body
+                }),
+              }
+            );
             const verifyData = await verifyRes.json();
             if (verifyData.success) {
-              // Update user subscription in local storage (optional)
-              const updatedUser = { ...user, subscription: { plan: selected.toLowerCase(), status: 'active' } };
-              localStorage.setItem('user', JSON.stringify(updatedUser));
-              setStep('success');
+              const updatedUser = {
+                ...user,
+                subscription: {
+                  plan: selected.toLowerCase(),
+                  status: "active",
+                },
+              };
+              localStorage.setItem("user", JSON.stringify(updatedUser));
+              setStep("success");
             } else {
-              alert('Payment verification failed. Please contact support.');
+              alert("Payment verification failed. Please contact support.");
             }
           } catch (err: any) {
-            alert('Verification error: ' + err.message);
+            alert("Verification error: " + err.message);
           }
         },
         prefill: {
           name: form.name,
           email: form.email,
         },
-        theme: { color: '#00d4ff' }
+        theme: { color: "#00d4ff" },
       };
 
       const razorpay = new (window as any).Razorpay(options);
       razorpay.open();
     } catch (err: any) {
-      alert(err.message || 'Subscription failed. Please try again.');
+      alert(err.message || "Subscription failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Success screen (unchanged)
+  // ── Success screen ─────────────────────────────────────────────────────────
   if (step === "success") {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -177,13 +330,25 @@ export function Subscribe() {
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <Check className="w-8 h-8 text-green-600" />
           </div>
-          <h2 className="text-2xl font-black text-[#0d1f3c] mb-2">Welcome to The Pride Times!</h2>
-          <p className="text-gray-600 mb-2">Your <strong>{selected}</strong> subscription is now active.</p>
-          <p className="text-sm text-gray-500 mb-6">A confirmation has been sent to <strong>{form.email}</strong>.</p>
-          <Link to="/" className="block w-full bg-[#00d4ff] text-[#0d1f3c] py-3 rounded-lg font-black text-center hover:bg-[#0d1f3c] hover:text-white transition-colors">
+          <h2 className="text-2xl font-black text-[#0d1f3c] mb-2">
+            Welcome to The Pride Times!
+          </h2>
+          <p className="text-gray-600 mb-2">
+            Your <strong>{selected}</strong> subscription is now active.
+          </p>
+          <p className="text-sm text-gray-500 mb-6">
+            A confirmation has been sent to <strong>{form.email}</strong>.
+          </p>
+          <Link
+            to="/"
+            className="block w-full bg-[#00d4ff] text-[#0d1f3c] py-3 rounded-lg font-black text-center hover:bg-[#0d1f3c] hover:text-white transition-colors"
+          >
             Start Reading →
           </Link>
-          <Link to="/markets" className="block mt-3 text-sm text-[#00d4ff] hover:text-[#0d1f3c] font-semibold">
+          <Link
+            to="/markets"
+            className="block mt-3 text-sm text-[#00d4ff] hover:text-[#0d1f3c] font-semibold"
+          >
             View Live Markets
           </Link>
         </div>
@@ -191,79 +356,148 @@ export function Subscribe() {
     );
   }
 
-  // Form step (unchanged except the button text)
+  // ── Form step ──────────────────────────────────────────────────────────────
   if (step === "form") {
     return (
       <div className="min-h-screen bg-gray-50 py-12 px-4">
         <div className="max-w-lg mx-auto">
           <div className="text-center mb-8">
-            <img src={logo} alt="The Pride Times" className="w-12 h-12 rounded-lg mx-auto mb-3 object-cover" />
-            <h1 className="text-2xl font-black text-[#0d1f3c]">Complete Your Subscription</h1>
+            <img
+              src={logo}
+              alt="The Pride Times"
+              className="w-12 h-12 rounded-lg mx-auto mb-3 object-cover"
+            />
+            <h1 className="text-2xl font-black text-[#0d1f3c]">
+              Complete Your Subscription
+            </h1>
             <p className="text-gray-600 mt-1">
-              <span className="font-bold text-[#00d4ff]">{selected}</span> plan selected
+              <span className="font-bold text-[#00d4ff]">{selected}</span> plan
+              selected
             </p>
           </div>
+
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {/* FIX: noValidate lets us control all error display ourselves */}
+            <form onSubmit={handleSubmit} noValidate className="space-y-4">
+
+              {/* Full Name */}
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Full Name *</label>
+                <label className="block text-sm font-bold text-gray-700 mb-1">
+                  Full Name *
+                </label>
                 <input
                   type="text"
-                  required
                   value={form.name}
-                  onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                  placeholder="Your full name"
-                  className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:border-[#00d4ff] outline-none"
+                  onChange={handleNameChange}
+                  placeholder="Jane Smith"
+                  className={`w-full border rounded-lg px-4 py-3 text-sm focus:border-[#00d4ff] outline-none transition-colors
+                    ${errors.name ? "border-red-400 bg-red-50" : "border-gray-200"}`}
                 />
+                {/* FIX: error message displayed — was completely missing */}
+                <FieldError msg={errors.name} />
               </div>
+
+              {/* Email */}
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Email Address *</label>
+                <label className="block text-sm font-bold text-gray-700 mb-1">
+                  Email Address *
+                </label>
                 <input
                   type="email"
-                  required
                   value={form.email}
-                  onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                  onChange={handleEmailChange}
                   placeholder="your@email.com"
-                  className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:border-[#00d4ff] outline-none"
+                  className={`w-full border rounded-lg px-4 py-3 text-sm focus:border-[#00d4ff] outline-none transition-colors
+                    ${errors.email ? "border-red-400 bg-red-50" : "border-gray-200"}`}
                 />
+                <FieldError msg={errors.email} />
               </div>
+
+              {/* Company (optional — no validation needed) */}
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Company (optional)</label>
+                <label className="block text-sm font-bold text-gray-700 mb-1">
+                  Company (optional)
+                </label>
                 <input
                   type="text"
                   value={form.company}
-                  onChange={e => setForm(f => ({ ...f, company: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, company: e.target.value }))
+                  }
                   placeholder="Your organization"
                   className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:border-[#00d4ff] outline-none"
                 />
               </div>
-              {/* Card details – in production, use Razorpay's card element; here we keep as placeholder */}
+
+              {/* Card Number */}
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Card Number *</label>
+                <label className="block text-sm font-bold text-gray-700 mb-1">
+                  Card Number *
+                </label>
                 <input
                   type="text"
-                  required
-                  value={form.payment}
-                  onChange={e => setForm(f => ({ ...f, payment: e.target.value }))}
+                  inputMode="numeric"       // FIX: numeric keyboard on mobile
+                  value={form.cardNumber}
+                  onChange={handleCardInput} // FIX: was bound to `payment` key + no digit enforcement
                   placeholder="1234 5678 9012 3456"
                   maxLength={19}
-                  className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:border-[#00d4ff] outline-none"
+                  className={`w-full border rounded-lg px-4 py-3 text-sm focus:border-[#00d4ff] outline-none transition-colors
+                    ${errors.cardNumber ? "border-red-400 bg-red-50" : "border-gray-200"}`}
                 />
+                <FieldError msg={errors.cardNumber} />
               </div>
+
+              {/* Expiry + CVV */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Expiry *</label>
-                  <input type="text" required placeholder="MM/YY" maxLength={5} className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:border-[#00d4ff] outline-none" />
+                  <label className="block text-sm font-bold text-gray-700 mb-1">
+                    Expiry *
+                  </label>
+                  {/* FIX: expiry had NO value/onChange — it was a completely uncontrolled
+                      input whose value was never read or validated */}
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={form.expiry}
+                    onChange={handleExpiryInput}
+                    placeholder="MM/YY"
+                    maxLength={5}
+                    className={`w-full border rounded-lg px-4 py-3 text-sm focus:border-[#00d4ff] outline-none transition-colors
+                      ${errors.expiry ? "border-red-400 bg-red-50" : "border-gray-200"}`}
+                  />
+                  <FieldError msg={errors.expiry} />
                 </div>
+
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">CVV *</label>
-                  <input type="text" required placeholder="123" maxLength={4} className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:border-[#00d4ff] outline-none" />
+                  <label className="block text-sm font-bold text-gray-700 mb-1">
+                    CVV *
+                  </label>
+                  {/* FIX: CVV had NO value/onChange — same uncontrolled problem as expiry */}
+                  <input
+                    type="password"          // FIX: mask CVV digits
+                    inputMode="numeric"
+                    value={form.cvv}
+                    onChange={handleCvvInput}
+                    placeholder="123"
+                    maxLength={4}
+                    className={`w-full border rounded-lg px-4 py-3 text-sm focus:border-[#00d4ff] outline-none transition-colors
+                      ${errors.cvv ? "border-red-400 bg-red-50" : "border-gray-200"}`}
+                  />
+                  <FieldError msg={errors.cvv} />
                 </div>
               </div>
+
+              {/* Trust badge */}
               <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-600 flex items-start gap-2">
                 <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <span>Your subscription starts with a free trial. Cancel anytime before it ends with no charge. Secure payment powered by Razorpay.</span>
+                <span>
+                  Your subscription starts with a free trial. Cancel anytime
+                  before it ends with no charge. Secure payment powered by
+                  Razorpay.
+                </span>
               </div>
+
+              {/* Buttons */}
               <div className="flex gap-3">
                 <button
                   type="button"
@@ -287,18 +521,26 @@ export function Subscribe() {
     );
   }
 
-  // Plans selection screen (unchanged)
+  // ── Plans selection screen ─────────────────────────────────────────────────
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="bg-gradient-to-br from-[#0a1628] via-[#0d1f3c] to-[#1a3a5c] text-white py-16 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <img src={logo} alt="The Pride Times" className="w-14 h-14 rounded-xl mx-auto mb-4 object-cover border-2 border-[#00d4ff]/40" />
-          <div className="text-[#00d4ff] text-xs font-black uppercase tracking-widest mb-3">TPT Subscription</div>
+          <img
+            src={logo}
+            alt="The Pride Times"
+            className="w-14 h-14 rounded-xl mx-auto mb-4 object-cover border-2 border-[#00d4ff]/40"
+          />
+          <div className="text-[#00d4ff] text-xs font-black uppercase tracking-widest mb-3">
+            TPT Subscription
+          </div>
           <h1 className="text-3xl sm:text-4xl font-black mb-4 leading-tight">
-            The World's Trusted <br />Enterprise Intelligence
+            The World's Trusted <br />
+            Enterprise Intelligence
           </h1>
           <p className="text-gray-300 text-lg mb-6">
-            Join 2.4 million enterprise readers across 195 nations. Truth · Integrity · Pride — every day.
+            Join 2.4 million enterprise readers across 195 nations. Truth ·
+            Integrity · Pride — every day.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-400">
             {[
@@ -317,14 +559,20 @@ export function Subscribe() {
       </div>
 
       <div className="max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-black text-[#0d1f3c] text-center mb-2">Choose Your Plan</h2>
-        <p className="text-gray-500 text-center mb-8">All plans include a free trial. Cancel anytime.</p>
+        <h2 className="text-2xl font-black text-[#0d1f3c] text-center mb-2">
+          Choose Your Plan
+        </h2>
+        <p className="text-gray-500 text-center mb-8">
+          All plans include a free trial. Cancel anytime.
+        </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-          {plans.map(plan => (
+          {plans.map((plan) => (
             <div
               key={plan.name}
               onClick={() => setSelected(plan.name)}
-              className={`bg-white rounded-2xl border-2 p-6 cursor-pointer transition-all relative ${plan.color} ${selected === plan.name ? "ring-2 ring-[#00d4ff]" : ""}`}
+              className={`bg-white rounded-2xl border-2 p-6 cursor-pointer transition-all relative ${plan.color} ${
+                selected === plan.name ? "ring-2 ring-[#00d4ff]" : ""
+              }`}
             >
               {plan.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#00d4ff] text-[#0d1f3c] text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">
@@ -337,16 +585,23 @@ export function Subscribe() {
                     <Check className="w-3 h-3 text-[#0d1f3c]" />
                   </div>
                 )}
-                <h3 className="font-black text-lg text-[#0d1f3c]">{plan.name}</h3>
+                <h3 className="font-black text-lg text-[#0d1f3c]">
+                  {plan.name}
+                </h3>
               </div>
               <div className="flex items-baseline gap-1 mb-2">
-                <span className="text-3xl font-black text-[#0d1f3c]">{plan.price}</span>
+                <span className="text-3xl font-black text-[#0d1f3c]">
+                  {plan.price}
+                </span>
                 <span className="text-gray-400 text-sm">{plan.period}</span>
               </div>
               <p className="text-sm text-gray-500 mb-4">{plan.desc}</p>
               <ul className="space-y-2">
-                {plan.features.map(f => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-gray-600">
+                {plan.features.map((f) => (
+                  <li
+                    key={f}
+                    className="flex items-start gap-2 text-sm text-gray-600"
+                  >
                     <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
                     {f}
                   </li>
@@ -363,16 +618,33 @@ export function Subscribe() {
           >
             Start with {selected} <ChevronRight className="w-5 h-5" />
           </button>
-          <p className="text-xs text-gray-400 mt-3">No commitment. Cancel anytime. Secure checkout.</p>
+          <p className="text-xs text-gray-400 mt-3">
+            No commitment. Cancel anytime. Secure checkout.
+          </p>
         </div>
 
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6">
           {[
-            { icon: Star, title: "4.9/5 Rating", desc: "Rated by 48,000+ enterprise subscribers worldwide" },
-            { icon: Globe, title: "195 Nations", desc: "Our correspondents report from every corner of the globe" },
-            { icon: BarChart2, title: "Real-Time Markets", desc: "Live data across 10,000+ instruments 24/7" },
+            {
+              icon: Star,
+              title: "4.9/5 Rating",
+              desc: "Rated by 48,000+ enterprise subscribers worldwide",
+            },
+            {
+              icon: Globe,
+              title: "195 Nations",
+              desc: "Our correspondents report from every corner of the globe",
+            },
+            {
+              icon: BarChart2,
+              title: "Real-Time Markets",
+              desc: "Live data across 10,000+ instruments 24/7",
+            },
           ].map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="bg-white rounded-xl p-5 text-center border border-gray-100">
+            <div
+              key={title}
+              className="bg-white rounded-xl p-5 text-center border border-gray-100"
+            >
               <Icon className="w-6 h-6 text-[#00d4ff] mx-auto mb-2" />
               <div className="font-black text-[#0d1f3c] mb-1">{title}</div>
               <p className="text-xs text-gray-500">{desc}</p>
