@@ -38,27 +38,7 @@ export function Article() {
     window.open(urls[platform] || "#", "_blank");
   };
 
-  const articleBody = `
-Why Most Businesses Fail at Digital Marketing & How AI is Changing the Game
-
-In today’s digital-first economy, businesses are investing heavily in marketing yet most fail to see consistent, scalable results. Despite running ads, posting on social media, and hiring agencies, growth often remains unpredictable.
-
-The core problem isn’t effort — it’s the lack of a structured, data-driven system.
-
-Most businesses rely on fragmented strategies: random ad campaigns, inconsistent content, and no clear customer journey. Without a unified approach, marketing becomes an expense rather than a revenue engine.
-
-This is where the shift toward AI-powered marketing is transforming the landscape.
-
-Modern digital growth is no longer about guesswork. It is about leveraging data, automation, and predictive insights to build systems that continuously optimize performance. From audience targeting to conversion tracking, AI enables businesses to make smarter, faster, and more profitable decisions.
-
-At Axis Elevate, we focus on building what we call a “Digital Growth Ecosystem” — a structured framework that integrates performance marketing, search optimization, branding, and automation into a single, scalable system.
-
-Instead of running isolated campaigns, this approach ensures that every touchpoint from the first click to final conversion is optimized for maximum impact. The result is not just traffic, but consistent and measurable revenue growth.
-
-As competition increases, businesses that rely on outdated, manual strategies will struggle to keep up. The future belongs to those who adopt intelligent, data-backed systems that evolve with the market.
-
-For businesses looking to move beyond inconsistent results, Axis Elevate offers a complimentary growth audit to identify key opportunities and build a scalable roadmap for success.
-`;
+const articleBody = article.content;
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Breadcrumb */}
@@ -97,9 +77,14 @@ For businesses looking to move beyond inconsistent results, Axis Elevate offers 
 
             <article className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
               {/* Hero image */}
-              <div className="relative h-56 sm:h-72 md:h-96">
-                <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <div className="relative w-full">
+  <img 
+    src={article.image} 
+    alt={article.title} 
+    className="w-full h-auto"
+  />
+
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 {article.breaking && (
                   <div className="absolute top-4 left-4 bg-red-600 text-white text-xs font-black px-3 py-1.5 tracking-widest uppercase animate-pulse">
                     🔴 Breaking News
@@ -188,13 +173,28 @@ For businesses looking to move beyond inconsistent results, Axis Elevate offers 
                 </div>
 
                 {/* Article body */}
-                <div className="prose prose-gray max-w-none">
-                  {articleBody.trim().split("\n\n").map((paragraph, idx) => (
-                    <p key={idx} className="text-gray-700 leading-relaxed mb-5 text-base">
-                      {paragraph.trim()}
-                    </p>
-                  ))}
-                </div>
+               {/* Article body */}
+<div className="prose prose-gray max-w-none">
+  {articleBody.trim().split("\n\n").map((paragraph, idx) => {
+    const trimmed = paragraph.trim();
+    if (trimmed.startsWith("[IMAGE:") && trimmed.endsWith("]")) {
+      const src = trimmed.slice(7, -1);
+      return (
+        <img
+          key={idx}
+          src={src}
+          alt="Article image"
+          className="w-full h-auto rounded-xl my-6"
+        />
+      );
+    }
+    return (
+      <p key={idx} className="text-gray-700 leading-relaxed mb-5 text-base">
+        {trimmed}
+      </p>
+    );
+  })}
+</div>
 
                 {/* Inline Ad */}
                 <AdBlock variant="rectangle" className="my-8" />

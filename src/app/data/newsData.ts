@@ -109,19 +109,40 @@ export const articles: Article[] = [
     region: "Global"
   },
   {
-    id: "7",
-    title: "Decentralized Finance Volume Surpasses Traditional Banking for First Time in History",
-    excerpt: "DeFi platforms record $8.7 trillion in monthly transaction volume in February 2026, surpassing the aggregate volume of traditional retail banking for the first time ever.",
-    content: "In a landmark shift for global finance, decentralized finance platforms have collectively processed more transaction volume than traditional retail banking networks for the first time.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Finance",
-    image: "https://images.unsplash.com/photo-1744473119469-905016183836?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjcnlwdG9jdXJyZW5jeSUyMGJsb2NrY2hhaW4lMjBkaWdpdGFsJTIwZmluYW5jZXxlbnwxfHx8fDE3NzI2MjM4ODB8MA&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 2, 2026",
-    readTime: "7 min read",
-    breaking: true,
-    tags: ["DeFi", "Blockchain", "Banking Disruption"],
-    region: "Global"
+   
+  id: "7",
+  title: "Why Most Businesses Fail at Digital Marketing & How AI is Changing the Game",
+  excerpt: "And how AI-driven systems are turning unpredictable campaigns into scalable, revenue-generating engines.",
+  content: `
+In today's digital-first economy, businesses are investing heavily in marketing yet most fail to see consistent, scalable results. Despite running ads, posting on social media, and hiring agencies, growth often remains unpredictable.
+
+The core problem isn't effort it's the lack of a structured, data-driven system.
+
+Most businesses rely on fragmented strategies: random ad campaigns, inconsistent content, and no clear customer journey. Without a unified approach, marketing becomes an expense rather than a revenue engine.
+
+This is where the shift toward AI-powered marketing is transforming the landscape.
+
+Modern digital growth is no longer about guesswork. It is about leveraging data, automation, and predictive insights to build systems that continuously optimize performance. From audience targeting to conversion tracking, AI enables businesses to make smarter, faster, and more profitable decisions.
+
+At Axis Elevate, we focus on building what we call a "Digital Growth Ecosystem" a structured framework that integrates performance marketing, search optimization, branding, and automation into a single, scalable system.
+
+Instead of running isolated campaigns, this approach ensures that every touchpoint from the first click to final conversion is optimized for maximum impact. The result is not just traffic, but consistent and measurable revenue growth.
+
+As competition increases, businesses that rely on outdated, manual strategies will struggle to keep up. The future belongs to those who adopt intelligent, data-backed systems that evolve with the market.
+
+For businesses looking to move beyond inconsistent results, Axis Elevate offers a complimentary growth audit to identify key opportunities and build a scalable roadmap for success.
+  `,
+  author: "Prakash Ray",
+  authorRole: "Senior Correspondent",
+  category: "Technology",
+  image: "/assess/Axis-Elevate- Cover-1.png",
+  date: "April 21, 2026",
+  readTime: "6 min read",
+  featured: true,
+  breaking: true,
+  tags: ["AI Marketing", "Digital Growth", "Axis Elevate"],
+  region: "Global"
+
   },
 
   // CYBERSECURITY
@@ -334,6 +355,31 @@ export const articles: Article[] = [
     date: "March 4, 2026",
     readTime: "7 min read",
     tags: ["Carbon Credits", "Net Zero", "ESG"],
+    region: "Global"
+  },
+
+  {
+  id: "nvbc-1",
+  title: "Northern Virginia Brittany Club",
+  excerpt: "A regional organization dedicated to the promotion, preservation, and enjoyment of the Brittany breed in Northern Virginia.",
+  content: `
+The Northern Virginia Brittany Club (NVBC) is a regional organization dedicated to the promotion, preservation, and enjoyment of the Brittany breed of dogs in the Northern Virginia area. The club provides a platform for Brittany enthusiasts to connect, share knowledge, and participate in various activities related to the breed.
+
+
+
+The NVBC organizes events such as dog shows, field trials, obedience competitions, and social gatherings for members and their Brittany dogs. The club also offers educational resources on breeding, training, and health care for the breed, as well as opportunities for community involvement and outreach.
+
+[IMAGE:/assess/NVBC-Article-2.png]
+  `,
+    author: "Sagar Kumar",
+    authorRole: "Chief Editor",
+    category: "Energy",
+    image: "/assess/NVBC-Article-1.png",
+    date: "April 1, 2026",
+    readTime: "16 min read",
+    featured: true,
+    breaking: false,
+    tags: ["breed", "american breed"],
     region: "Global"
   },
 

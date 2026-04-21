@@ -5,9 +5,11 @@ import { articles } from "../data/newsData";
 import { useLiveDateTime } from "../components/LiveClock";
 import { AdBlock } from "../components/AdBlock";
 
+
 const coverStories = [
   {
     id: "cover-1",
+     articleId: "1",
     title: "Why Most Businesses Fail at Digital Marketing",
     subtitle: "April 2026 Cover Story",
     desc: "And how AI-driven systems are turning unpredictable campaigns into scalable, revenue-generating engines.",
@@ -19,10 +21,11 @@ const coverStories = [
   },
   {
     id: "cover-2",
-    title: "The New World Order of Finance",
+     articleId: "7",
+    title: "Why Most Businesses Fail at Digital Marketing",
     subtitle: "Special Report: April 2026",
-    desc: "DeFi has surpassed traditional banking. We trace the seismic shift from Wall Street to a world without borders.",
-    image: "",
+    desc: "And how AI-driven systems are turning unpredictable campaigns into scalable, revenue-generating engines.",
+    image: "/assess/Axis-Elevate- Cover-1.png", 
     author: "Sagar Kumar",
     readTime: "22 min read",
     tag: "Special Report",
@@ -30,10 +33,11 @@ const coverStories = [
   },
   {
     id: "cover-3",
-    title: "The Clean Energy Century Begins",
+     articleId: "nvbc-1",
+    title: "american brittany club",
     subtitle: "Feature: April 2026",
     desc: "With fusion power now commercially viable and renewables connecting 200 nations, we mark the moment fossil fuels became history.",
-    image: "https://images.unsplash.com/photo-1769501378353-2e4e3e3e325c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+     image: "/assess/NVBC-Article-1.png", 
     author: "Sagar Kumar",
     readTime: "16 min read",
     tag: "Feature",
@@ -128,11 +132,18 @@ export function Magazine() {
             {coverStories.map((story, i) => (
               <Link
                 key={story.id}
-                to={`/article/${articles[i]?.id || "1"}`}
+                to={`/article/${story.articleId}`}
                 className={`group rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow ${i === 0 ? "lg:col-span-2 lg:row-span-1" : ""}`}
               >
-                <div className={`relative ${i === 0 ? "h-72 sm:h-80" : "h-52"}`}>
-                  <img src={story.image} alt={story.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                
+                   <div className={`relative ${i === 0 ? "h-72 sm:h-80" : "h-52"}`}>
+  <img 
+    src={story.image} 
+    alt={story.title} 
+    className={`w-full group-hover:scale-105 transition-transform duration-500 ${
+      i === 0 ? "h-full object-contain bg-gray-900" : "h-full object-cover"
+    }`}
+  />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   <div className="absolute top-4 left-4">
                     <span className={`${story.tagColor} text-white text-[10px] font-black px-2 py-1 uppercase tracking-wider rounded`}>
