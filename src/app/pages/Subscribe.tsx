@@ -272,7 +272,7 @@ export function Subscribe() {
           // 3. Verify on backend — only pass Razorpay tokens, never raw card data
           try {
             const verifyRes = await fetch(
-              "https://thepridetime.com/api/payment/verify",
+            "https://www.thepridetime.com/api/payment/verify",
               {
                 method: "POST",
                 headers: {
