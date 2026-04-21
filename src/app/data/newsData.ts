@@ -135,7 +135,7 @@ For businesses looking to move beyond inconsistent results, Axis Elevate offers 
   author: "Prakash Ray",
   authorRole: "Senior Correspondent",
   category: "Technology",
-  image: "/assess/Axis-Elevate- Cover-1.png",
+  image: "/assess/Axis-Elevate-Cover-1.png",
   date: "April 21, 2026",
   readTime: "6 min read",
   featured: true,
