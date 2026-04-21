@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 dotenv.config();
+import paymentRoutes from './routes/payment.js';
 
 // ─── Startup env checks ───────────────────────────────────────────────────────
 // FIX: fail fast if critical env vars are missing instead of using hardcoded fallbacks
@@ -42,6 +43,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use('/api/payment', paymentRoutes);
 
 // ─── MongoDB ──────────────────────────────────────────────────────────────────
 // FIX: URI was hardcoded with plain-text credentials in source
