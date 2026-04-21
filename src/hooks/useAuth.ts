@@ -1,7 +1,7 @@
 // src/hooks/useAuth.ts
 import { useState, useEffect } from 'react';
 
-const API_BASE = "https://thepridetime.onrender.com";
+const API_BASE = "https://www.thepridetime.com";
 
 interface User {
   id: string;
