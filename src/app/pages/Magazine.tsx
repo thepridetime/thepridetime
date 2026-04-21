@@ -25,7 +25,7 @@ const coverStories = [
     title: "Why Most Businesses Fail at Digital Marketing",
     subtitle: "Special Report: April 2026",
     desc: "And how AI-driven systems are turning unpredictable campaigns into scalable, revenue-generating engines.",
-    image: "/assess/Axis-Elevate- Cover-1.png",
+    image: "/assess/Axis-Elevate-Cover-1.png",
     author: "Sagar Kumar",
     readTime: "22 min read",
     tag: "Special Report",
