@@ -1,13 +1,8 @@
 import { useState } from "react";
-//import { Link } from "react-router";
 import { Link, useNavigate } from "react-router";
 import { Eye, EyeOff, Lock, Mail, AlertCircle, CheckCircle } from "lucide-react";
-//import { useNavigate } from "react-router";
-//import { supabase } from "../lib/supabase";        
-//import { useAuth } from "../hooks/useAuth";       
-export function SignIn() {
-  //const { signIn } = useAuth();
 
+export function SignIn() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -16,59 +11,98 @@ export function SignIn() {
   const [resetEmail, setResetEmail] = useState("");
   const [resetSent, setResetSent] = useState(false);
   const navigate = useNavigate();
-const [error, setError] = useState("");
-const [isSuccess, setIsSuccess] = useState(false);
-
-const checkUserSubscription = async (email: string) => {
-  try {
-    const response = await fetch(`https://thepridetime.com/api/auth/check-status/${email}`);
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    return { canLogin: false, message: "Unable to verify subscription status" };
-  }
-};
-
-const handleSignIn = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setLoading(true);
-  setError("");
+  const [error, setError] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
   
-  try {
-    // Directly proceed with login (skip status check for now)
-    const response = await fetch('https://thepridetime.onrender.com/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        email: form.email, 
-        password: form.password 
-      })
-    });
+  // Validation error states
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [resetEmailError, setResetEmailError] = useState("");
+
+  // Simple email check
+  const isValidEmail = (email: string) => {
+    if (!email) return "Email is required";
+    if (email.trim().length < 5) return "Email must be at least 5 characters";
+    if (!email.includes("@") || !email.includes(".")) return "Enter valid email (like name@domain.com)";
+    return "";
+  };
+
+  // Simple password check  
+  const isValidPassword = (password: string) => {
+    if (!password) return "Password is required";
+    if (password.length < 8) return "Password must be at least 8 characters";
+    return "";
+  };
+
+  const checkUserSubscription = async (email: string) => {
+    try {
+      const response = await fetch(`https://thepridetime.com/api/auth/check-status/${email}`);
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      return { canLogin: false, message: "Unable to verify subscription status" };
+    }
+  };
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
     
-    const data = await response.json();
+    // Validate before submission
+    const emailCheck = isValidEmail(form.email);
+    const passwordCheck = isValidPassword(form.password);
+    setEmailError(emailCheck);
+    setPasswordError(passwordCheck);
     
-    if (!response.ok) {
-      throw new Error(data.error || 'Login failed');
+    if (emailCheck || passwordCheck) {
+      return; // Stop if validation fails
     }
     
-    if (data.success) {
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-          window.dispatchEvent(new Event('auth-change'));
-      setIsSuccess(true);
+    setLoading(true);
+    setError("");
+    
+    try {
+      const response = await fetch('https://thepridetime.onrender.com/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          email: form.email.trim(), 
+          password: form.password 
+        })
+      });
       
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+      
+      if (data.success) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        window.dispatchEvent(new Event('auth-change'));
+        setIsSuccess(true);
+        
+        setTimeout(() => {
+          navigate('/');
+        }, 2000);
+      }
+    } catch (err: any) {
+      setError(err.message);
+      setLoading(false);
     }
-  } catch (err: any) {
-    setError(err.message);
-    setLoading(false);
-  }
-};
+  };
 
   const handleReset = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate reset email
+    const emailCheck = isValidEmail(resetEmail);
+    setResetEmailError(emailCheck);
+    
+    if (emailCheck) {
+      return; // Stop if validation fails
+    }
+    
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -76,7 +110,7 @@ const handleSignIn = async (e: React.FormEvent) => {
     }, 1000);
   };
 
-  // NEW: Success screen using isSuccess instead of status
+  // Success screen
   if (isSuccess) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -104,8 +138,8 @@ const handleSignIn = async (e: React.FormEvent) => {
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex flex-col items-center gap-2">
             <div className="w-14 h-14 bg-gradient-to-br from-[#0d1f3c] to-[#00d4ff] rounded-xl flex items-center justify-center border-2 border-[#00d4ff]/40">
-  <span className="text-white font-black text-2xl">PT</span>
-</div>
+              <span className="text-white font-black text-2xl">PT</span>
+            </div>
             <div>
               <div className="text-xl font-black text-[#0d1f3c]">The Pride <span className="text-[#00d4ff]">Times</span></div>
               <div className="text-[9px] tracking-widest text-gray-400 uppercase">Truth · Integrity · Pride</div>
@@ -119,14 +153,15 @@ const handleSignIn = async (e: React.FormEvent) => {
               <h1 className="text-2xl font-black text-[#0d1f3c] mb-1">Sign In</h1>
               <p className="text-gray-500 text-sm mb-6">Access your Pride Times account</p>
 
-              {status === "error" && (
+              {error && (
                 <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 mb-4 text-sm">
                   <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  Invalid email or password. Please try again.
+                  {error}
                 </div>
               )}
 
               <form onSubmit={handleSignIn} className="space-y-4">
+                {/* Email Field */}
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-1">Email Address</label>
                   <div className="relative">
@@ -135,12 +170,23 @@ const handleSignIn = async (e: React.FormEvent) => {
                       type="email"
                       required
                       value={form.email}
-                      onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                      onChange={e => {
+                        setForm(f => ({ ...f, email: e.target.value }));
+                        setEmailError(isValidEmail(e.target.value));
+                      }}
                       placeholder="your@email.com"
-                      className="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-3 text-sm focus:border-[#00d4ff] outline-none"
+                      className={`w-full border ${emailError ? 'border-red-500' : 'border-gray-200'} rounded-lg pl-10 pr-4 py-3 text-sm focus:border-[#00d4ff] outline-none`}
                     />
                   </div>
+                  {emailError && (
+                    <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {emailError}
+                    </p>
+                  )}
                 </div>
+
+                {/* Password Field */}
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-1">Password</label>
                   <div className="relative">
@@ -149,9 +195,12 @@ const handleSignIn = async (e: React.FormEvent) => {
                       type={showPw ? "text" : "password"}
                       required
                       value={form.password}
-                      onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
+                      onChange={e => {
+                        setForm(f => ({ ...f, password: e.target.value }));
+                        setPasswordError(isValidPassword(e.target.value));
+                      }}
                       placeholder="••••••••"
-                      className="w-full border border-gray-200 rounded-lg pl-10 pr-10 py-3 text-sm focus:border-[#00d4ff] outline-none"
+                      className={`w-full border ${passwordError ? 'border-red-500' : 'border-gray-200'} rounded-lg pl-10 pr-10 py-3 text-sm focus:border-[#00d4ff] outline-none`}
                     />
                     <button
                       type="button"
@@ -161,7 +210,14 @@ const handleSignIn = async (e: React.FormEvent) => {
                       {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                   </div>
+                  {passwordError && (
+                    <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {passwordError}
+                    </p>
+                  )}
                 </div>
+
                 <div className="flex items-center justify-between text-sm">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input type="checkbox" className="rounded border-gray-300" />
@@ -175,9 +231,10 @@ const handleSignIn = async (e: React.FormEvent) => {
                     Forgot password?
                   </button>
                 </div>
+
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !!emailError || !!passwordError || !form.email || !form.password}
                   className="w-full bg-[#00d4ff] text-[#0d1f3c] py-3 rounded-lg font-black hover:bg-[#0d1f3c] hover:text-white transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
                 >
                   {loading ? (
@@ -201,7 +258,7 @@ const handleSignIn = async (e: React.FormEvent) => {
           ) : (
             <>
               <button
-                onClick={() => { setResetMode(false); setResetSent(false); }}
+                onClick={() => { setResetMode(false); setResetSent(false); setResetEmailError(""); }}
                 className="text-sm text-gray-500 hover:text-[#0d1f3c] mb-4 flex items-center gap-1"
               >
                 ← Back to Sign In
@@ -222,12 +279,25 @@ const handleSignIn = async (e: React.FormEvent) => {
                       type="email"
                       required
                       value={resetEmail}
-                      onChange={e => setResetEmail(e.target.value)}
+                      onChange={e => {
+                        setResetEmail(e.target.value);
+                        setResetEmailError(isValidEmail(e.target.value));
+                      }}
                       placeholder="your@email.com"
-                      className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:border-[#00d4ff] outline-none"
+                      className={`w-full border ${resetEmailError ? 'border-red-500' : 'border-gray-200'} rounded-lg px-4 py-3 text-sm focus:border-[#00d4ff] outline-none`}
                     />
+                    {resetEmailError && (
+                      <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" />
+                        {resetEmailError}
+                      </p>
+                    )}
                   </div>
-                  <button type="submit" disabled={loading} className="w-full bg-[#00d4ff] text-[#0d1f3c] py-3 rounded-lg font-black hover:bg-[#0d1f3c] hover:text-white transition-colors disabled:opacity-60">
+                  <button 
+                    type="submit" 
+                    disabled={loading || !!resetEmailError || !resetEmail}
+                    className="w-full bg-[#00d4ff] text-[#0d1f3c] py-3 rounded-lg font-black hover:bg-[#0d1f3c] hover:text-white transition-colors disabled:opacity-60"
+                  >
                     {loading ? "Sending..." : "Send Reset Link"}
                   </button>
                 </form>

@@ -9,7 +9,7 @@ import { AdBlock } from "../components/AdBlock";
 const coverStories = [
   {
     id: "cover-1",
-     articleId: "1",
+    articleId: "1",
     title: "Why Most Businesses Fail at Digital Marketing",
     subtitle: "April 2026 Cover Story",
     desc: "And how AI-driven systems are turning unpredictable campaigns into scalable, revenue-generating engines.",
@@ -21,11 +21,11 @@ const coverStories = [
   },
   {
     id: "cover-2",
-     articleId: "7",
+    articleId: "7",
     title: "Why Most Businesses Fail at Digital Marketing",
     subtitle: "Special Report: April 2026",
     desc: "And how AI-driven systems are turning unpredictable campaigns into scalable, revenue-generating engines.",
-    image: "/assess/Axis-Elevate- Cover-1.png", 
+    image: "/assess/Axis-Elevate- Cover-1.png",
     author: "Sagar Kumar",
     readTime: "22 min read",
     tag: "Special Report",
@@ -33,11 +33,11 @@ const coverStories = [
   },
   {
     id: "cover-3",
-     articleId: "nvbc-1",
+    articleId: "nvbc-1",
     title: "american brittany club",
     subtitle: "Feature: April 2026",
     desc: "With fusion power now commercially viable and renewables connecting 200 nations, we mark the moment fossil fuels became history.",
-     image: "/assess/NVBC-Article-1.png", 
+    image: "/assess/NVBC-Article-1.png",
     author: "Sagar Kumar",
     readTime: "16 min read",
     tag: "Feature",
@@ -110,11 +110,10 @@ export function Magazine() {
             <button
               key={issue.month}
               onClick={() => setActiveIssue(issue.month)}
-              className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-bold transition-colors border ${
-                activeIssue === issue.month
+              className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-bold transition-colors border ${activeIssue === issue.month
                   ? "bg-[#0d1f3c] text-white border-[#0d1f3c]"
                   : "bg-white text-gray-600 border-gray-200 hover:border-[#0d1f3c]"
-              }`}
+                }`}
             >
               {issue.month}
               {issue.current && <span className="ml-1.5 text-[10px] bg-[#00d4ff] text-[#0d1f3c] px-1.5 py-0.5 rounded-full font-black">NEW</span>}
@@ -135,15 +134,14 @@ export function Magazine() {
                 to={`/article/${story.articleId}`}
                 className={`group rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow ${i === 0 ? "lg:col-span-2 lg:row-span-1" : ""}`}
               >
-                
-                   <div className={`relative ${i === 0 ? "h-72 sm:h-80" : "h-52"}`}>
-  <img 
-    src={story.image} 
-    alt={story.title} 
-    className={`w-full group-hover:scale-105 transition-transform duration-500 ${
-      i === 0 ? "h-full object-contain bg-gray-900" : "h-full object-cover"
-    }`}
-  />
+
+                <div className={`relative ${i === 0 ? "h-72 sm:h-80" : "h-52"}`}>
+                  <img
+                    src={story.image}
+                    alt={story.title}
+                    className={`w-full group-hover:scale-105 transition-transform duration-500 ${i === 0 ? "h-full object-contain bg-gray-900" : "h-full object-cover"
+                      }`}
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   <div className="absolute top-4 left-4">
                     <span className={`${story.tagColor} text-white text-[10px] font-black px-2 py-1 uppercase tracking-wider rounded`}>
