@@ -365,7 +365,7 @@ For businesses looking to move beyond inconsistent results, Axis Elevate offers 
   content: `
 The Northern Virginia Brittany Club (NVBC) is a regional organization dedicated to the promotion, preservation, and enjoyment of the Brittany breed of dogs in the Northern Virginia area. The club provides a platform for Brittany enthusiasts to connect, share knowledge, and participate in various activities related to the breed.
 
-
+[IMAGE:/assess/NVBC-2025-Ad.png]
 
 The NVBC organizes events such as dog shows, field trials, obedience competitions, and social gatherings for members and their Brittany dogs. The club also offers educational resources on breeding, training, and health care for the breed, as well as opportunities for community involvement and outreach.
 

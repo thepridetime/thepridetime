@@ -24,7 +24,8 @@ export default function PaymentButton() {
       }
 
 
-      const userId = localStorage.getItem("userId");
+     const user = JSON.parse(localStorage.getItem("user") || "{}");
+const userId = user.id;
 
       if (!userId) {
         alert("User not logged in. Please login again.");
