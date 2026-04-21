@@ -373,14 +373,14 @@ The NVBC organizes events such as dog shows, field trials, obedience competition
   `,
     author: "Sagar Kumar",
     authorRole: "Chief Editor",
-    category: "Energy",
+    category: "dog breed",
     image: "/assess/NVBC-Article-1.png",
     date: "April 1, 2026",
     readTime: "16 min read",
     featured: true,
     breaking: false,
     tags: ["breed", "american breed"],
-    region: "Global"
+    region: "North America"
   },
 
 ];
