@@ -243,14 +243,17 @@ export function Subscribe() {
       const amount = amountMap[selected.toLowerCase()] || 1900;
 
       // 1. Create order
-      const orderResponse = await fetch(
-       "https://thepridetime.onrender.com/api/payment/create-order",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ amount }),
-        }
-      );
+    const orderResponse = await fetch(
+  "https://thepridetime.onrender.com/api/payment/create-order",
+  {
+    method: "POST",
+    headers: { 
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ amount }),
+  }
+);
       const orderData = await orderResponse.json();
 
       if (!orderData.success) {
