@@ -90,8 +90,7 @@ const authMiddleware = (req, res, next) => {
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email?.trim());
 const isValidName  = (name)  => /^[A-Za-z\s'\-]{2,}$/.test(name?.trim());
 
-// ─── Routes ───────────────────────────────────────────────────────────────────
-// Payment routes handled entirely in routes/payment.js — NO duplicates here
+// ─── Payment routes ───────────────────────────────────────────────────────────
 app.use('/api/payment', paymentRoutes);
 
 // ─── Health check ─────────────────────────────────────────────────────────────
@@ -126,10 +125,21 @@ app.post('/api/auth/register', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
+
+    // ── Auto-start 7-day trial on registration ────────────────────────────────
+    const trialEndsAt = new Date();
+    trialEndsAt.setDate(trialEndsAt.getDate() + 7);
+
     const user = new User({
       email: email.toLowerCase().trim(),
       password: hashedPassword,
-      name: name.trim()
+      name: name.trim(),
+      subscription: {
+        plan: 'trial',
+        status: 'trial',
+        startDate: new Date(),
+        trialEndsAt
+      }
     });
     await user.save();
 
@@ -142,7 +152,12 @@ app.post('/api/auth/register', async (req, res) => {
     res.status(201).json({
       success: true,
       token,
-      user: { id: user._id, email: user.email, name: user.name }
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        subscription: user.subscription
+      }
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -175,6 +190,19 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password.' });
     }
 
+    // ── Auto-start trial if user has no subscription yet ──────────────────────
+    if (!user.subscription?.status) {
+      const trialEndsAt = new Date();
+      trialEndsAt.setDate(trialEndsAt.getDate() + 7);
+      user.subscription = {
+        plan: 'trial',
+        status: 'trial',
+        startDate: new Date(),
+        trialEndsAt
+      };
+      await user.save();
+    }
+
     const token = jwt.sign(
       { userId: user._id, email: user.email },
       process.env.JWT_SECRET,
@@ -184,7 +212,12 @@ app.post('/api/auth/login', async (req, res) => {
     res.json({
       success: true,
       token,
-      user: { id: user._id, email: user.email, name: user.name }
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        subscription: user.subscription  // includes trialEndsAt for frontend
+      }
     });
   } catch (error) {
     console.error('Login error:', error);
@@ -237,8 +270,6 @@ app.post('/api/subscriptions/create', authMiddleware, async (req, res) => {
       trialEndsAt
     };
     await user.save();
-
-    console.log(`Subscription saved — user: ${user.email}, plan: ${plan}, trial ends: ${trialEndsAt}`);
 
     const token = jwt.sign(
       { userId: user._id, email: user.email },

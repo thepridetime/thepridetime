@@ -1,25 +1,26 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { Eye, EyeOff, Lock, Mail, AlertCircle, CheckCircle } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, AlertCircle, CheckCircle, Clock } from "lucide-react";
+
+const API_BASE = "https://thepridetime.onrender.com";
 
 export function SignIn() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [resetMode, setResetMode] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [resetSent, setResetSent] = useState(false);
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
-  
-  // Validation error states
+  const [trialInfo, setTrialInfo] = useState<{ daysLeft: number; hoursLeft: number; isTrial: boolean; expired: boolean } | null>(null);
+
+  // Validation
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [resetEmailError, setResetEmailError] = useState("");
 
-  // Simple email check
   const isValidEmail = (email: string) => {
     if (!email) return "Email is required";
     if (email.trim().length < 5) return "Email must be at least 5 characters";
@@ -27,64 +28,72 @@ export function SignIn() {
     return "";
   };
 
-  // Simple password check  
   const isValidPassword = (password: string) => {
     if (!password) return "Password is required";
     if (password.length < 8) return "Password must be at least 8 characters";
     return "";
   };
 
-  const checkUserSubscription = async (email: string) => {
-    try {
-      const response = await fetch(`https://thepridetime.com/api/auth/check-status/${email}`);
-      const data = await response.json();
-      return data;
-    } catch (err) {
-      return { canLogin: false, message: "Unable to verify subscription status" };
-    }
+  // Calculate trial time remaining
+  const getTrialInfo = (subscription: any) => {
+    if (!subscription?.trialEndsAt) return null;
+    const now = new Date();
+    const trialEnd = new Date(subscription.trialEndsAt);
+    const diff = trialEnd.getTime() - now.getTime();
+    if (diff <= 0) return { daysLeft: 0, hoursLeft: 0, isTrial: true, expired: true };
+    const daysLeft = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hoursLeft = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    return { daysLeft, hoursLeft, isTrial: subscription.status === 'trial', expired: false };
   };
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validate before submission
+
     const emailCheck = isValidEmail(form.email);
     const passwordCheck = isValidPassword(form.password);
     setEmailError(emailCheck);
     setPasswordError(passwordCheck);
-    
-    if (emailCheck || passwordCheck) {
-      return; // Stop if validation fails
-    }
-    
+    if (emailCheck || passwordCheck) return;
+
     setLoading(true);
     setError("");
-    
+
     try {
-      const response = await fetch('https://thepridetime.onrender.com/api/auth/login', {
+      const response = await fetch(`${API_BASE}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          email: form.email.trim(), 
-          password: form.password 
+        body: JSON.stringify({
+          email: form.email.trim(),
+          password: form.password
         })
       });
-      
+
       const data = await response.json();
-      
+
       if (!response.ok) {
         throw new Error(data.error || 'Login failed');
       }
-      
+
       if (data.success) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('userId', data.user.id);
         window.dispatchEvent(new Event('auth-change'));
+
+        // Check trial status
+        const trial = getTrialInfo(data.user?.subscription);
+        setTrialInfo(trial as any);
         setIsSuccess(true);
-        
+
         setTimeout(() => {
-          navigate('/');
-        }, 2000);
+          if (trial?.expired) {
+            // Trial expired — go to subscribe
+            navigate('/subscribe');
+          } else {
+            // Active or trial — go home
+            navigate('/');
+          }
+        }, 2500);
       }
     } catch (err: any) {
       setError(err.message);
@@ -94,15 +103,9 @@ export function SignIn() {
 
   const handleReset = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validate reset email
     const emailCheck = isValidEmail(resetEmail);
     setResetEmailError(emailCheck);
-    
-    if (emailCheck) {
-      return; // Stop if validation fails
-    }
-    
+    if (emailCheck) return;
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -110,7 +113,7 @@ export function SignIn() {
     }, 1000);
   };
 
-  // Success screen
+  // ── Success screen ───────────────────────────────────────────────────────────
   if (isSuccess) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
@@ -119,13 +122,43 @@ export function SignIn() {
             <CheckCircle className="w-8 h-8 text-green-600" />
           </div>
           <h2 className="text-2xl font-black text-[#0d1f3c] mb-2">Welcome Back!</h2>
-          <p className="text-gray-600 mb-6">You're signed in to The Pride Times as <strong>{form.email}</strong>.</p>
-          <Link to="/" className="block bg-[#00d4ff] text-[#0d1f3c] py-3 rounded-lg font-black hover:bg-[#0d1f3c] hover:text-white transition-colors">
-            Go to Homepage
-          </Link>
-          <Link to="/markets" className="block mt-3 text-sm text-[#00d4ff] hover:underline">
-            View Live Markets
-          </Link>
+          <p className="text-gray-600 mb-4">
+            Signed in as <strong>{form.email}</strong>
+          </p>
+
+          {/* Trial countdown */}
+          {trialInfo && !trialInfo.expired && trialInfo.isTrial && (
+            <div className="bg-[#0d1f3c] text-white rounded-xl p-4 mb-4">
+              <div className="flex items-center justify-center gap-2 mb-1">
+                <Clock className="w-4 h-4 text-[#00d4ff]" />
+                <span className="text-[#00d4ff] font-black text-sm uppercase tracking-wide">Free Trial Active</span>
+              </div>
+              <div className="text-2xl font-black text-white">
+                {trialInfo.daysLeft > 0
+                  ? `${trialInfo.daysLeft} days ${trialInfo.hoursLeft} hrs left`
+                  : `${trialInfo.hoursLeft} hours left`}
+              </div>
+              <p className="text-gray-400 text-xs mt-1">Subscribe before trial ends to keep access</p>
+            </div>
+          )}
+
+          {/* Trial expired */}
+          {trialInfo?.expired && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
+              <p className="text-red-700 font-bold text-sm">Your trial has expired.</p>
+              <p className="text-red-500 text-xs mt-1">Redirecting to subscribe page...</p>
+            </div>
+          )}
+
+          {/* No trial yet */}
+          {!trialInfo && (
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+              <p className="text-blue-700 font-bold text-sm">🎉 Your 7-day free trial starts now!</p>
+              <p className="text-blue-500 text-xs mt-1">Full access to all content for 7 days</p>
+            </div>
+          )}
+
+          <div className="text-xs text-gray-400 animate-pulse">Redirecting...</div>
         </div>
       </div>
     );
@@ -161,7 +194,6 @@ export function SignIn() {
               )}
 
               <form onSubmit={handleSignIn} className="space-y-4">
-                {/* Email Field */}
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-1">Email Address</label>
                   <div className="relative">
@@ -180,13 +212,11 @@ export function SignIn() {
                   </div>
                   {emailError && (
                     <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" />
-                      {emailError}
+                      <AlertCircle className="w-3 h-3" />{emailError}
                     </p>
                   )}
                 </div>
 
-                {/* Password Field */}
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-1">Password</label>
                   <div className="relative">
@@ -212,8 +242,7 @@ export function SignIn() {
                   </div>
                   {passwordError && (
                     <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-3 h-3" />
-                      {passwordError}
+                      <AlertCircle className="w-3 h-3" />{passwordError}
                     </p>
                   )}
                 </div>
@@ -288,13 +317,12 @@ export function SignIn() {
                     />
                     {resetEmailError && (
                       <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" />
-                        {resetEmailError}
+                        <AlertCircle className="w-3 h-3" />{resetEmailError}
                       </p>
                     )}
                   </div>
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     disabled={loading || !!resetEmailError || !resetEmail}
                     className="w-full bg-[#00d4ff] text-[#0d1f3c] py-3 rounded-lg font-black hover:bg-[#0d1f3c] hover:text-white transition-colors disabled:opacity-60"
                   >

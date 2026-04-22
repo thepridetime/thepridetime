@@ -4,6 +4,7 @@ import { BreakingNewsTicker } from "../components/BreakingNewsTicker";
 import { MarketTicker } from "../components/MarketTicker";
 import { Footer } from "../components/Footer";
 import { ScrollToTop } from "../components/ScrollToTop";
+import { TrialBanner } from "../components/TrialBanner";
 
 export function Root() {
   return (
@@ -12,6 +13,7 @@ export function Root() {
       <Header />
       <BreakingNewsTicker />
       <MarketTicker />
+           <TrialBanner />
       <main className="flex-1">
         <Outlet />
       </main>
