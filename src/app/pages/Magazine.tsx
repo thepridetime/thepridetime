@@ -128,20 +128,18 @@ export function Magazine() {
             <h2 className="text-xl font-black text-[#0d1f3c] uppercase tracking-wide">Cover Stories — {activeIssue}</h2>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            {coverStories.map((story, i) => (
-              <Link
-                key={story.id}
-                to={`/article/${story.articleId}`}
-                className={`group rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow ${i === 0 ? "lg:col-span-2 lg:row-span-1" : ""}`}
-              >
-
-                <div className={`relative ${i === 0 ? "h-72 sm:h-80" : "h-52"}`}>
-                  <img
-                    src={story.image}
-                    alt={story.title}
-                    className={`w-full group-hover:scale-105 transition-transform duration-500 ${i === 0 ? "h-full object-contain bg-gray-900" : "h-full object-cover"
-                      }`}
-                  />
+  {coverStories.map((story, i) => (
+    <Link
+      key={story.id}
+      to={`/article/${story.articleId}`}
+      className="group rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow"
+    >
+      <div className="relative h-52">
+        <img
+          src={story.image}
+          alt={story.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                   <div className="absolute top-4 left-4">
                     <span className={`${story.tagColor} text-white text-[10px] font-black px-2 py-1 uppercase tracking-wider rounded`}>
@@ -150,10 +148,10 @@ export function Magazine() {
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-5">
                     <div className="text-yellow-300 text-xs font-semibold mb-1">{story.subtitle}</div>
-                    <h3 className={`text-white font-black leading-tight mb-2 group-hover:text-yellow-300 transition-colors ${i === 0 ? "text-xl sm:text-2xl" : "text-base"}`}>
+                    <h3 className="text-white font-black leading-tight mb-2 group-hover:text-yellow-300 transition-colors text-base">
                       {story.title}
                     </h3>
-                    {i === 0 && <p className="text-gray-300 text-sm line-clamp-2">{story.desc}</p>}
+                    
                     <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
                       <span className="flex items-center gap-1"><User className="w-3 h-3" />{story.author}</span>
                       <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{story.readTime}</span>

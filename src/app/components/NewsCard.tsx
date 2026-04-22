@@ -140,7 +140,7 @@ export function NewsCard({ article, variant = "standard" }: NewsCardProps) {
   // Standard card
   return (
     <Link to={`/article/${article.id}`} className="group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="relative overflow-hidden h-48">
+      <div className="relative overflow-hidden h-40">
         <img
           src={article.image}
           alt={article.title}
