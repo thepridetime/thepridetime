@@ -49,47 +49,7 @@ export function Sidebar() {
 
   return (
     <aside className="space-y-5">
-      {/* Live Markets Widget */}
-      <div className="bg-[#0d1f3c] rounded-lg overflow-hidden border border-[#1a2f50]">
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-[#1a2f50]">
-          <BarChart2 className="w-4 h-4 text-[#00d4ff]" />
-          <h3 className="text-sm font-black text-white uppercase tracking-wider">Live Markets</h3>
-          <span className="ml-auto flex items-center gap-1 text-xs text-green-400 font-semibold">
-            <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
-            LIVE
-          </span>
-        </div>
-        <div className="p-2">
-          {liveMarkets.map((item, idx) => (
-            <Link
-              key={idx}
-              to="/markets"
-              className="flex items-center justify-between px-3 py-2 hover:bg-[#1a2f50] rounded transition-colors"
-            >
-              <div>
-                <div className="text-xs font-semibold text-gray-300">{item.name}</div>
-                <div className="text-sm font-black text-white tabular-nums">
-                  {item.value.toLocaleString("en-US", {
-                    minimumFractionDigits: item.value < 10 ? 4 : 2,
-                    maximumFractionDigits: item.value < 10 ? 4 : 2,
-                  })}
-                </div>
-              </div>
-              <div className={`flex items-center gap-1 text-xs font-bold ${item.up ? "text-green-400" : "text-red-400"}`}>
-                {item.up ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
-                {item.changePct}
-              </div>
-            </Link>
-          ))}
-        </div>
-        <div className="px-4 py-2.5 border-t border-[#1a2f50]">
-          <Link to="/markets" className="text-xs text-[#00d4ff] hover:text-white transition-colors flex items-center gap-1 font-semibold">
-            <Activity className="w-3 h-3" />
-            Full Live Market Dashboard <ChevronRight className="w-3 h-3" />
-          </Link>
-        </div>
-      </div>
-
+      
       {/* Ad Block 1 */}
       <AdBlock variant="sidebar" />
 
