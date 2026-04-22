@@ -89,7 +89,7 @@ const filteredChartData = (() => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("https://www.thepridetime.com/api/market/live");
+        const res = await fetch("https://thepridetime.onrender.com/api/market/live");
         if (!res.ok) throw new Error("HTTP " + res.status);
         const data = await res.json();
         setMarketData(data);

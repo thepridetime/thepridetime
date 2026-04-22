@@ -244,7 +244,7 @@ export function Subscribe() {
 
       // 1. Create order
       const orderResponse = await fetch(
-        "https://www.thepridetime.com/api/payment/create-order",
+       "https://thepridetime.onrender.com/api/payment/create-order",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -272,7 +272,7 @@ export function Subscribe() {
           // 3. Verify on backend — only pass Razorpay tokens, never raw card data
           try {
             const verifyRes = await fetch(
-            "https://www.thepridetime.com/api/payment/verify",
+           "https://thepridetime.onrender.com/api/payment/verify",
               {
                 method: "POST",
                 headers: {

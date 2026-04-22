@@ -61,7 +61,7 @@ export function SignIn() {
     setError("");
     
     try {
-      const response = await fetch('https://www.thepridetime.com/api/auth/login', {
+      const response = await fetch('https://thepridetime.onrender.com/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

@@ -12,7 +12,7 @@ export default function PaymentButton() {
     try {
 
       const res = await axios.post(
-        "https://www.thepridetime.com/api/payment/create-order",
+        "https://thepridetime.onrender.com/api/payment/create-order",
         { amount: 500 }
       );
 
@@ -47,7 +47,7 @@ const userId = user.id;
             console.log("Payment Success Response:", response);
 
             const verifyRes = await axios.post(
-              "https://www.thepridetime.com/api/payment/verify",
+              "https://thepridetime.onrender.com/api/payment/verify",
               {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
