@@ -6,32 +6,34 @@ declare global {
   }
 }
 
-export default function PaymentButton() {
+const API_BASE = "https://thepridetime.onrender.com";
 
+export default function PaymentButton() {
   const payNow = async () => {
     try {
+      // Get token and user from localStorage
+      const token = localStorage.getItem("token");
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+      const userId = user.id;
+
+      if (!token || !userId) {
+        alert("Please login before making a payment.");
+        return;
+      }
+
+      const headers = { Authorization: `Bearer ${token}` };
 
       const res = await axios.post(
-        "https://thepridetime.onrender.com/api/payment/create-order",
-        { amount: 500 }
+        `${API_BASE}/api/payment/create-order`,
+        { amount: 500 },
+        { headers }
       );
 
       const order = res.data.order;
-
       if (!order) {
         alert("Order creation failed");
         return;
       }
-
-
-     const user = JSON.parse(localStorage.getItem("user") || "{}");
-const userId = user.id;
-
-      if (!userId) {
-        alert("User not logged in. Please login again.");
-        return;
-      }
-
 
       const options = {
         key: "rzp_live_Se2cGxhX6qZJdY",
@@ -40,44 +42,39 @@ const userId = user.id;
         name: "The Pride Times",
         description: "Premium Subscription",
         order_id: order.id,
-
         handler: async function (response: any) {
           try {
-
             console.log("Payment Success Response:", response);
 
             const verifyRes = await axios.post(
-              "https://thepridetime.onrender.com/api/payment/verify",
+              `${API_BASE}/api/payment/verify`,
               {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
-                userId: userId,
                 plan: "basic"
-              }
+              },
+              { headers }
             );
 
             console.log("Verify response:", verifyRes.data);
-
             if (verifyRes.data.success) {
               alert("Payment Successful!");
             } else {
               alert("Payment verification failed");
             }
-
           } catch (err) {
             console.error("Verification error:", err);
             alert("Payment verification failed");
           }
         },
-
         theme: {
           color: "#000000"
         }
       };
+
       const rzp = new window.Razorpay(options);
       rzp.open();
-
     } catch (error) {
       console.error("Payment error:", error);
       alert("Payment failed to start");
