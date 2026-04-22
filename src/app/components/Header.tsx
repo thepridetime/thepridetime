@@ -120,14 +120,19 @@ export function Header() {
                         <button onClick={() => setNotifOpen(false)}><X className="w-4 h-4 text-gray-400" /></button>
                       </div>
                       {[
-                        { title: "🔴 BREAKING: Global AI Alliance Forms", time: "2 min ago" },
-                        { title: "📈 Markets: S&P 500 hits new high", time: "15 min ago" },
-                        { title: "⚡ Fusion reactor achieves 72-hour record", time: "1 hr ago" },
+                        { title: "🔴 BREAKING: Global AI Alliance Forms", time: "2 min ago", to: "/category/technology" },
+                        { title: "📈 Markets: S&P 500 hits new high", time: "15 min ago", to: "/markets" },
+                        { title: "⚡ Fusion reactor achieves 72-hour record", time: "1 hr ago", to: "/category/energy" },
                       ].map((n, i) => (
-                        <div key={i} className="px-4 py-3 border-b border-[#1a2f50] hover:bg-[#1a2f50] cursor-pointer transition-colors">
+                        <Link
+                          key={i}
+                          to={n.to}
+                          onClick={() => setNotifOpen(false)}
+                          className="block px-4 py-3 border-b border-[#1a2f50] hover:bg-[#1a2f50] cursor-pointer transition-colors"
+                        >
                           <div className="text-xs text-gray-200 leading-tight">{n.title}</div>
                           <div className="text-[10px] text-gray-500 mt-1">{n.time}</div>
-                        </div>
+                        </Link>
                       ))}
                       <Link
                         to="/latest"
