@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { Search, Bell, Menu, X, ChevronDown, Globe, TrendingUp, ChevronRight } from "lucide-react";
-import { categories } from "../data/newsData";
+//import { categories } from "../data/newsData";
+import { articles, categories } from "../data/newsData";
 import { useLiveDateTime } from "./LiveClock";
 import logo from "/src/app/assess/logos.png";
 import icon from "/src/app/assess/icon.png";
@@ -119,21 +120,34 @@ export function Header() {
                         <span className="text-sm font-bold text-white">Notifications</span>
                         <button onClick={() => setNotifOpen(false)}><X className="w-4 h-4 text-gray-400" /></button>
                       </div>
-                      {[
-                        { title: "🔴 BREAKING: Global AI Alliance Forms", time: "2 min ago", to: "/category/technology" },
-                        { title: "📈 Markets: S&P 500 hits new high", time: "15 min ago", to: "/markets" },
-                        { title: "⚡ Fusion reactor achieves 72-hour record", time: "1 hr ago", to: "/category/energy" },
-                      ].map((n, i) => (
-                        <Link
-                          key={i}
-                          to={n.to}
-                          onClick={() => setNotifOpen(false)}
-                          className="block px-4 py-3 border-b border-[#1a2f50] hover:bg-[#1a2f50] cursor-pointer transition-colors"
-                        >
-                          <div className="text-xs text-gray-200 leading-tight">{n.title}</div>
-                          <div className="text-[10px] text-gray-500 mt-1">{n.time}</div>
-                        </Link>
-                      ))}
+                      {articles.filter(a => a.breaking).slice(0, 3).length > 0
+  ? articles.filter(a => a.breaking).slice(0, 3).map((article) => (
+      <Link
+        key={article.id}
+        to={`/article/${article.id}`}
+        onClick={() => setNotifOpen(false)}
+        className="block px-4 py-3 border-b border-[#1a2f50] hover:bg-[#1a2f50] transition-colors"
+      >
+        <div className="text-xs text-gray-200 leading-tight">
+          🔴 {article.title}
+        </div>
+        <div className="text-[10px] text-gray-500 mt-1">{article.date} · {article.readTime}</div>
+      </Link>
+    ))
+  : articles.slice(0, 3).map((article) => (
+      <Link
+        key={article.id}
+        to={`/article/${article.id}`}
+        onClick={() => setNotifOpen(false)}
+        className="block px-4 py-3 border-b border-[#1a2f50] hover:bg-[#1a2f50] transition-colors"
+      >
+        <div className="text-xs text-gray-200 leading-tight">
+          📰 {article.title}
+        </div>
+        <div className="text-[10px] text-gray-500 mt-1">{article.date} · {article.readTime}</div>
+      </Link>
+    ))
+}
                       <Link
                         to="/latest"
                         className="block text-center text-xs text-[#00d4ff] py-3 hover:text-white transition-colors"
