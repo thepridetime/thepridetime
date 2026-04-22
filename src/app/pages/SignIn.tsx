@@ -279,7 +279,7 @@ export function SignIn() {
                 <p className="text-sm text-gray-600">
                   Don't have an account?{" "}
                   <Link to="/signup" className="text-[#00d4ff] font-bold hover:text-[#0d1f3c] transition-colors">
-                    Subscribe Now
+                    Register your account now
                   </Link>
                 </p>
               </div>
