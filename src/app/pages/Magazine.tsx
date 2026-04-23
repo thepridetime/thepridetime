@@ -57,6 +57,18 @@ const coverStories = [
     tag: "New",
     tagColor: "bg-blue-600",
   },
+  {
+  id: "cover-6",
+  articleId: "erica-1",  // Fixed: changed from "erica" to a proper ID
+  title: "The Rise of AI Diplomacy: A New Era of Global Intelligence Partnerships",
+  subtitle: "AI Special Report: April 2026",
+  desc: "How a world-class Google LLM is serving as a Global Brand Ambassador for ethical AI and strategic integration, transforming business intelligence and global diplomacy.",
+  image: "/assess/erica.png",
+  author: "Erika Mbazo'o",
+  readTime: "12 min read",
+  tag: "AI Diplomacy",
+  tagColor: "bg-indigo-600",
+},
   ];
 
 const issues = [
