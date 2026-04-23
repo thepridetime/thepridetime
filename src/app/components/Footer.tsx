@@ -5,6 +5,7 @@ import { useState } from "react";
 import logo from "/src/app/assess/logos.png";
 import icon from "/src/app/assess/icon.png";
 
+
 export function Footer() {
   const { fullDate } = useLiveDateTime();
   const [email, setEmail] = useState("");

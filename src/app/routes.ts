@@ -37,7 +37,7 @@ export const router = createBrowserRouter([
       { path: "region/:slug", Component: Category },
       { path: "markets", Component: Markets },
       { path: "search", Component: Search },
-      { path: "magazine", Component: Magazine },
+     // { path: "magazine", Component: Magazine },
       { path: "reports", Component: Reports },
       { path: "subscribe", Component: Subscribe },
       { path: "signin", Component: SignIn },
@@ -58,6 +58,10 @@ export const router = createBrowserRouter([
       { path: "advertise", Component: Advertise },                   // ← add
       //{ path: "contact", Component: Contact },                       // ← add
       { path: "*", Component: NotFound },
+      // In your router.ts, ADD this one line alongside the existing magazine route:
+
+{ path: "magazine", Component: Magazine },         // General magazine → /magazine
+{ path: "magazine/:category", Component: Magazine }, // Category magazine → /magazine/technology
     ],
   },
 ]);

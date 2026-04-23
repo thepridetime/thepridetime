@@ -8,17 +8,17 @@ import { AdBlock } from "../components/AdBlock";
 
 const coverStories = [
   {
-    id: "cover-1",
-    articleId: "1",
-    title: "Why Most Businesses Fail at Digital Marketing",
-    subtitle: "April 2026 Cover Story",
-    desc: "And how AI-driven systems are turning unpredictable campaigns into scalable, revenue-generating engines.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    author: "Prakash Ray",
-    readTime: "6 min read",
-    tag: "Cover Story",
-    tagColor: "bg-red-600",
-  },
+  id: "cover-7",
+  articleId: "yep-tribe-1",
+  title: "Eddie N Ibude: Leading YEP Tribe into the Future of Digital Finance",
+  subtitle: "CEO Interview: April 2026",
+  desc: "The Chief Executive Officer shares his vision for revolutionizing digital payments and financial inclusion across emerging markets.",
+  image: "/assess/TribePay.png",
+  author: "Sagar Kumar",
+  readTime: "6 min read",
+  tag: "CEO Interview",
+  tagColor: "bg-emerald-600",
+},
   {
     id: "cover-2",
     articleId: "7",
@@ -43,7 +43,21 @@ const coverStories = [
     tag: "Feature",
     tagColor: "bg-yellow-600",
   },
-];
+
+  
+    {
+    id: "cover-5",  // ✅ NEW COVER STORY
+    articleId: "sculptandstrive-1",  // ✅ Links to /article/sculptandstrive-1
+    title: "Sculpt & Strive: The Art of Modern Fitness",
+    subtitle: "New Addition: April 2026",
+    desc: "Discover how Sculpt & Strive is revolutionizing the fitness industry with innovative training methods and community-driven results.",
+    image: "/assess/scst1.png",
+    author: "Sarah Johnson",
+    readTime: "8 min read",
+    tag: "New",
+    tagColor: "bg-blue-600",
+  },
+  ];
 
 const issues = [
   { month: "April 2026", articles: 48, cover: "AI Revolution", current: true },
@@ -127,7 +141,7 @@ export function Magazine() {
             <div className="w-1 h-6 bg-yellow-500"></div>
             <h2 className="text-xl font-black text-[#0d1f3c] uppercase tracking-wide">Cover Stories — {activeIssue}</h2>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
   {coverStories.map((story, i) => (
     <Link
       key={story.id}

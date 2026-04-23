@@ -38,7 +38,7 @@ export function Article() {
     window.open(urls[platform] || "#", "_blank");
   };
 
-const articleBody = article.content;
+  const articleBody = article.content;
   return (
     <div className="bg-gray-50 min-h-screen">
       {/* Breadcrumb */}
@@ -78,13 +78,13 @@ const articleBody = article.content;
             <article className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
               {/* Hero image */}
               <div className="relative w-full">
-  <img 
-    src={article.image} 
-    alt={article.title} 
-    className="w-full h-auto"
-  />
+                <img
+                  src={article.image}
+                  alt={article.title}
+                  className="w-full h-auto"
+                />
 
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 {article.breaking && (
                   <div className="absolute top-4 left-4 bg-red-600 text-white text-xs font-black px-3 py-1.5 tracking-widest uppercase animate-pulse">
                     🔴 Breaking News
@@ -173,28 +173,28 @@ const articleBody = article.content;
                 </div>
 
                 {/* Article body */}
-               {/* Article body */}
-<div className="prose prose-gray max-w-none">
-  {articleBody.trim().split("\n\n").map((paragraph, idx) => {
-    const trimmed = paragraph.trim();
-    if (trimmed.startsWith("[IMAGE:") && trimmed.endsWith("]")) {
-      const src = trimmed.slice(7, -1);
-      return (
-        <img
-          key={idx}
-          src={src}
-          alt="Article image"
-          className="w-full h-auto rounded-xl my-6"
-        />
-      );
-    }
-    return (
-      <p key={idx} className="text-gray-700 leading-relaxed mb-5 text-base">
-        {trimmed}
-      </p>
-    );
-  })}
-</div>
+                {/* Article body */}
+                <div className="prose prose-gray max-w-none">
+                  {articleBody.trim().split("\n\n").map((paragraph, idx) => {
+                    const trimmed = paragraph.trim();
+                    if (trimmed.startsWith("[IMAGE:") && trimmed.endsWith("]")) {
+                      const src = trimmed.slice(7, -1);
+                      return (
+                        <img
+                          key={idx}
+                          src={src}
+                          alt="Article image"
+                          className="w-full h-auto rounded-xl my-6"
+                        />
+                      );
+                    }
+                    return (
+                      <p key={idx} className="text-gray-700 leading-relaxed mb-5 text-base">
+                        {trimmed}
+                      </p>
+                    );
+                  })}
+                </div>
 
                 {/* Inline Ad */}
                 <AdBlock variant="rectangle" className="my-8" />

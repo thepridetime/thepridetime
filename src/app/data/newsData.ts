@@ -19,21 +19,33 @@ export interface Article {
 export const articles: Article[] = [
   // TECHNOLOGY
   {
-    id: "1",
-    title: "Why Most Businesses Fail at Digital Marketing",
-    excerpt: "And how AI-driven systems are turning unpredictable campaigns into scalable, revenue-generating engines..",
-    content: "In an unprecedented move, technology leaders from Silicon Valley to Singapore have joined forces to establish a comprehensive framework for artificial intelligence governance. The alliance aims to create interoperable standards that will accelerate responsible AI adoption across enterprise environments worldwide.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Technology",
-    image: "https://images.unsplash.com/photo-1768224656445-33d078c250b7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlJTIwZGlnaXRhbCUyMG5ldHdvcmslMjBkYXRhfGVufDF8fHx8MTc3MjYyMTI5MnwO&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 4, 2026",
-    readTime: "6 min read",
-    featured: true,
-    breaking: true,
-    tags: ["AI Governance", "Global Standards", "Digital Intelligence"],
-    region: "Global"
-  },
+  id: "yep-tribe-1",
+  title: "Eddie N Ibude: Leading YEP Tribe into the Future of Digital Finance",
+  excerpt: "The Chief Executive Officer shares his vision for revolutionizing digital payments and financial inclusion across emerging markets.",
+  content: `
+    
+    Eddie N Ibude, Chief Executive Officer at YEP Tribe, has been at the forefront of digital finance innovation. Under his leadership, YEP Tribe has emerged as a game-changing platform that bridges the gap between traditional banking and modern digital payment solutions.
+
+    
+    YEP Tribe is transforming how individuals and businesses transact in emerging economies. The platform's innovative approach combines accessibility, security, and affordability to serve underserved communities.
+
+   
+    "Our goal is to democratize financial services," says Ibude. "We believe everyone deserves access to fast, secure, and affordable digital payment solutions regardless of their location or economic status."
+
+    
+    With expansion plans across multiple African and Asian markets, YEP Tribe is positioned to become a major player in the global fintech ecosystem. The company's focus on user-centric design and regulatory compliance sets it apart from competitors.
+  `,
+  author: "Sagar Kumar",
+  authorRole: "Chief Editor",
+  category: "Finance",
+  image: "/assess/TribePay.png",
+  date: "April 24, 2026",
+  readTime: "6 min read",
+  featured: true,
+  breaking: false,
+  tags: ["Fintech", "Digital Payments", "YEP Tribe", "Leadership"],
+  region: "Global",
+},
   {
     id: "2",
     title: "Enterprise AI Spending to Exceed $2.4 Trillion Globally by 2027, The Pride Times Analysis Reveals",
@@ -42,7 +54,7 @@ export const articles: Article[] = [
     author: "Sagar Kumar",
     authorRole: "Chief Editor",
     category: "Technology",
-    image: "https://images.unsplash.com/photo-1758520144750-dd3cbde6a689?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxnbG9iYWwlMjB0ZWNobm9sb2d5JTIwYnVzaW5lc3MlMjBlbnRlcnByaXNlfGVufDF8fHx8MTc3MjYyMTI5MHww&ixlib=rb-4.1.0&q=80&w=1080",
+     image: "https://images.unsplash.com/photo-1768224656445-33d078c250b7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlJTIwZGlnaXRhbCUyMG5ldHdvcmslMjBkYXRhfGVufDF8fHx8MTc3MjYyMTI5MnwO&ixlib=rb-4.1.0&q=80&w=1080",
     date: "February 28, 2026",
     readTime: "9 min read",
     tags: ["Enterprise AI", "Investment", "Market Forecast"],
@@ -62,21 +74,7 @@ export const articles: Article[] = [
     tags: ["Cloud Computing", "AWS", "Azure", "Google Cloud"],
     region: "Global"
   },
-  {
-    id: "4",
-    title: "Quantum Internet Backbone Goes Live Across North American Corridor",
-    excerpt: "The first commercial quantum communication network spanning 4,800 km between New York, Chicago, and Los Angeles achieves operational status, offering unprecedented secure data transmission.",
-    content: "A historic milestone in communications technology was achieved today as the first commercial quantum internet backbone spanning North America's major financial and technology hubs went fully operational.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Technology",
-    image: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjeWJlcnNlY3VyaXR5JTIwZGlnaXRhbCUyMHByb3RlY3Rpb24lMjBlbnRlcnByaXNlfGVufDF8fHx8MTc3MjYyMTI5OXww&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 1, 2026",
-    readTime: "8 min read",
-    breaking: true,
-    tags: ["Quantum Internet", "Communications", "Security"],
-    region: "North America"
-  },
+  
 
   // FINANCE
   {
@@ -144,6 +142,7 @@ For businesses looking to move beyond inconsistent results, Axis Elevate offers 
   region: "Global"
 
   },
+
 
   // CYBERSECURITY
   {
@@ -220,7 +219,31 @@ For businesses looking to move beyond inconsistent results, Axis Elevate offers 
     tags: ["Fusion Energy", "Clean Power", "Innovation"],
     region: "North America"
   },
+{
+  id: "sculptandstrive-1",
+  title: "Sculpt & Strive: The Art of Modern Fitness",
+  excerpt: "Discover how Sculpt & Strive is revolutionizing the fitness industry with innovative training methods and community-driven results.",
+  content: `
+[IMAGE:/assess/scst2.png]
 
+What sets Sculpt & Strive apart is their commitment to building a supportive community where members push each other to achieve more than they thought possible.
+
+The Sculpt & Strive approach combines strength training, functional fitness, and mindset coaching to deliver transformative results.
+
+
+Members push each other to achieve more than they thought possible, creating an environment of mutual growth and accountability.
+  `,
+  author: "Sagar lamba",
+  authorRole: "Fitness Correspondent",
+  category: "Health & Wellness",
+  image: "/assess/scst1.png",
+  date: "April 23, 2026",
+  readTime: "8 min read",
+  featured: true,
+  breaking: false,
+  tags: ["Fitness", "Wellness", "Sculpt & Strive"],
+  region: "Global",
+},
   // HEALTHCARE
   {
     id: "13",
