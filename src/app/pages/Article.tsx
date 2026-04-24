@@ -1,10 +1,11 @@
 import { useParams, Link } from "react-router";
-import { Clock, MapPin, Tag, Share2, Bookmark, Printer, ChevronRight, ArrowLeft, User, Facebook, Twitter, Linkedin } from "lucide-react";
+import { Clock, MapPin, Tag, Share2, Bookmark, Printer, ChevronRight, ArrowLeft, User, Facebook, Twitter, Linkedin, ChevronLeft, ChevronRight as ChevronRightIcon, X } from "lucide-react";
 import { articles } from "../data/newsData";
 import { NewsCard } from "../components/NewsCard";
 import { Sidebar } from "../components/Sidebar";
 import { AdBlock } from "../components/AdBlock";
 import { useLiveDateTime } from "../components/LiveClock";
+import { useState } from "react";
 
 const categoryColors: Record<string, string> = {
   Technology: "bg-blue-600",
@@ -27,6 +28,38 @@ export function Article() {
   const moreArticles = articles.filter(a => a.id !== article.id).slice(0, 6);
   const catColor = categoryColors[article.category] || "bg-[#0d1f3c]";
 
+  // Gallery state
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalIndex, setModalIndex] = useState(0);
+
+  // Combine main image + additional images
+  const allGalleryImages = [article.image, ...(article.additionalImages || [])];
+  const hasGallery = allGalleryImages.length > 1;
+
+  // Gallery navigation functions
+  const nextGalleryImage = () => {
+    setGalleryIndex((prev) => (prev + 1) % allGalleryImages.length);
+  };
+
+  const prevGalleryImage = () => {
+    setGalleryIndex((prev) => (prev - 1 + allGalleryImages.length) % allGalleryImages.length);
+  };
+
+  // Modal navigation functions
+  const nextModalImage = () => {
+    setModalIndex((prev) => (prev + 1) % allGalleryImages.length);
+  };
+
+  const prevModalImage = () => {
+    setModalIndex((prev) => (prev - 1 + allGalleryImages.length) % allGalleryImages.length);
+  };
+
+  const openModal = (index: number) => {
+    setModalIndex(index);
+    setIsModalOpen(true);
+  };
+
   const handleShare = (platform: string) => {
     const url = window.location.href;
     const text = encodeURIComponent(article.title);
@@ -39,8 +72,48 @@ export function Article() {
   };
 
   const articleBody = article.content;
+  
   return (
     <div className="bg-gray-50 min-h-screen">
+      {/* Fullscreen Modal */}
+      {isModalOpen && (
+        <div 
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <button 
+            onClick={() => setIsModalOpen(false)}
+            className="absolute top-4 right-4 text-white hover:text-gray-300 transition z-10 bg-black/50 rounded-full p-2"
+          >
+            <X className="w-8 h-8" />
+          </button>
+          <button 
+            onClick={(e) => { e.stopPropagation(); prevModalImage(); }}
+            className="absolute left-4 text-white hover:text-gray-300 transition bg-black/50 rounded-full p-3 z-10"
+          >
+            <ChevronLeft className="w-8 h-8" />
+          </button>
+          <button 
+            onClick={(e) => { e.stopPropagation(); nextModalImage(); }}
+            className="absolute right-4 text-white hover:text-gray-300 transition bg-black/50 rounded-full p-3 z-10"
+          >
+            <ChevronRightIcon className="w-8 h-8" />
+          </button>
+          <img 
+            src={allGalleryImages[modalIndex]} 
+            alt={`Gallery ${modalIndex + 1}`}
+            className="max-w-[90vw] max-h-[90vh] object-contain"
+            onClick={(e) => e.stopPropagation()}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "https://placehold.co/1200x800/1a1a2e/ffd700?text=Image+Not+Found";
+            }}
+          />
+          <div className="absolute bottom-4 left-0 right-0 text-center text-white text-sm bg-black/50 py-2 mx-auto w-fit px-4 rounded-full">
+            {modalIndex + 1} / {allGalleryImages.length}
+          </div>
+        </div>
+      )}
+
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-screen-xl mx-auto px-3 sm:px-4 py-3 flex items-center gap-2 text-sm text-gray-500 overflow-x-auto">
@@ -76,21 +149,45 @@ export function Article() {
             </Link>
 
             <article className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
-              {/* Hero image */}
-              <div className="relative w-full">
+              {/* Hero image with navigation */}
+              <div className="relative w-full bg-gray-900">
                 <img
-                  src={article.image}
+                  src={allGalleryImages[galleryIndex]}
                   alt={article.title}
-                  className="w-full h-auto"
+                  className="w-full h-auto max-h-[500px] object-contain bg-gray-900"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "https://placehold.co/1200x600/1a1a2e/ffd700?text=The+Pride+Times";
+                  }}
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                {/* Navigation Arrows - Only show if multiple images */}
+                {hasGallery && (
+                  <>
+                    <button
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); prevGalleryImage(); }}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-all duration-200 z-10"
+                    >
+                      <ChevronLeft className="w-6 h-6" />
+                    </button>
+                    <button
+                      onClick={(e) => { e.preventDefault(); e.stopPropagation(); nextGalleryImage(); }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-all duration-200 z-10"
+                    >
+                      <ChevronRightIcon className="w-6 h-6" />
+                    </button>
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white text-xs px-3 py-1 rounded-full z-10">
+                      {galleryIndex + 1} / {allGalleryImages.length}
+                    </div>
+                  </>
+                )}
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
                 {article.breaking && (
-                  <div className="absolute top-4 left-4 bg-red-600 text-white text-xs font-black px-3 py-1.5 tracking-widest uppercase animate-pulse">
+                  <div className="absolute top-4 left-4 bg-red-600 text-white text-xs font-black px-3 py-1.5 tracking-widest uppercase animate-pulse pointer-events-none">
                     🔴 Breaking News
                   </div>
                 )}
-                <div className="absolute bottom-4 left-4 flex items-center gap-2">
+                <div className="absolute bottom-4 left-4 flex items-center gap-2 pointer-events-none">
                   <span className={`${catColor} text-white text-xs font-bold px-2 py-1 uppercase tracking-wide`}>
                     {article.category}
                   </span>
@@ -99,6 +196,36 @@ export function Article() {
                   </span>
                 </div>
               </div>
+
+              {/* Thumbnail Gallery - Only show if multiple images */}
+              {hasGallery && (
+                <div className="flex gap-2 p-3 bg-gray-50 border-b border-gray-100 overflow-x-auto">
+                  {allGalleryImages.map((img, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setGalleryIndex(idx)}
+                      className={`flex-shrink-0 w-14 h-14 rounded-md overflow-hidden border-2 transition-all ${
+                        galleryIndex === idx ? 'border-[#00d4ff] ring-1 ring-[#00d4ff]' : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                    >
+                      <img
+                        src={img}
+                        alt={`Thumb ${idx + 1}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = "https://placehold.co/100x100/1a1a2e/ffd700?text=Error";
+                        }}
+                      />
+                    </button>
+                  ))}
+                  <button
+                    onClick={() => openModal(galleryIndex)}
+                    className="flex-shrink-0 px-3 bg-gray-200 text-gray-700 rounded-md text-xs font-medium hover:bg-gray-300 transition"
+                  >
+                    Fullscreen
+                  </button>
+                </div>
+              )}
 
               <div className="p-4 sm:p-6 md:p-8">
                 {/* Meta */}
@@ -173,9 +300,8 @@ export function Article() {
                 </div>
 
                 {/* Article body */}
-                {/* Article body */}
                 <div className="prose prose-gray max-w-none">
-                  {articleBody.trim().split("\n\n").map((paragraph, idx) => {
+                  {typeof articleBody === 'string' && articleBody.trim().split("\n\n").map((paragraph, idx) => {
                     const trimmed = paragraph.trim();
                     if (trimmed.startsWith("[IMAGE:") && trimmed.endsWith("]")) {
                       const src = trimmed.slice(7, -1);
@@ -185,6 +311,9 @@ export function Article() {
                           src={src}
                           alt="Article image"
                           className="w-full h-auto rounded-xl my-6"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "https://placehold.co/800x500/1a1a2e/ffd700?text=Image+Not+Found";
+                          }}
                         />
                       );
                     }

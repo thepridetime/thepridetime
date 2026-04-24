@@ -10,6 +10,7 @@ export interface Article {
   category: string;
   subcategory?: string;
   image: string;
+  images?: string[];
   date: string;
   readTime: string;
   featured?: boolean;
@@ -17,6 +18,7 @@ export interface Article {
   tags: string[];
   region: string;
   publishedAt: string; // ISO date for sorting
+  additionalImages?: string[];
 }
 
 // ============================================================
@@ -81,33 +83,61 @@ Modern digital growth is no longer about guesswork. It is about leveraging data,
     publishedAt: "2026-04-21",
   },
   {
-  id: "nvbc-1",
-  title: "Northern Virginia Brittany Club",
-  excerpt: "A regional organization dedicated to the promotion, preservation, and enjoyment of the Brittany breed in Northern Virginia.",
-  content: `...`,
-  author: "Sagar Kumar",
-  authorRole: "Chief Editor",
-  category: "Lifestyle",
-  image: "/assess/NVBC-Article-1.png",
-  date: "April 20, 2026",
-  readTime: "16 min read",
-  featured: true,
-  breaking: false,
-  tags: ["Brittany", "Dog Breed", "Virginia", "Feature"],
-  region: "North America",  // ← Make sure this is exactly "North America"
-  publishedAt: "2026-04-20",
-},
+    id: "nvbc-1",
+    title: "Northern Virginia Brittany Club",
+    excerpt: "A regional organization dedicated to the promotion, preservation, and enjoyment of the Brittany breed in Northern Virginia.",
+    content: `The Northern Virginia Brittany Club (NVBC) is a vibrant community of Brittany enthusiasts dedicated to the promotion, preservation, and enjoyment of this remarkable breed.
+
+Founded in 2005, the club has grown to become one of the most active regional Brittany clubs in the United States. Members participate in field trials, hunt tests, conformation shows, and obedience competitions throughout the year.
+
+The Brittany, known for its exceptional hunting ability and affectionate nature, has found a devoted following in Northern Virginia. The club hosts monthly meetings, training sessions, and educational seminars to help both new and experienced owners.
+
+"Our mission is to celebrate the Brittany breed while promoting responsible ownership," says club president. "We welcome everyone from first-time owners to seasoned competitors."
+
+The club's annual specialty show draws participants from across the Mid-Atlantic region, showcasing the breed's versatility and beauty.`,
+    author: "Sagar Kumar",
+    authorRole: "Chief Editor",
+    category: "Lifestyle",
+    image: "/assess/NVBC-Article-1.png",
+    additionalImages: [
+      "/assess/NVBC-Article-1.png",
+      "/assess/NVBC-Article-2.png",
+      "/assess/NVBC-2025-Ad.png"
+    ],
+    date: "April 20, 2026",
+    readTime: "16 min read",
+    featured: true,
+    breaking: false,
+    tags: ["Brittany", "Dog Breed", "Virginia", "Feature"],
+    region: "North America",
+    publishedAt: "2026-04-20",
+  },
   {
     id: "sculptandstrive-1",
     title: "Sculpt & Strive: The Art of Modern Fitness",
     excerpt: "Discover how Sculpt & Strive is revolutionizing the fitness industry with innovative training methods and community-driven results.",
     content: `What sets Sculpt & Strive apart is their commitment to building a supportive community where members push each other to achieve more than they thought possible.
 
-The Sculpt & Strive approach combines strength training, functional fitness, and mindset coaching to deliver transformative results.`,
+The Sculpt & Strive approach combines strength training, functional fitness, and mindset coaching to deliver transformative results.
+
+Our programs include:
+- High-Intensity Interval Training (HIIT)
+- Functional Strength Training
+- Yoga & Mobility Work
+- Nutrition Coaching
+- Mental Resilience Training
+
+"Fitness is not just about looking good. It's about feeling strong, capable, and confident in your own skin," says founder Marcus Chen.
+
+Join the Sculpt & Strive community today and transform your life one workout at a time.`,
     author: "Sarah Johnson",
     authorRole: "Fitness Correspondent",
     category: "Health & Wellness",
     image: "/assess/scst1.png",
+    additionalImages: [
+      "/assess/scst1.png",
+      "/assess/scst2.png"
+    ],
     date: "April 23, 2026",
     readTime: "8 min read",
     featured: true,
@@ -124,7 +154,17 @@ The Sculpt & Strive approach combines strength training, functional fitness, and
 
 This AI system specializes in transforming complex, multidimensional data into actionable insights for executives, policymakers, and global consultants.
 
-A defining aspect of its global influence is its collaboration with Erika Mbazo'o, founder of VergiFreeWorld Consulting.`,
+A defining aspect of its global influence is its collaboration with Erika Mbazo'o, founder of VergiFreeWorld Consulting.
+
+Key capabilities include:
+- Real-time geopolitical risk assessment
+- Cross-cultural negotiation frameworks
+- Data-driven policy recommendations
+- Predictive economic modeling
+
+"The future of diplomacy isn't just human-to-human. It's human-plus-AI partnerships that leverage the best of both," says Erika Mbazo'o.
+
+This collaboration represents a pioneering model for how AI can serve as a trusted strategic partner in high-stakes global decision-making.`,
     author: "Erika Mbazo'o & The Pride Times Team",
     authorRole: "Global Strategic Partner & AI Diplomacy Expert",
     category: "Technology",

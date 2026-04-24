@@ -39,6 +39,7 @@ const getCoverStories = () => {
       subtitle: article.date.split(",")[0],
       desc: article.excerpt,
       image: article.image,
+      images: article.images || [article.image],
       author: article.author,
       readTime: article.readTime,
       tag: article.tags?.[0] || (article.breaking ? "BREAKING" : "Featured"),
@@ -171,6 +172,9 @@ export function Magazine() {
                   src={story.image}
                   alt={story.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = "https://placehold.co/600x400/1a1a2e/ffd700?text=The+Pride+Times";
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 <div className="absolute top-3 left-3">
@@ -178,6 +182,14 @@ export function Magazine() {
                     {story.tag}
                   </span>
                 </div>
+                {/* Multiple images indicator */}
+                {story.images && story.images.length > 1 && (
+                  <div className="absolute top-3 right-3">
+                    <span className="bg-black/60 backdrop-blur-sm text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                      📸 {story.images.length}
+                    </span>
+                  </div>
+                )}
                 <div className="absolute bottom-0 left-0 right-0 p-4">
                   <div className="text-yellow-300 text-xs font-semibold mb-1">{story.subtitle}</div>
                   <h3 className="text-white font-bold leading-tight mb-2 group-hover:text-yellow-300 transition-colors text-sm line-clamp-2">
@@ -247,12 +259,23 @@ export function Magazine() {
                 to={`/article/${article.id}`}
                 className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300"
               >
-                <div className="h-48 overflow-hidden">
+                <div className="relative h-48 overflow-hidden">
                   <img 
                     src={article.image} 
                     alt={article.title} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = "https://placehold.co/600x400/1a1a2e/ffd700?text=The+Pride+Times";
+                    }}
                   />
+                  {/* Multiple images indicator */}
+                  {article.images && article.images.length > 1 && (
+                    <div className="absolute bottom-2 right-2">
+                      <span className="bg-black/60 backdrop-blur-sm text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                        📸 +{article.images.length - 1}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="p-4">
                   <div className="flex items-center gap-2 mb-2">
