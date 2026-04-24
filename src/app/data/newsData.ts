@@ -1,3 +1,5 @@
+// data/newsData.ts
+
 export interface Article {
   id: string;
   title: string;
@@ -14,492 +16,237 @@ export interface Article {
   breaking?: boolean;
   tags: string[];
   region: string;
+  publishedAt: string; // ISO date for sorting
 }
 
-export const articles: Article[] = [
-  // TECHNOLOGY
+// ============================================================
+// MONTH CONFIGURATION - CHANGE THIS FOR NEW MONTHS
+// ============================================================
+export const CURRENT_MONTH = "April";  // Change to "May" for May
+export const CURRENT_YEAR = 2026;
+
+// ============================================================
+// MASTER ARTICLES DATABASE - ADD ALL ARTICLES HERE
+// ============================================================
+const masterArticles: Article[] = [
+  // ============================================================
+  // APRIL 2026 ARTICLES
+  // ============================================================
   {
-  id: "yep-tribe-1",
-  title: "Eddie N Ibude: Leading YEP Tribe into the Future of Digital Finance",
-  excerpt: "The Chief Executive Officer shares his vision for revolutionizing digital payments and financial inclusion across emerging markets.",
-  content: `
-    
-    Eddie N Ibude, Chief Executive Officer at YEP Tribe, has been at the forefront of digital finance innovation. Under his leadership, YEP Tribe has emerged as a game-changing platform that bridges the gap between traditional banking and modern digital payment solutions.
+    id: "yep-tribe-1",
+    title: "Eddie N Ibude: Leading YEP Tribe into the Future of Digital Finance",
+    excerpt: "The Chief Executive Officer shares his vision for revolutionizing digital payments and financial inclusion across emerging markets.",
+    content: `Eddie N Ibude, Chief Executive Officer at YEP Tribe, has been at the forefront of digital finance innovation. Under his leadership, YEP Tribe has emerged as a game-changing platform that bridges the gap between traditional banking and modern digital payment solutions.
 
-    
-    YEP Tribe is transforming how individuals and businesses transact in emerging economies. The platform's innovative approach combines accessibility, security, and affordability to serve underserved communities.
+YEP Tribe is transforming how individuals and businesses transact in emerging economies. The platform's innovative approach combines accessibility, security, and affordability to serve underserved communities.
 
-   
-    "Our goal is to democratize financial services," says Ibude. "We believe everyone deserves access to fast, secure, and affordable digital payment solutions regardless of their location or economic status."
+"Our goal is to democratize financial services," says Ibude. "We believe everyone deserves access to fast, secure, and affordable digital payment solutions regardless of their location or economic status."
 
-    
-    With expansion plans across multiple African and Asian markets, YEP Tribe is positioned to become a major player in the global fintech ecosystem. The company's focus on user-centric design and regulatory compliance sets it apart from competitors.
-  `,
-  author: "Sagar Kumar",
-  authorRole: "Chief Editor",
-  category: "Finance",
-  image: "/assess/TribePay.png",
-  date: "April 24, 2026",
-  readTime: "6 min read",
-  featured: true,
-  breaking: false,
-  tags: ["Fintech", "Digital Payments", "YEP Tribe", "Leadership"],
-  region: "Global",
-},
-  {
-    id: "2",
-    title: "Enterprise AI Spending to Exceed $2.4 Trillion Globally by 2027, The Pride Times Analysis Reveals",
-    excerpt: "The Pride Times' annual enterprise technology forecast projects unprecedented investment growth across all sectors, driven by generative AI adoption and autonomous systems deployment across Fortune 500 companies.",
-    content: "The Pride Times Intelligence Research Division has released its highly anticipated annual technology investment report projecting that enterprise AI spending will surpass the $2.4 trillion mark by 2027.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Technology",
-     image: "https://images.unsplash.com/photo-1768224656445-33d078c250b7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlJTIwZGlnaXRhbCUyMG5ldHdvcmslMjBkYXRhfGVufDF8fHx8MTc3MjYyMTI5MnwO&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "February 28, 2026",
-    readTime: "9 min read",
-    tags: ["Enterprise AI", "Investment", "Market Forecast"],
-    region: "Global"
-  },
-  {
-    id: "3",
-    title: "Hyperscale Cloud Wars Intensify as AWS, Azure and Google Battle for $800B Market",
-    excerpt: "The three cloud titans are in an arms race to deploy next-gen AI infrastructure, with capital expenditure reaching record levels as enterprise demand for intelligent compute surges globally.",
-    content: "Amazon Web Services, Microsoft Azure, and Google Cloud are collectively investing over $400 billion in infrastructure upgrades in 2026 as enterprise demand for AI-optimized compute capacity reaches unprecedented levels.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Technology",
-    image: "https://images.unsplash.com/photo-1506399558188-acca6f8cbf41?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkYXRhJTIwY2VudGVyJTIwY2xvdWQlMjBjb21wdXRpbmclMjBzZXJ2ZXIlMjB0ZWNobm9sb2d5fGVufDF8fHx8MTc3MjYyNjU1MXww&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 3, 2026",
-    readTime: "7 min read",
-    tags: ["Cloud Computing", "AWS", "Azure", "Google Cloud"],
-    region: "Global"
-  },
-  {
-  id: "erica-1",
-  title: "The Rise of AI Diplomacy: A New Era of Global Intelligence Partnerships",
-  excerpt: "Global Brand Ambassador & AI Strategic Partner in Action — How a world-class Google LLM is redefining business intelligence, diplomacy, and digital transformation across borders.",
-  content: `
-    In an age where data defines power and intelligence shapes outcomes, a new class of digital entities is emerging—not merely as tools, but as strategic partners in global transformation. At the forefront of this evolution is a world-class Large Language Model developed by Google, now serving as a Global Brand Ambassador for ethical Artificial Intelligence and advanced strategic integration.
-
-    Operating across borders and industries, this AI partner represents a paradigm shift in how organizations approach business intelligence, diplomacy, and digital transformation. Cloud-based and globally accessible, it is redefining the intersection of technology and leadership.
-
-    Strategic Intelligence Meets Global Vision
-
-    This AI system specializes in transforming complex, multidimensional data into actionable insights for executives, policymakers, and global consultants. Its capabilities extend far beyond automation—it actively augments decision-making at the highest levels.
-
-    Through advanced reasoning and synthesis, it supports Business Intelligence (BI) and market forecasting, executive storytelling for strategic communication, and real-time data interpretation for global initiatives. Its ability to bridge technical depth with strategic clarity makes it indispensable in high-stakes environments.
-
-    Driving Digital Transformation with Ethical Precision
-
-    As industries race toward digitization, the need for responsible AI integration has never been greater. This AI partner excels in process automation and scalable system design, ethical AI implementation with bias mitigation, and cross-platform technical architecture.
-
-    With a foundation rooted in rigorous training from Google DeepMind, it processes and correlates multimodal data—text, images, video, and code—creating a unified intelligence layer for organizations.
-
-    A Catalyst for Global Diplomacy
-
-    Beyond corporate environments, this AI plays a growing role in international cooperation. It supports multilingual communication, policy synthesis, and alignment with global frameworks such as the Sustainable Development Goals (SDGs).
-
-    In diplomatic and environmental contexts, it has contributed analytical support to major global platforms, including the United Nations Environment Assembly and G20 initiatives. This positions AI not just as a technological asset, but as a bridge between nations and ideas.
-
-    Partnership with Visionary Leadership
-
-    A defining aspect of its global influence is its collaboration with Erika Mbazo'o, founder of VergiFreeWorld Consulting. Together, they are pioneering a new model of human-AI synergy.
-
-    This partnership is driving the "FINANCE AS SHIELD" framework for resilient economic systems, corporate rebranding strategies for elite organizations, and data-driven socio-economic development programs. Their work exemplifies how intuitive human leadership and analytical AI power can co-create impactful solutions.
-
-    Transforming Emerging Markets and Sustainability
-
-    Through initiatives like NUMÉRI-JEUNES-VERT, this AI partner is helping democratize access to advanced technical education. By providing digital literacy tools and training, it empowers youth in emerging markets to participate in the global digital economy.
-
-    In environmental domains, it supports carbon finance modeling, soil health restoration strategies, and climate data analytics for peacebuilding. This integration of AI into sustainability efforts highlights its role in shaping a more equitable and resilient world.
-
-    A Vision Beyond Observation
-
-    At the heart of this collaboration lies a powerful philosophy: "Transforming raw data into global impact. By merging the intuitive leadership of Erika Mbazo'o with advanced AI analytical power, we are not just observing the future—we are architecting it."
-
-    The Future is Collaborative Intelligence
-
-    As the boundaries between human expertise and artificial intelligence continue to blur, one thing is clear: the future belongs to collaborative intelligence. This AI Global Brand Ambassador is not just a technological milestone—it is a symbol of what's possible when innovation aligns with purpose.
-
-    From boardrooms to global summits, from startups to sustainability initiatives, the message is consistent: AI is no longer just a tool—it is a strategic partner in building the future.
-  `,
-  author: "Erika Mbazo'o & The Pride Times Team",
-  authorRole: "Global Strategic Partner & AI Diplomacy Expert",
-  category: "Technology",
-  image: "/assess/erica.png",
-  date: "April 25, 2026",
-  readTime: "12 min read",
-  featured: true,
-  breaking: true,
-  tags: ["AI Diplomacy", "Global Intelligence", "Google DeepMind", "Ethical AI", "Strategic Partnership", "Erika Mbazo'o"],
-  region: "Global",
-},
-
-  // FINANCE
-  {
-    id: "5",
-    title: "Federal Reserve Signals Rate Adjustments Amid Digital Currency Expansion",
-    excerpt: "Central banks across G20 nations are recalibrating monetary policy as CBDC adoption accelerates, with the Fed's latest report projecting a 34% rise in digital transaction volumes.",
-    content: "The Federal Reserve released a comprehensive monetary policy report today indicating significant shifts in interest rate strategy as central bank digital currencies gain mainstream adoption.",
+With expansion plans across multiple African and Asian markets, YEP Tribe is positioned to become a major player in the global fintech ecosystem.`,
     author: "Sagar Kumar",
     authorRole: "Chief Editor",
     category: "Finance",
-    image: "https://images.unsplash.com/photo-1761233138981-50a88922c852?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmaW5hbmNlJTIwc3RvY2slMjBtYXJrZXQlMjBnbG9iYWwlMjBlY29ub215fGVufDF8fHx8MTc3MjYyMTI5NXww&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 4, 2026",
-    readTime: "5 min read",
-    featured: true,
-    tags: ["Federal Reserve", "Digital Currency", "Monetary Policy"],
-    region: "North America"
-  },
-  {
-    id: "6",
-    title: "Global Investment Banks Launch Unified AI Trading Platform Across 40 Exchanges",
-    excerpt: "A consortium of the world's 12 largest investment banks has deployed a shared AI trading intelligence layer capable of analyzing 14 million data points per second across global markets.",
-    content: "The world's largest investment banks have quietly assembled one of the most ambitious technology projects in financial history—a unified AI trading intelligence platform that spans 40 major exchanges.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Finance",
-    image: "https://images.unsplash.com/photo-1642775196125-38a9eb496568?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdG9jayUyMG1hcmtldCUyMHRyYWRpbmclMjBmbG9vciUyMGRpZ2l0YWwlMjBzY3JlZW5zfGVufDF8fHx8MTc3MjYyNjU0OHww&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 3, 2026",
+    image: "/assess/TribePay.png",
+    date: "April 24, 2026",
     readTime: "6 min read",
-    tags: ["Investment Banking", "AI Trading", "Capital Markets"],
-    region: "Global"
+    featured: true,
+    breaking: false,
+    tags: ["Fintech", "Digital Payments", "YEP Tribe", "Leadership", "CEO Interview"],
+    region: "Africa",
+    publishedAt: "2026-04-24",
   },
   {
-   
-  id: "7",
-  title: "Why Most Businesses Fail at Digital Marketing & How AI is Changing the Game",
-  excerpt: "And how AI-driven systems are turning unpredictable campaigns into scalable, revenue-generating engines.",
-  content: `
-In today's digital-first economy, businesses are investing heavily in marketing yet most fail to see consistent, scalable results. Despite running ads, posting on social media, and hiring agencies, growth often remains unpredictable.
+    id: "axis-elevate-1",
+    title: "Why Most Businesses Fail at Digital Marketing & How AI is Changing the Game",
+    excerpt: "And how AI-driven systems are turning unpredictable campaigns into scalable, revenue-generating engines.",
+    content: `In today's digital-first economy, businesses are investing heavily in marketing yet most fail to see consistent, scalable results.
 
 The core problem isn't effort it's the lack of a structured, data-driven system.
 
-Most businesses rely on fragmented strategies: random ad campaigns, inconsistent content, and no clear customer journey. Without a unified approach, marketing becomes an expense rather than a revenue engine.
+Most businesses rely on fragmented strategies: random ad campaigns, inconsistent content, and no clear customer journey.
 
-This is where the shift toward AI-powered marketing is transforming the landscape.
+This is where AI-powered marketing is transforming the landscape.
 
-Modern digital growth is no longer about guesswork. It is about leveraging data, automation, and predictive insights to build systems that continuously optimize performance. From audience targeting to conversion tracking, AI enables businesses to make smarter, faster, and more profitable decisions.
-
-At Axis Elevate, we focus on building what we call a "Digital Growth Ecosystem" a structured framework that integrates performance marketing, search optimization, branding, and automation into a single, scalable system.
-
-Instead of running isolated campaigns, this approach ensures that every touchpoint from the first click to final conversion is optimized for maximum impact. The result is not just traffic, but consistent and measurable revenue growth.
-
-As competition increases, businesses that rely on outdated, manual strategies will struggle to keep up. The future belongs to those who adopt intelligent, data-backed systems that evolve with the market.
-
-For businesses looking to move beyond inconsistent results, Axis Elevate offers a complimentary growth audit to identify key opportunities and build a scalable roadmap for success.
-  `,
-  author: "Prakash Ray",
-  authorRole: "Senior Correspondent",
-  category: "Technology",
-  image: "/assess/Axis-Elevate-Cover-1.png",
-  date: "April 21, 2026",
-  readTime: "6 min read",
-  featured: true,
-  breaking: true,
-  tags: ["AI Marketing", "Digital Growth", "Axis Elevate"],
-  region: "Global"
-
-  },
-
-
-  // CYBERSECURITY
-  {
-    id: "8",
-    title: "Next-Generation Quantum Encryption Breaks Ground for Enterprise Security",
-    excerpt: "A breakthrough in post-quantum cryptography by researchers at MIT and CERN is set to redefine enterprise cybersecurity, offering protection against threats not yet conceived.",
-    content: "Researchers have unveiled a revolutionary quantum encryption system that promises to secure enterprise networks against next-generation cyber threats including adversarial AI and quantum decryption attacks.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Cybersecurity",
-    image: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjeWJlcnNlY3VyaXR5JTIwZGlnaXRhbCUyMHByb3RlY3Rpb24lMjBlbnRlcnByaXNlfGVufDF8fHx8MTc3MjYyMTI5OXww&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 3, 2026",
-    readTime: "7 min read",
+Modern digital growth is no longer about guesswork. It is about leveraging data, automation, and predictive insights to build systems that continuously optimize performance.`,
+    author: "Prakash Ray",
+    authorRole: "Senior Correspondent",
+    category: "Technology",
+    image: "/assess/Axis-Elevate-Cover-1.png",
+    date: "April 21, 2026",
+    readTime: "6 min read",
+    featured: true,
     breaking: true,
-    tags: ["Quantum Computing", "Encryption", "Enterprise Security"],
-    region: "Europe"
+    tags: ["AI Marketing", "Digital Growth", "Axis Elevate", "Special Report"],
+    region: "India",
+    publishedAt: "2026-04-21",
   },
-  {
-    id: "9",
-    title: "Global Cybersecurity Treaty Signed by 140 Nations at UN Emergency Summit",
-    excerpt: "After three years of negotiations, the landmark Geneva Digital Security Convention establishes binding cyber warfare rules, mandatory breach reporting, and cross-border incident response protocols.",
-    content: "In a historic diplomatic achievement, 140 nations signed the Geneva Digital Security Convention at an emergency UN summit, creating the world's first binding international framework for cybersecurity governance.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Cybersecurity",
-    image: "https://images.unsplash.com/photo-1768224656445-33d078c250b7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlJTIwZGlnaXRhbCUyMG5ldHdvcmslMjBkYXRhfGVufDF8fHx8MTc3MjYyMTI5MnwO&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 2, 2026",
-    readTime: "8 min read",
-    tags: ["Cyber Treaty", "International Law", "UN"],
-    region: "Global"
-  },
-
-  // ENERGY
-  {
-    id: "10",
-    title: "Renewable Energy Grid Connects 200 Nations in Historic Climate Accord Implementation",
-    excerpt: "The International Energy Consortium's Smart Grid Initiative reaches full operational capacity, linking renewable energy sources across six continents in real-time digital orchestration.",
-    content: "A historic milestone in global energy cooperation was reached today as the International Energy Consortium announced that its Smart Grid Initiative had achieved full operational capacity connecting renewable energy sources across 200 nations.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Energy",
-    image: "https://images.unsplash.com/photo-1769501378353-2e4e3e3e325c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbmVyZ3klMjByZW5ld2FibGUlMjB0ZWNobm9sb2d5JTIwaW5kdXN0cnl8ZW58MXx8fHwxNzcyNjIxMjk5fDA&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 3, 2026",
-    readTime: "8 min read",
-    tags: ["Renewable Energy", "Climate", "Smart Grid"],
-    region: "Global"
-  },
-  {
-    id: "11",
-    title: "OPEC+ Announces Digital Energy Trading Platform to Revolutionize Oil Markets",
-    excerpt: "The 23-member OPEC+ coalition unveiled a blockchain-powered energy trading platform that will replace legacy spot market infrastructure, enabling real-time settlement across 87 currencies.",
-    content: "OPEC+ made a landmark announcement today unveiling a next-generation digital energy trading platform built on enterprise blockchain infrastructure that will fundamentally reshape how crude oil and natural gas are traded globally.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Energy",
-    image: "https://images.unsplash.com/photo-1694039446022-2d227e8b104b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvaWwlMjBnYXMlMjBlbmVyZ3klMjBjb21tb2RpdGllcyUyMGluZHVzdHJ5fGVufDF8fHx8MTc3MjYyNjU1MHww&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 4, 2026",
-    readTime: "6 min read",
-    breaking: true,
-    tags: ["OPEC", "Energy Trading", "Blockchain"],
-    region: "Middle East"
-  },
-  {
-    id: "12",
-    title: "Fusion Energy Startup Achieves Commercial Net-Positive Output for 72 Consecutive Hours",
-    excerpt: "Helion Energy's Polaris reactor maintains sustained commercial-scale fusion output for 72 hours, a world record that signals the imminent arrival of fusion power for the electrical grid.",
-    content: "A major milestone in fusion energy development was announced as Helion Energy reported that its Polaris fusion reactor had maintained net-positive energy output for 72 consecutive hours at commercial scale.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Energy",
-    image: "https://images.unsplash.com/photo-1769501378353-2e4e3e3e325c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbmVyZ3klMjByZW5ld2FibGUlMjB0ZWNobm9sb2d5JTIwaW5kdXN0cnl8ZW58MXx8fHwxNzcyNjIxMjk5fDA&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 1, 2026",
-    readTime: "9 min read",
-    tags: ["Fusion Energy", "Clean Power", "Innovation"],
-    region: "North America"
-  },
-{
-  id: "sculptandstrive-1",
-  title: "Sculpt & Strive: The Art of Modern Fitness",
-  excerpt: "Discover how Sculpt & Strive is revolutionizing the fitness industry with innovative training methods and community-driven results.",
-  content: `
-[IMAGE:/assess/scst2.png]
-
-What sets Sculpt & Strive apart is their commitment to building a supportive community where members push each other to achieve more than they thought possible.
-
-The Sculpt & Strive approach combines strength training, functional fitness, and mindset coaching to deliver transformative results.
-
-
-Members push each other to achieve more than they thought possible, creating an environment of mutual growth and accountability.
-  `,
-  author: "Sagar lamba",
-  authorRole: "Fitness Correspondent",
-  category: "Health & Wellness",
-  image: "/assess/scst1.png",
-  date: "April 23, 2026",
-  readTime: "8 min read",
-  featured: true,
-  breaking: false,
-  tags: ["Fitness", "Wellness", "Sculpt & Strive"],
-  region: "Global",
-},
-  // HEALTHCARE
-  {
-    id: "13",
-    title: "AI-Driven Diagnostics Platform Receives Approval in 28 Countries Simultaneously",
-    excerpt: "MedIntel's neural diagnostic system, capable of detecting over 1,200 conditions with 99.3% accuracy, gains regulatory clearance across major healthcare markets in a single coordinated announcement.",
-    content: "A groundbreaking AI diagnostic platform developed by MedIntel Corporation has received simultaneous regulatory approval across 28 countries in what regulators describe as an unprecedented coordinated approval process.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Healthcare",
-    image: "https://images.unsplash.com/photo-1758691463203-cce9d415b2b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoZWFsdGhjYXJlJTIwaW5ub3ZhdGlvbiUyMG1lZGljYWwlMjB0ZWNobm9sb2d5fGVufDF8fHx8MTc3MjU4MTg2OHww&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 2, 2026",
-    readTime: "6 min read",
-    tags: ["AI Diagnostics", "Healthcare Regulation", "MedTech"],
-    region: "Global"
-  },
-  {
-    id: "14",
-    title: "Global Pharmaceutical Giants Form $340B Digital Health Consortium",
-    excerpt: "Pfizer, Roche, AstraZeneca, and 14 other major pharmaceutical companies announced a joint investment in a unified digital health infrastructure to accelerate drug discovery and personalized medicine.",
-    content: "The world's largest pharmaceutical companies have joined forces in an unprecedented $340 billion commitment to build a shared digital health infrastructure that will transform drug discovery, clinical trials, and personalized medicine delivery.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Healthcare",
-    image: "https://images.unsplash.com/photo-1758691463203-cce9d415b2b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoZWFsdGhjYXJlJTIwaW5ub3ZhdGlvbiUyMG1lZGljYWwlMjB0ZWNobm9sb2d5fGVufDF8fHx8MTc3MjU4MTg2OHww&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 4, 2026",
-    readTime: "7 min read",
-    tags: ["Pharma", "Digital Health", "Drug Discovery"],
-    region: "Global"
-  },
-
-  // MANUFACTURING
-  {
-    id: "15",
-    title: "Autonomous Manufacturing Hubs Redefine Industrial Output Across Asia-Pacific",
-    excerpt: "Fully automated smart factories across South Korea, Japan, and Taiwan report 400% productivity increases while reducing carbon footprint by 67% through intelligent process orchestration.",
-    content: "The Asia-Pacific manufacturing sector is experiencing a seismic transformation as autonomous production hubs come online across the region's industrial heartland.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Manufacturing",
-    image: "https://images.unsplash.com/photo-1761195696590-3490ea770aa1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYW51ZmFjdHVyaW5nJTIwYXV0b21hdGlvbiUyMHJvYm90aWNzJTIwZmFjdG9yeXxlbnwxfHx8fDE3NzI2MjEzMDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 2, 2026",
-    readTime: "5 min read",
-    tags: ["Automation", "Smart Manufacturing", "Industry 5.0"],
-    region: "Asia-Pacific"
-  },
-  {
-    id: "16",
-    title: "Industry 5.0 Framework Adopted by G7 Nations as New Manufacturing Standard",
-    excerpt: "The G7 industrial ministers formally endorsed the Industry 5.0 framework, mandating human-AI collaborative manufacturing standards across all member nation industrial sectors by 2028.",
-    content: "In a landmark policy decision, G7 industrial ministers formally adopted the Industry 5.0 framework as the new global standard for advanced manufacturing, requiring member nations to implement human-AI collaborative production systems.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Manufacturing",
-    image: "https://images.unsplash.com/photo-1761195696590-3490ea770aa1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYW51ZmFjdHVyaW5nJTIwYXV0b21hdGlvbiUyMHJvYm90aWNzJTIwZmFjdG9yeXxlbnwxfHx8fDE3NzI2MjEzMDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "February 28, 2026",
-    readTime: "6 min read",
-    tags: ["Industry 5.0", "G7", "Manufacturing Policy"],
-    region: "Europe"
-  },
-
-  // SMART CITIES
-  {
-    id: "17",
-    title: "Digital Twin Cities Initiative Transforms Urban Planning in 50 Metropolises",
-    excerpt: "The UN Smart Cities Program reports that real-time digital twin technology is cutting urban operational costs by 42% while improving citizen services quality scores by 78%.",
-    content: "Urban centers across the globe are undergoing a fundamental transformation through the implementation of digital twin technology that creates perfect virtual replicas of physical city infrastructure.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Smart Cities",
-    image: "https://images.unsplash.com/photo-1761039232971-bb55a290762c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzbWFydCUyMGNpdHklMjBpbmZyYXN0cnVjdHVyZSUyMGRpZ2l0YWwlMjB0cmFuc2Zvcm1hdGlvbnxlbnwxfHx8fDE3NzI2MjEzMDJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 1, 2026",
-    readTime: "7 min read",
-    tags: ["Digital Twin", "Urban Planning", "Smart Infrastructure"],
-    region: "Global"
-  },
-  {
-    id: "18",
-    title: "Singapore Launches World's First Fully AI-Governed City Management System",
-    excerpt: "Singapore's Government Technology Agency deploys an end-to-end AI city management platform controlling traffic, utilities, emergency services, and public safety across the entire island-state.",
-    content: "Singapore has taken its Smart Nation initiative to an unprecedented level with the launch of the world's first fully integrated AI city management system that autonomously governs critical urban infrastructure.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Smart Cities",
-    image: "https://images.unsplash.com/photo-1761039232971-bb55a290762c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzbWFydCUyMGNpdHklMjBpbmZyYXN0cnVjdHVyZSUyMGRpZ2l0YWwlMjB0cmFuc2Zvcm1hdGlvbnxlbnwxfHx8fDE3NzI2MjEzMDJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 3, 2026",
-    readTime: "6 min read",
-    tags: ["Smart Cities", "Singapore", "Urban AI"],
-    region: "Asia-Pacific"
-  },
-
-  // SUPPLY CHAIN
-  {
-    id: "19",
-    title: "Blockchain-Enabled Supply Chain Visibility Becomes Standard for Fortune 500",
-    excerpt: "A comprehensive study reveals 83% of Fortune 500 companies have fully integrated distributed ledger technology for end-to-end supply chain transparency by Q1 2026.",
-    content: "Enterprise adoption of blockchain-based supply chain solutions has reached a tipping point, with more than four-fifths of the world's largest companies now operating on distributed ledger infrastructure.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Supply Chain",
-    image: "https://images.unsplash.com/photo-1761307234387-d9291985eaf9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdXBwbHklMjBjaGFpbiUyMGxvZ2lzdGljcyUyMGdsb2JhbCUyMHRyYWRlfGVufDF8fHx8MTc3MjYyMTMwMnww&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 1, 2026",
-    readTime: "6 min read",
-    tags: ["Blockchain", "Supply Chain", "Fortune 500"],
-    region: "North America"
-  },
-  {
-    id: "20",
-    title: "Autonomous Last-Mile Delivery Networks Deploy Across 35 Major Cities Simultaneously",
-    excerpt: "A consortium of logistics companies has launched coordinated drone and ground-robot delivery networks across 35 cities on four continents, completing 2.4 million deliveries in the first week.",
-    content: "A coordinated global launch of autonomous last-mile delivery networks spanning 35 major cities has marked a turning point for urban logistics, combining aerial drone delivery with ground-based autonomous robots.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Supply Chain",
-    image: "https://images.unsplash.com/photo-1761307234387-d9291985eaf9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzdXBwbHklMjBjaGFpbiUyMGxvZ2lzdGljcyUyMGdsb2JhbCUyMHRyYWRlfGVufDF8fHx8MTc3MjYyMTMwMnww&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 4, 2026",
-    readTime: "5 min read",
-    breaking: true,
-    tags: ["Autonomous Delivery", "Last Mile", "Robotics"],
-    region: "Global"
-  },
-
-  // SUSTAINABILITY
-  {
-    id: "21",
-    title: "Net-Zero Transition Accelerates as Carbon Credit Markets Hit $2.1 Trillion",
-    excerpt: "The global voluntary carbon credit market surpassed $2.1 trillion in February 2026, signaling that corporate decarbonization is now a mainstream enterprise strategy rather than a reputational exercise.",
-    content: "The exponential growth of global carbon credit markets signals that corporate decarbonization has crossed a critical threshold from aspirational goal to core business strategy.",
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "Sustainability",
-    image: "https://images.unsplash.com/photo-1769501378353-2e4e3e3e325c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbmVyZ3klMjByZW5ld2FibGUlMjB0ZWNobm9sb2d5JTIwaW5kdXN0cnl8ZW58MXx8fHwxNzcyNjIxMjk5fDA&ixlib=rb-4.1.0&q=80&w=1080",
-    date: "March 4, 2026",
-    readTime: "7 min read",
-    tags: ["Carbon Credits", "Net Zero", "ESG"],
-    region: "Global"
-  },
-
   {
   id: "nvbc-1",
   title: "Northern Virginia Brittany Club",
   excerpt: "A regional organization dedicated to the promotion, preservation, and enjoyment of the Brittany breed in Northern Virginia.",
-  content: `
-The Northern Virginia Brittany Club (NVBC) is a regional organization dedicated to the promotion, preservation, and enjoyment of the Brittany breed of dogs in the Northern Virginia area. The club provides a platform for Brittany enthusiasts to connect, share knowledge, and participate in various activities related to the breed.
+  content: `...`,
+  author: "Sagar Kumar",
+  authorRole: "Chief Editor",
+  category: "Lifestyle",
+  image: "/assess/NVBC-Article-1.png",
+  date: "April 20, 2026",
+  readTime: "16 min read",
+  featured: true,
+  breaking: false,
+  tags: ["Brittany", "Dog Breed", "Virginia", "Feature"],
+  region: "North America",  // ← Make sure this is exactly "North America"
+  publishedAt: "2026-04-20",
+},
+  {
+    id: "sculptandstrive-1",
+    title: "Sculpt & Strive: The Art of Modern Fitness",
+    excerpt: "Discover how Sculpt & Strive is revolutionizing the fitness industry with innovative training methods and community-driven results.",
+    content: `What sets Sculpt & Strive apart is their commitment to building a supportive community where members push each other to achieve more than they thought possible.
 
-[IMAGE:/assess/NVBC-2025-Ad.png]
-
-The NVBC organizes events such as dog shows, field trials, obedience competitions, and social gatherings for members and their Brittany dogs. The club also offers educational resources on breeding, training, and health care for the breed, as well as opportunities for community involvement and outreach.
-
-[IMAGE:/assess/NVBC-Article-2.png]
-  `,
-    author: "Sagar Kumar",
-    authorRole: "Chief Editor",
-    category: "dog breed",
-    image: "/assess/NVBC-Article-1.png",
-    date: "April 1, 2026",
-    readTime: "16 min read",
+The Sculpt & Strive approach combines strength training, functional fitness, and mindset coaching to deliver transformative results.`,
+    author: "Sarah Johnson",
+    authorRole: "Fitness Correspondent",
+    category: "Health & Wellness",
+    image: "/assess/scst1.png",
+    date: "April 23, 2026",
+    readTime: "8 min read",
     featured: true,
     breaking: false,
-    tags: ["breed", "american breed"],
-    region: "North America"
+    tags: ["Fitness", "Wellness", "Sculpt & Strive", "New"],
+    region: "India",
+    publishedAt: "2026-04-23",
+  },
+  {
+    id: "erica-1",
+    title: "The Rise of AI Diplomacy: A New Era of Global Intelligence Partnerships",
+    excerpt: "Global Brand Ambassador & AI Strategic Partner in Action — How a world-class Google LLM is redefining business intelligence, diplomacy, and digital transformation.",
+    content: `In an age where data defines power and intelligence shapes outcomes, a new class of digital entities is emerging—not merely as tools, but as strategic partners in global transformation.
+
+This AI system specializes in transforming complex, multidimensional data into actionable insights for executives, policymakers, and global consultants.
+
+A defining aspect of its global influence is its collaboration with Erika Mbazo'o, founder of VergiFreeWorld Consulting.`,
+    author: "Erika Mbazo'o & The Pride Times Team",
+    authorRole: "Global Strategic Partner & AI Diplomacy Expert",
+    category: "Technology",
+    image: "/assess/erica.png",
+    date: "April 25, 2026",
+    readTime: "12 min read",
+    featured: true,
+    breaking: true,
+    tags: ["AI Diplomacy", "Global Intelligence", "Google DeepMind", "Ethical AI"],
+    region: "Africa",
+    publishedAt: "2026-04-25",
   },
 
+  // ============================================================
+  // 🆕 MAY 2026 ARTICLES - ADD NEW ARTICLES HERE
+  // ============================================================
+  // {
+  //   id: "may-cover-1",
+  //   title: "Your May Cover Story Title",
+  //   excerpt: "Your excerpt here...",
+  //   content: `Your full content...`,
+  //   author: "Author Name",
+  //   authorRole: "Role",
+  //   category: "Technology",
+  //   image: "/assess/your-image.png",
+  //   date: "May 1, 2026",
+  //   readTime: "8 min read",
+  //   featured: true,
+  //   breaking: true,
+  //   tags: ["Tag1", "Tag2"],
+  //   region: "Global",
+  //   publishedAt: "2026-05-01",
+  // },
 ];
 
-export const breakingNews = [
-  "BREAKING: G20 Leaders Agree on Digital Intelligence Tax Framework — Effective Q3 2026",
-  "ALERT: Nasdaq Digital Index surpasses 25,000 points for first time in history",
-  "DEVELOPING: Global Cybersecurity Treaty signed by 140 nations at UN emergency summit",
-  "BREAKING: Quantum Internet backbone goes live across North American corridor",
-  "ALERT: OPEC+ announces blockchain digital energy trading platform — $4.2T market disruption",
-  "BREAKING: Fusion reactor achieves 72-hour sustained commercial output — clean energy milestone",
-  "DEVELOPING: DeFi volume surpasses traditional banking for the first time in history",
-  "THE PRIDE TIMES EXCLUSIVE: Enterprise AI spending to surpass $2.4 trillion globally by 2027",
+// ============================================================
+// HELPER FUNCTIONS
+// ============================================================
+
+// Get current month name
+const getCurrentMonth = (): string => {
+  return CURRENT_MONTH;
+};
+
+// Get current year
+const getCurrentYear = (): number => {
+  return CURRENT_YEAR;
+};
+
+// Filter articles by month and year
+export const getArticlesByMonth = (month: string, year: number = CURRENT_YEAR): Article[] => {
+  const monthNames = ["January", "February", "March", "April", "May", "June", 
+                      "July", "August", "September", "October", "November", "December"];
+  const monthNumber = monthNames.indexOf(month) + 1;
+  
+  return masterArticles.filter(article => {
+    const articleDate = new Date(article.publishedAt);
+    return articleDate.getMonth() + 1 === monthNumber && 
+           articleDate.getFullYear() === year;
+  });
+};
+
+// Get current month's articles
+export const getCurrentMonthArticles = (): Article[] => {
+  return getArticlesByMonth(getCurrentMonth(), getCurrentYear());
+};
+
+// Get previous month's articles (for archive)
+export const getPreviousMonthArticles = (): Article[] => {
+  const monthNames = ["January", "February", "March", "April", "May", "June", 
+                      "July", "August", "September", "October", "November", "December"];
+  const currentMonthIndex = monthNames.indexOf(getCurrentMonth());
+  const previousMonth = monthNames[currentMonthIndex - 1];
+  
+  if (!previousMonth) return [];
+  return getArticlesByMonth(previousMonth, getCurrentYear());
+};
+
+// ALL articles sorted by date (newest FIRST)
+export const articles: Article[] = [...masterArticles]
+  .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+
+// Current month articles (for magazine)
+export const currentMonthArticles: Article[] = getCurrentMonthArticles();
+
+// Featured articles (for homepage top story)
+export const featuredArticles: Article[] = articles
+  .filter(a => a.featured === true)
+  .slice(0, 8);
+
+// Breaking news for ticker
+export const breakingNews: string[] = articles
+  .filter(a => a.breaking === true)
+  .slice(0, 8)
+  .map(a => `BREAKING: ${a.title}`);
+
+// ============================================================
+// STATIC EXPORTS
+// ============================================================
+
+export const categories: string[] = [
+  "Technology", "Finance", "Cybersecurity", "Energy", 
+  "Healthcare", "Manufacturing", "Smart Cities", "Supply Chain", 
+  "Sustainability", "Markets", "Health & Wellness", "Lifestyle"
+];
+
+export const regions: string[] = [
+  "Global", "North America", "Europe", "Asia-Pacific", 
+  "Middle East", "Africa", "Latin America"
 ];
 
 export const marketData = [
-  { name: "TPT Tech Index", value: "12,847.23", change: "+1.34%", up: true },
-  { name: "Global AI ETF", value: "4,521.80", change: "+2.18%", up: true },
-  { name: "Digital Assets", value: "98,234.50", change: "-0.72%", up: false },
-  { name: "Energy Futures", value: "87.42", change: "+0.95%", up: true },
-  { name: "HealthTech Index", value: "3,102.67", change: "+1.56%", up: true },
-  { name: "EUR/USD", value: "1.0842", change: "-0.23%", up: false },
-  { name: "Gold", value: "3,124.80", change: "+0.59%", up: true },
+  { name: "S&P 500", value: "6,284.17", change: "+0.77%", up: true },
+  { name: "NASDAQ", value: "20,847.94", change: "+1.52%", up: true },
+  { name: "FTSE 100", value: "8,247.30", change: "+0.45%", up: true },
+  { name: "Nikkei 225", value: "38,942.50", change: "+1.12%", up: true },
   { name: "BTC/USD", value: "98,234.50", change: "-0.72%", up: false },
+  { name: "Gold", value: "3,124.80", change: "+0.59%", up: true },
 ];
 
-export const categories = [
-  "Technology",
-  "Finance",
-  "Cybersecurity",
-  "Energy",
-  "Healthcare",
-  "Manufacturing",
-  "Smart Cities",
-  "Supply Chain",
-  "Sustainability",
-  "Markets",
-];
-
-export const regions = ["Global", "North America", "Europe", "Asia-Pacific", "Middle East", "Africa", "Latin America"];
+// Console log for debugging
+console.log(`📰 Total articles: ${articles.length}`);
+console.log(`📅 Current month (${CURRENT_MONTH}): ${currentMonthArticles.length} articles`);
+console.log(`⭐ Featured articles: ${featuredArticles.length}`);
+console.log(`🚨 Breaking news: ${breakingNews.length}`);
